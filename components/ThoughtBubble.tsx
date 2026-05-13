@@ -65,12 +65,13 @@ export default function ThoughtBubble({ thought, onEdit, onDelete, isLocked }: T
         {!isLocked && !thought.isStreaming && (
           <div className="flex items-center gap-1 opacity-100 transition-all">
             {!isEditing && !isChanged && (
-              <span className="text-[10px] font-bold uppercase tracking-wider text-primary mr-2 animate-pulse hidden sm:flex items-center gap-1 opacity-70 group-hover:opacity-100">
-                <Edit2 className="w-3 h-3" />
-                Intercept
+              <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-primary mr-1 sm:mr-2 animate-pulse flex items-center gap-1 opacity-70 group-hover:opacity-100">
+                <Edit2 className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+                <span className="hidden sm:inline">Intercept</span>
+                <span className="sm:hidden">Edit</span>
               </span>
             )}
-            <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all">
+            <div className="flex items-center gap-1 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-all">
               <button
               onClick={() => setIsEditing(!isEditing)}
               className="p-1.5 rounded-lg hover:bg-muted text-muted hover:text-primary transition-all"

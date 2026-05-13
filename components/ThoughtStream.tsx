@@ -27,6 +27,7 @@ export default function ThoughtStream({
   onCollapse: onCollapseProp,
 }: ThoughtStreamProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [committed, setCommitted] = useState(false);
   const isAllFilled = thoughts.length > 0 && thoughts.every((t) => !t.isStreaming);
 
   const handleDelete = (id: string) => {
@@ -35,6 +36,7 @@ export default function ThoughtStream({
 
   const onCollapse = () => {
     setIsCollapsed(true);
+    setCommitted(true);
     onCollapseProp();
   };
 
@@ -58,7 +60,9 @@ export default function ThoughtStream({
             </div>
           </div>
         </div>
-        <Timer onComplete={onCollapse} isActive={!isStreaming && !isCollapsed} duration={20} />
+        {!committed && (
+          <Timer onComplete={onCollapse} isActive={!isStreaming && !isCollapsed} duration={20} />
+        )}
       </div>
 
       <motion.div 

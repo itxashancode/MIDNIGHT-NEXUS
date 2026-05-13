@@ -90,7 +90,7 @@ export default function ChatInput({ onSend, disabled, value = "", onChange, isVi
         stiffness: 260,
         damping: 20
       }}
-      className="fixed bottom-0 left-0 w-full pb-8 px-6 z-[200] pointer-events-none"
+      className="fixed bottom-0 left-0 w-full pb-6 pt-2 px-3 md:px-6 md:pb-8 z-[200] pointer-events-none" style={{ paddingBottom: 'max(1.5rem, env(safe-area-inset-bottom))' }}
     >
       <div className="max-w-[760px] mx-auto pointer-events-auto">
         <AnimatePresence>
@@ -124,7 +124,7 @@ export default function ChatInput({ onSend, disabled, value = "", onChange, isVi
             animate={{
               borderColor: isFocused ? "hsl(var(--primary))" : "hsl(var(--border))",
             }}
-            className="flex items-center gap-2 rounded-[28px] bg-background/95 backdrop-blur-xl border-2 p-2 pl-6 pr-4 transition-all shadow-sm"
+            className="flex items-center gap-2 rounded-[28px] bg-background/95 backdrop-blur-xl border-2 p-2 pl-4 md:pl-6 pr-3 md:pr-4 transition-all shadow-sm"
           >
             <input
               ref={fileRef}
@@ -142,7 +142,7 @@ export default function ChatInput({ onSend, disabled, value = "", onChange, isVi
               onBlur={() => setIsFocused(false)}
               disabled={disabled}
               placeholder="Enter a prompt here"
-              className="flex-1 bg-transparent border-none outline-none py-3 text-[17px] font-body text-foreground placeholder:text-muted/60"
+              className="flex-1 bg-transparent border-none outline-none py-2.5 md:py-3 text-[15px] md:text-[17px] font-body text-foreground placeholder:text-muted/60 min-w-0"
             />
             
             <div className="flex items-center gap-1">
@@ -173,8 +173,8 @@ export default function ChatInput({ onSend, disabled, value = "", onChange, isVi
           )}
         </form>
         
-        <p className="text-center text-[11px] text-muted mt-4 font-body font-medium">
-          Dead Star may display inaccurate info, including about people, so double-check its responses. <a href="#" className="underline">Your privacy & Gemini Apps</a>
+        <p className="text-center text-[10px] md:text-[11px] text-muted mt-3 md:mt-4 font-body font-medium px-2">
+          Dead Star may display inaccurate info. <span className="hidden sm:inline">Double-check its responses.</span> <a href="#" className="underline">Your privacy</a>
         </p>
       </div>
     </motion.div>
