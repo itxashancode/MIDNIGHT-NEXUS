@@ -3,7 +3,7 @@
  */
 
 const COINGECKO_BASE = "https://api.coingecko.com/api/v3";
-const API_KEY = process.env.COINGECKO_API_KEY || "CG-PUBZQYn6eyBEuhi4NU6Zsyxa";
+const API_KEY = process.env.COINGECKO_API_KEY;
 
 export async function fetchCryptoPrices(args: { ids: string; vs_currencies?: string }, signal?: AbortSignal) {
   try {

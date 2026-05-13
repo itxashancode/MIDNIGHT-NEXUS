@@ -17,7 +17,7 @@ export async function fetchFinanceNews(params: {
   sources?: string;
   date?: string;
 }, signal?: AbortSignal): Promise<string> {
-  const apiKey = "Dz1MzAtsTkyLqkRxD3lTNexcS9eCIxG0"; // Provided by user
+  const apiKey = process.env.FINANCELAYER_API_KEY;
   
   const url = new URL("https://api.apilayer.com/financelayer/news");
   if (params.keywords) url.searchParams.append("keywords", params.keywords);
@@ -70,7 +70,7 @@ export async function fetchExchangeRates(params: {
   base?: string;
   symbols?: string;
 }, signal?: AbortSignal): Promise<string> {
-  const apiKey = "Dz1MzAtsTkyLqkRxD3lTNexcS9eCIxG0"; // Provided by user
+  const apiKey = process.env.FINANCELAYER_API_KEY;
   
   try {
     // Optimized: Use currency_data for faster response times
