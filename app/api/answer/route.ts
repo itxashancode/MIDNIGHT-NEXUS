@@ -26,14 +26,20 @@ export async function POST(req: Request) {
     const ip = req.headers.get("x-forwarded-for") || "anonymous";
 
     // 1. Rate Limiting (10 requests per minute)
-    const { rateLimit, validateImage, sanitizeThought } = await import("@/lib/security");
-    if (!rateLimit(ip, 10)) {
+    const { checkRateLimit, validateImage, sanitizeThought, sanitizeInput } = await import("@/lib/security");
+    if (!(await checkRateLimit(ip))) {
       return new Response("Too many requests. Please wait a minute.", { status: 429 });
     }
 
-    // 2. Image Validation (Max 5MB)
-    if (image && !validateImage(image.base64)) {
-      return new Response("Image too large. Maximum size is 5MB.", { status: 400 });
+    // Origin Validation (CORS)
+    const origin = req.headers.get("origin");
+    if (origin && !origin.includes("localhost") && origin !== "https://deadstarai.vercel.app") {
+      return new Response("Forbidden: Invalid Origin", { status: 403 });
+    }
+
+    // 2. Image Validation (Max 5MB, WebP only)
+    if (image && !validateImage(image.base64, 5)) {
+      return new Response("Invalid image format or size. Only WebP under 5MB is supported.", { status: 400 });
     }
 
     if (!message && !image) {
@@ -69,7 +75,8 @@ STRICT RULES:
 ADAPTIVE EFFICIENCY:
 - Think efficiently and at a lower depth for this final response, as the heavy reasoning nodes are provided above.`;
 
-    const userMessage = message || "Analyze image";
+    const sanitizedMessage = sanitizeInput(message, 1000);
+    const userMessage = sanitizedMessage || "Analyze image";
 
     // Step 1: First Gemma 4 call — let it decide if it needs to search
     const functionCallResult = await fetchGemmaFunctionCall(

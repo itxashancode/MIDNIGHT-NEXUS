@@ -9,14 +9,20 @@ export async function POST(req: Request) {
     const ip = req.headers.get("x-forwarded-for") || "anonymous";
 
     // 1. Rate Limiting (10 requests per minute)
-    const { rateLimit, validateImage } = await import("@/lib/security");
-    if (!rateLimit(ip, 10)) {
+    const { checkRateLimit, validateImage, sanitizeInput } = await import("@/lib/security");
+    if (!(await checkRateLimit(ip))) {
       return new Response("Too many requests. Please wait a minute.", { status: 429 });
     }
 
-    // 2. Image Validation (Max 5MB)
-    if (image && !validateImage(image.base64)) {
-      return new Response("Image too large. Maximum size is 5MB.", { status: 400 });
+    // Origin Validation (CORS)
+    const origin = req.headers.get("origin");
+    if (origin && !origin.includes("localhost") && origin !== "https://deadstarai.vercel.app") {
+      return new Response("Forbidden: Invalid Origin", { status: 403 });
+    }
+
+    // 2. Image Validation (Max 5MB, WebP only)
+    if (image && !validateImage(image.base64, 5)) {
+      return new Response("Invalid image format or size. Only WebP under 5MB is supported.", { status: 400 });
     }
 
     const imageData: GemmaImagePart | undefined = image
@@ -25,7 +31,9 @@ export async function POST(req: Request) {
 
     const systemInstruction = "You are a private thinking engine. Output thoughts as a JSON array of strings.";
 
-    const userMessage = `Generate exactly 6 private pre-response thoughts for: "${message || "this image"}". 
+    const sanitizedMessage = sanitizeInput(message, 1000);
+
+    const userMessage = `Generate exactly 6 private pre-response thoughts for: "${sanitizedMessage || "this image"}". 
     Even for simple inputs, generate 6 distinct thoughts exploring different angles, doubts, or follow-up considerations. 
     Each thought must be one sentence under 20 words. 
     If an image is provided, at least 3 thoughts must directly reference what you observe in the image. 

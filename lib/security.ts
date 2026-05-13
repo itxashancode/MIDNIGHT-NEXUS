@@ -1,25 +1,30 @@
+import { Redis } from '@upstash/redis';
+import { Ratelimit } from '@upstash/ratelimit';
+
 /**
  * DEAD STAR - Security Middleware Utilities
  * Optimized for Next.js Edge Runtime
  */
 
-// Simple in-memory cache for rate limiting (Note: This is per-instance in Edge)
-// For production, use Upstash Redis or Vercel KV.
-const rateLimitMap = new Map<string, { count: number; lastReset: number }>();
+// Initialize Upstash Redis ratelimit (fallback to disabled if no env vars in local dev)
+const redisUrl = process.env.UPSTASH_REDIS_REST_URL;
+const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN;
 
-export function rateLimit(ip: string, limit: number = 10, windowMs: number = 60000) {
-  const now = Date.now();
-  const record = rateLimitMap.get(ip) || { count: 0, lastReset: now };
+const ratelimit = redisUrl && redisToken 
+  ? new Ratelimit({
+      redis: new Redis({
+        url: redisUrl,
+        token: redisToken,
+      }),
+      limiter: Ratelimit.slidingWindow(10, "1 m"),
+      analytics: true,
+    })
+  : null;
 
-  if (now - record.lastReset > windowMs) {
-    record.count = 0;
-    record.lastReset = now;
-  }
-
-  record.count++;
-  rateLimitMap.set(ip, record);
-
-  return record.count <= limit;
+export async function checkRateLimit(ip: string): Promise<boolean> {
+  if (!ratelimit) return true; // Bypass in local dev if no Upstash credentials
+  const { success } = await ratelimit.limit(ip);
+  return success;
 }
 
 export function validateImage(base64?: string, maxSizeMb: number = 5) {
@@ -29,7 +34,26 @@ export function validateImage(base64?: string, maxSizeMb: number = 5) {
   const sizeInBytes = (base64.length * 3) / 4;
   const sizeInMb = sizeInBytes / (1024 * 1024);
   
-  return sizeInMb <= maxSizeMb;
+  if (sizeInMb > maxSizeMb) return false;
+
+  // Verify magic number for WebP (WebP starts with RIFF -> UklGR in base64)
+  if (!base64.startsWith("UklGR")) {
+    return false;
+  }
+  
+  return true;
+}
+
+/**
+ * Sanitize user-provided message input
+ */
+export function sanitizeInput(content: string, maxLength: number = 1000): string {
+  if (!content) return "";
+  return content
+    .replace(/[\x00-\x1F\x7F]/g, "") // Strip control characters
+    .replace(/\[\/?[A-Z_]+\]/g, "")  // Remove [TAGS]
+    .replace(/System:/gi, "S:")      // Prevent fake system instructions
+    .slice(0, maxLength);            // Strict length limit
 }
 
 /**
