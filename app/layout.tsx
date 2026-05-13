@@ -23,7 +23,13 @@ export const metadata: Metadata = {
   description: "Bending AI reasoning before it arrives. A multimodal experience with Gemma 4.",
   keywords: ["AI", "Gemma 4", "Reasoning", "Multimodal", "Dead Star"],
   authors: [{ name: "Dead Star Team" }],
+  icons: {
+    icon: "/icon.svg",
+    shortcut: "/favicon.ico",
+    apple: "/icon.svg",
+  },
 };
+
 
 export default function RootLayout({
   children,
