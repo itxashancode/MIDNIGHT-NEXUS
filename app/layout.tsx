@@ -19,14 +19,53 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Dead Star AI",
-  description: "Bending AI reasoning before it arrives. A multimodal experience with Gemma 4.",
-  keywords: ["AI", "Gemma 4", "Reasoning", "Multimodal", "Dead Star"],
-  authors: [{ name: "Dead Star Team" }],
-  icons: {
-    icon: "/icon.svg?v=2",
-    shortcut: "/favicon.ico?v=2",
-    apple: "/icon.svg?v=2",
+  metadataBase: new URL("https://deadstarai.vercel.app"),
+  title: {
+    default: "Dead Star AI - Bending AI Reasoning",
+    template: "%s | Dead Star AI"
+  },
+  description: "Dead Star AI is an advanced multimodal reasoning engine powered by Gemma 4. Intercept, analyze, and reshape AI cognitive nodes in real-time.",
+  keywords: ["AI", "Gemma 4", "Reasoning Engine", "Multimodal AI", "Dead Star", "Artificial Intelligence", "Developer Tools", "Prompt Engineering"],
+  authors: [{ name: "Dead Star Team", url: "https://deadstarai.vercel.app" }],
+  creator: "Dead Star Team",
+  publisher: "Dead Star AI",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  openGraph: {
+    title: "Dead Star AI - Bending AI Reasoning",
+    description: "Dead Star AI is an advanced multimodal reasoning engine powered by Gemma 4. Intercept, analyze, and reshape AI cognitive nodes in real-time.",
+    url: "https://deadstarai.vercel.app",
+    siteName: "Dead Star AI",
+    images: [
+      {
+        url: "/icon.svg",
+        width: 800,
+        height: 600,
+        alt: "Dead Star AI Logo",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Dead Star AI",
+    description: "Intercept, analyze, and reshape AI cognitive nodes in real-time with Gemma 4.",
+    creator: "@DeadStarAI",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
   verification: {
     google: "J1p5DIxzr2GfL6I2Ouuu-ASvS8WgjdKlIu4pqawLAHM",

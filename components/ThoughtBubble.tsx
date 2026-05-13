@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Edit2, Sparkles, AlertCircle, Trash2 } from "lucide-react";
+import { Edit2, Sparkles, AlertCircle, Trash2, Globe } from "lucide-react";
 import { useState } from "react";
 
 interface Thought {
@@ -23,6 +23,7 @@ export default function ThoughtBubble({ thought, onEdit, onDelete, isLocked }: T
   const [editValue, setEditValue] = useState(thought.content);
 
   const isChanged = thought.originalContent !== null && thought.originalContent !== thought.content;
+  const isWebSearch = thought.content.toLowerCase().includes("tavilysearch") || thought.content.toLowerCase().includes("web_search");
 
   const handleSave = () => {
     onEdit(editValue);
@@ -46,17 +47,31 @@ export default function ThoughtBubble({ thought, onEdit, onDelete, isLocked }: T
         <div className="flex items-center gap-2">
           {thought.isStreaming ? (
             <div className="w-2 h-2 rounded-full bg-primary animate-ping" />
+          ) : isWebSearch ? (
+            <Globe className="w-3.5 h-3.5 text-blue-500" />
           ) : (
             <Sparkles className={`w-3.5 h-3.5 ${isChanged ? "text-primary" : "text-muted-foreground"}`} />
           )}
           <span className="text-[10px] font-subheading font-bold uppercase tracking-widest text-muted/70">
-            {thought.isStreaming ? "Synthesizing..." : isChanged ? "Human Intervened" : "Neural Path"}
+            {thought.isStreaming ? "Synthesizing..." : isWebSearch ? "Action Node" : isChanged ? "Human Intervened" : "Neural Path"}
           </span>
+          {isWebSearch && !thought.isStreaming && (
+            <span className="ml-2 px-1.5 py-0.5 rounded bg-blue-500/10 text-blue-500 text-[9px] font-bold uppercase tracking-wider border border-blue-500/20">
+              Web Search
+            </span>
+          )}
         </div>
 
         {!isLocked && !thought.isStreaming && (
-          <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all">
-            <button
+          <div className="flex items-center gap-1 opacity-100 transition-all">
+            {!isEditing && !isChanged && (
+              <span className="text-[10px] font-bold uppercase tracking-wider text-primary mr-2 animate-pulse hidden sm:flex items-center gap-1 opacity-70 group-hover:opacity-100">
+                <Edit2 className="w-3 h-3" />
+                Intercept
+              </span>
+            )}
+            <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all">
+              <button
               onClick={() => setIsEditing(!isEditing)}
               className="p-1.5 rounded-lg hover:bg-muted text-muted hover:text-primary transition-all"
               title="Edit thought"
@@ -69,7 +84,8 @@ export default function ThoughtBubble({ thought, onEdit, onDelete, isLocked }: T
               title="Remove node"
             >
               <Trash2 className="w-3.5 h-3.5" />
-            </button>
+              </button>
+            </div>
           </div>
         )}
       </div>
