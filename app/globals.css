@@ -12,8 +12,8 @@
     --popover-foreground: 240 10% 3.9%;
     
     /* 3 CORE COLORS */
-    --primary: 239 84% 67%; /* Brand Indigo: #6366f1 */
-    --primary-foreground: 0 0% 98%; /* White: #fafafa */
+    --primary: 212 100% 59%; /* Brand Blue: #3091ff */
+    --primary-foreground: 0 0% 100%; /* Pure White */
     --muted: 240 5% 64.9%; /* Muted Zinc: #a1a1aa */
     
     --secondary: 240 4.8% 95.9%;
@@ -38,8 +38,8 @@
     --popover-foreground: 0 0% 98%;
     
     /* 3 CORE COLORS (DARK MODE) */
-    --primary: 239 84% 67%; /* Brand Indigo */
-    --primary-foreground: 0 0% 98%; /* White */
+    --primary: 212 100% 59%; /* Brand Blue: #3091ff */
+    --primary-foreground: 0 0% 100%; /* Pure White */
     --muted: 240 5% 64.9%; /* Muted Zinc */
     
     --secondary: 240 3.7% 15.9%;
@@ -113,15 +113,15 @@
 .star-mesh {
   @apply fixed inset-0 z-[-1] pointer-events-none;
   background: 
-    radial-gradient(circle at 50% 50%, hsla(var(--primary), 0.12) 0%, transparent 50%),
-    radial-gradient(circle at 20% 80%, hsla(var(--primary), 0.08) 0%, transparent 40%),
-    radial-gradient(circle at 80% 20%, hsla(var(--primary), 0.08) 0%, transparent 40%);
+    radial-gradient(circle at 50% 50%, rgba(48, 145, 255, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 20% 80%, rgba(143, 184, 255, 0.12) 0%, transparent 40%),
+    radial-gradient(circle at 80% 20%, rgba(64, 112, 255, 0.12) 0%, transparent 40%);
   filter: blur(80px);
 }
 
 .hero-glow {
   @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full z-[-1] pointer-events-none;
-  background: radial-gradient(circle at center, hsla(var(--primary), 0.15) 0%, transparent 70%);
+  background: radial-gradient(circle at center, rgba(162, 191, 255, 0.2) 0%, transparent 70%);
   filter: blur(60px);
 }
 
