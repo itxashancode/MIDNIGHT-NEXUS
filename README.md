@@ -4,8 +4,6 @@
 
 Dead Star is a tactical intelligence interface built for the **Build with Gemma 4 Challenge**. It leverages the raw, multi-step reasoning capabilities of the Gemma 4 family to provide "Intercepted Intelligence"—a unique UX where users can see, edit, and collapse AI reasoning nodes before generating a final answer.
 
-![Dead Star Interface Demo](https://placehold.co/1200x600/0a0a0a/ff0000?text=30-Second+Demo+GIF+Placeholder)
-
 ---
 
 ## 🛰️ The Concept: Intelligence Lab
