@@ -28,6 +28,12 @@ export const metadata: Metadata = {
     shortcut: "/favicon.ico?v=2",
     apple: "/icon.svg?v=2",
   },
+  verification: {
+    google: "J1p5DIxzr2GfL6I2Ouuu-ASvS8WgjdKlIu4pqawLAHM",
+    other: {
+      "msvalidate.01": "0CE40AA79AE219E065CCF60DBDD27315",
+    },
+  },
 };
 
 
