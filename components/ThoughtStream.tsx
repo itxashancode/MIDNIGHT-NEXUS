@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence, Reorder } from "framer-motion";
 import ThoughtBubble from "./ThoughtBubble";
 import Timer from "./Timer";
-import { Brain, ArrowRight, Activity } from "lucide-react";
+import { Brain, ArrowRight, Activity, Plus } from "lucide-react";
 
 export type Thought = {
   id: string;
@@ -99,6 +99,27 @@ export default function ThoughtStream({
               </Reorder.Item>
             ))}
           </Reorder.Group>
+
+          {!isStreaming && !isCollapsed && (
+            <button
+              onClick={() => {
+                const newId = `manual-${Date.now()}`;
+                setThoughts([
+                  ...thoughts,
+                  {
+                    id: newId,
+                    content: "New neural pathway...",
+                    originalContent: null,
+                    isStreaming: false
+                  }
+                ]);
+              }}
+              className="mt-2 w-full p-4 border border-dashed border-border hover:border-primary/40 rounded-2xl flex items-center justify-center gap-2 text-muted hover:text-primary bg-transparent hover:bg-primary/5 transition-all group"
+            >
+              <Plus className="w-4 h-4 group-hover:scale-110 transition-transform" />
+              <span className="text-[10px] font-subheading font-bold uppercase tracking-widest">Inject Neural Link</span>
+            </button>
+          )}
 
           {isStreaming && (
             <motion.div

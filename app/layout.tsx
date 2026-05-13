@@ -24,9 +24,9 @@ export const metadata: Metadata = {
   keywords: ["AI", "Gemma 4", "Reasoning", "Multimodal", "Dead Star"],
   authors: [{ name: "Dead Star Team" }],
   icons: {
-    icon: "/icon.svg",
-    shortcut: "/favicon.ico",
-    apple: "/icon.svg",
+    icon: "/icon.svg?v=2",
+    shortcut: "/favicon.ico?v=2",
+    apple: "/icon.svg?v=2",
   },
 };
 
