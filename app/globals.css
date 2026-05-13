@@ -1,0 +1,133 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    
+    /* 3 CORE COLORS */
+    --primary: 239 84% 67%; /* Brand Indigo: #6366f1 */
+    --primary-foreground: 0 0% 98%; /* White: #fafafa */
+    --muted: 240 5% 64.9%; /* Muted Zinc: #a1a1aa */
+    
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 5.9% 10%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    
+    /* 3 CORE COLORS (DARK MODE) */
+    --primary: 239 84% 67%; /* Brand Indigo */
+    --primary-foreground: 0 0% 98%; /* White */
+    --muted: 240 5% 64.9%; /* Muted Zinc */
+    
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+  }
+}
+
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--muted)); /* Default Body Text Color */
+    font-family: var(--font-inter), sans-serif; /* 3. BODY FONT */
+    @apply antialiased;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    color: hsl(var(--foreground)); /* 2. HEADING COLOR */
+  }
+
+  h1 { font-family: var(--font-outfit), sans-serif; font-weight: 800; } /* 1. HEADING FONT (Fallback) */
+}
+
+/* 3 FONTS CUSTOM CLASSES */
+.halaska-display {
+  font-family: 'Halaska', sans-serif; /* 1. HEADING FONT */
+  font-size: clamp(4rem, 15vw, 12rem);
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  line-height: 0.85;
+  text-transform: uppercase;
+  color: hsl(var(--foreground));
+}
+
+.subheading-style {
+  font-family: var(--font-outfit), sans-serif; /* 2. SUBHEADING FONT */
+  font-weight: 700;
+  color: hsl(var(--foreground));
+  letter-spacing: -0.02em;
+}
+
+.body-style {
+  font-family: var(--font-inter), sans-serif; /* 3. BODY FONT */
+  font-weight: 400;
+  color: hsl(var(--muted));
+}
+
+/* Suggestion Cards */
+.suggestion-card {
+  @apply flex flex-col gap-4 p-8 rounded-[32px] bg-background/30 backdrop-blur-xl border border-white/5 hover:border-primary/40 hover:bg-background/50 transition-all duration-500 cursor-pointer relative overflow-hidden;
+  will-change: transform, border-color;
+  transform: translateZ(0);
+}
+
+.solidroad-nav {
+  @apply w-full max-w-[1200px] bg-background/80 backdrop-blur-md border border-border shadow-lg rounded-[2rem] px-6 py-3 transition-all duration-300;
+  font-family: var(--font-outfit); /* Use subheading font for nav */
+}
+
+/* Star-Mesh Background */
+.star-mesh {
+  @apply fixed inset-0 z-[-1] pointer-events-none;
+  background: 
+    radial-gradient(circle at 50% 50%, hsla(var(--primary), 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 20% 80%, hsla(var(--primary), 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 80% 20%, hsla(var(--primary), 0.08) 0%, transparent 40%);
+  filter: blur(80px);
+}
+
+.hero-glow {
+  @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full z-[-1] pointer-events-none;
+  background: radial-gradient(circle at center, hsla(var(--primary), 0.15) 0%, transparent 70%);
+  filter: blur(60px);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-primary/20 rounded-full;
+}

@@ -1,36 +1,109 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌌 Dead Star
 
-## Getting Started
+> **"Intercepted intelligence streams from the edge of reasoning."**
 
-First, run the development server:
+Dead Star is a tactical intelligence interface built for the **Build with Gemma 4 Challenge**. It leverages the raw, multi-step reasoning capabilities of the Gemma 4 family to provide "Intercepted Intelligence"—a unique UX where users can see, edit, and collapse AI reasoning nodes before generating a final answer.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+![Dead Star Interface Demo](https://placehold.co/1200x600/0a0a0a/ff0000?text=30-Second+Demo+GIF+Placeholder)
+
+---
+
+## 🛰️ The Concept: Intelligence Lab
+Most AI interfaces hide reasoning. **Dead Star** puts it center stage.
+1. **Intercept**: The system streams multi-node reasoning (Gemma 4).
+2. **Intervene**: You can delete, edit, or reorder these "Intelligence Nodes."
+3. **Collapse**: You commit the stabilized intelligence to generate the final, tactical answer.
+
+---
+
+## 🏗️ Architecture: The Reasoning Intercept Protocol (RIP)
+
+```mermaid
+graph TD
+    User([User Query]) --> ThinkingAPI[Thinking API /api/think]
+    ThinkingAPI --> G4_31B[Gemma 4 31B]
+    G4_31B --> Nodes[Streaming Intelligence Nodes]
+    
+    Nodes --> UI{Intelligence Lab}
+    UI --> Edit[Manual User Editing]
+    UI --> Reorder[Node Reordering]
+    
+    Edit --> Collapse[Commit Intelligence]
+    Reorder --> Collapse
+    
+    Collapse --> AnswerAPI[Answer API /api/answer]
+    AnswerAPI --> ToolCall{Native Tool Call?}
+    ToolCall -- Yes --> Tavily[Tavily Search API]
+    ToolCall -- No --> FinalResult[Gemma 4 Synthesis]
+    
+    Tavily --> FinalResult
+    FinalResult --> View[Tactical Answer Panel]
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## ⚡ Technical Highlights
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Gemma 4 Native Function Calling**: Uses the latest Gemma 4 tool-use capabilities to trigger real-time web searches via Tavily only when necessary.
+- **Robust Failover Chain**: Implements a multi-layered fallback system (`31B` -> `26B` -> `4B`) with API key rotation to ensure 100% availability during high traffic.
+- **Haptic UI/UX**: Built with Framer Motion for a "glassmorphism" tactical feel, featuring instant collapse animations and "Intelligence Depth" token tracking.
+- **Context-Aware Reasoning**: Specifically tuned for deep analysis, deconstruction, and modular reconstruction tasks.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🛠️ Installation & Deployment
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 🚀 One-Command Deploy (Vercel)
+The fastest way to experience Dead Star is to click the button below. It will clone the repo and prompt you for your `GEMMA_API_KEY` and `TAVILY_API_KEY`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fyour-username%2Fdead-star&env=GEMMA_API_KEY,TAVILY_API_KEY)
 
-## Deploy on Vercel
+### 💻 Local Development
+1. **Clone & Install**:
+   ```bash
+   git clone https://github.com/your-username/dead-star.git
+   cd dead-star
+   npm install
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+2. **Environment Variables**:
+   Create a `.env.local` file:
+   ```env
+   # Supports comma-separated keys for automatic rotation
+   GEMMA_API_KEY=your_key_1,your_key_2
+   TAVILY_API_KEY=your_tavily_key
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+3. **Launch**:
+   ```bash
+   npm run dev
+   ```
+
+---
+
+## 🛰️ Architecture: Reasoning Intercept Protocol (RIP)
+
+Dead Star utilizes a unique dual-pass architecture to maximize Gemma 4's reasoning:
+
+1. **The Intercept Pass**: Gemma 4 generates raw reasoning nodes.
+2. **The Manipulation Phase**: The user interacts with the Intelligence Lab to prune or refine thoughts.
+3. **The Synthesis Pass**: Gemma 4 receives the user-stabilized intelligence AND a native function call result (if needed) to produce the final tactical response.
+
+```mermaid
+graph TD
+    A[User Query] --> B[Gemma 4 31B]
+    B --> C[Intelligence Nodes]
+    C --> D{Intelligence Lab}
+    D -- User Intervention --> E[Stabilized Intelligence]
+    E --> F[Gemma 4 Function Call]
+    F -- Tool: web_search --> G[Tavily Search API]
+    G --> H[Final Context Injection]
+    H --> I[Gemma 4 Final Synthesis]
+    I --> J[Tactical Answer]
+```
+
+---
+
+## 🏆 Dev.to Gemma 4 Challenge
+This project is an entry for the **Build with Gemma 4** challenge.
+Built by [Your Name] in Pakistan, 2026.
