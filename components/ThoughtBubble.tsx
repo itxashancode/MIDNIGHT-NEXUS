@@ -37,10 +37,10 @@ export default function ThoughtBubble({ thought, onEdit, onDelete, isLocked }: T
       animate={{ opacity: 1, x: 0 }}
       className={`group relative flex flex-col gap-2 p-4 rounded-2xl border transition-all duration-300 ${
         thought.isStreaming 
-          ? "bg-muted/30 border-primary/20 animate-pulse" 
+          ? "bg-muted/40 border-primary/30 animate-pulse" 
           : isChanged 
-            ? "bg-primary/5 border-primary/30" 
-            : "bg-background border-border hover:border-primary/40 hover:shadow-sm"
+            ? "bg-primary/10 border-primary/40" 
+            : "bg-muted/10 border-border hover:bg-muted/20 hover:border-primary/50 hover:shadow-md"
       }`}
     >
       <div className="flex items-center justify-between gap-3">
@@ -52,7 +52,7 @@ export default function ThoughtBubble({ thought, onEdit, onDelete, isLocked }: T
           ) : (
             <Sparkles className={`w-3.5 h-3.5 ${isChanged ? "text-primary" : "text-muted-foreground"}`} />
           )}
-          <span className="text-[10px] font-subheading font-bold uppercase tracking-widest text-muted/70">
+          <span className="text-[10px] font-subheading font-bold uppercase tracking-widest text-primary/80">
             {thought.isStreaming ? "Synthesizing..." : isWebSearch ? "Action Node" : isChanged ? "Human Intervened" : "Neural Path"}
           </span>
           {isWebSearch && !thought.isStreaming && (
@@ -91,33 +91,44 @@ export default function ThoughtBubble({ thought, onEdit, onDelete, isLocked }: T
         )}
       </div>
 
+      {isEditing && (
+        <div 
+          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[150] cursor-default pointer-events-auto"
+          onClick={() => setIsEditing(false)}
+        />
+      )}
+
       {isEditing ? (
-        <div className="flex flex-col gap-2 mt-1">
+        <div className="flex flex-col gap-3 mt-1 relative z-[160]">
+          <div className="flex items-center gap-2 mb-1">
+            <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+            <span className="text-[10px] font-subheading font-bold uppercase tracking-widest text-primary">Neural Override Active</span>
+          </div>
           <textarea
             autoFocus
             value={editValue}
             onChange={(e) => setEditValue(e.target.value)}
             maxLength={500}
-            className="w-full bg-muted border border-primary/20 rounded-xl p-3 text-sm font-body font-medium focus:ring-2 focus:ring-primary/20 outline-none min-h-[80px] resize-none"
+            className="w-full bg-background border-2 border-primary rounded-xl p-4 text-[15px] font-body font-medium focus:ring-8 focus:ring-primary/10 outline-none min-h-[120px] resize-none shadow-[0_20px_50px_rgba(48,145,255,0.3)]"
           />
-          <div className="flex justify-end gap-2">
+          <div className="flex justify-end gap-3">
             <button
               onClick={() => setIsEditing(false)}
-              className="px-3 py-1.5 text-xs font-subheading font-bold text-muted hover:text-foreground transition-colors"
+              className="px-4 py-2 text-[11px] font-subheading font-bold text-muted hover:text-foreground transition-colors uppercase tracking-widest"
             >
-              Cancel
+              Discard
             </button>
             <button
               onClick={handleSave}
-              className="px-4 py-1.5 bg-primary text-primary-foreground text-xs font-bold rounded-lg shadow-sm hover:scale-105 active:scale-95 transition-all"
+              className="px-6 py-2 bg-primary text-primary-foreground text-[11px] font-bold rounded-xl shadow-xl hover:scale-105 active:scale-95 transition-all uppercase tracking-widest"
             >
-              Apply Change
+              Apply Intent
             </button>
           </div>
         </div>
       ) : (
         <div className="relative">
-          <p className={`text-[15px] leading-relaxed font-body font-medium ${isChanged ? "text-primary" : "text-foreground/90"}`}>
+          <p className={`text-[15px] leading-relaxed font-body font-medium ${isChanged ? "text-primary font-bold" : "text-foreground"}`}>
             {thought.content}
           </p>
           {isChanged && (

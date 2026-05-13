@@ -19,8 +19,8 @@ export async function tavilySearch(query: string, signal?: AbortSignal): Promise
       body: JSON.stringify({
         api_key: apiKey,
         query,
-        search_depth: "basic",
-        max_results: 3, // Reduced results for faster processing
+        search_depth: "advanced",
+        max_results: 5,
         include_answer: true,
       }),
       signal: signal || controller.signal,
@@ -63,6 +63,15 @@ export function needsSearch(message: string): boolean {
     /score/i,
     /match/i,
     /trending/i,
+    /ticker/i,
+    /nasdaq/i,
+    /dow jones/i,
+    /equity/i,
+    /dividend/i,
+    /currency/i,
+    /exchange rate/i,
+    /convert (usd|eur|gbp|pkr)/i,
+    /bitcoin|btc|ethereum|eth|solana|crypto|token|market cap/i,
     /202[456789]/,      // Specific upcoming/current years
     /who (is|was|won)/i,
     /what happened/i,

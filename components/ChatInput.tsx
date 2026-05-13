@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import NextImage from "next/image";
 import { Image as ImageIcon, X, Send } from "lucide-react";
@@ -53,6 +53,15 @@ export default function ChatInput({ onSend, disabled, value = "", onChange, isVi
   const [image, setImage] = useState<ImageAttachment | null>(null);
   const [fileError, setFileError] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+  const ghostRef = useRef<HTMLSpanElement>(null);
+  const [cursorOffset, setCursorOffset] = useState(0);
+
+  // Sync cursor position with ghost element width
+  useEffect(() => {
+    if (ghostRef.current) {
+      setCursorOffset(ghostRef.current.offsetWidth);
+    }
+  }, [input]);
 
   const handleFile = async (file: File) => {
     setFileError(null);
@@ -65,6 +74,20 @@ export default function ChatInput({ onSend, disabled, value = "", onChange, isVi
       setImage(attachment);
     } catch {
       setFileError("Failed to process image.");
+    }
+  };
+
+  const handlePaste = async (e: React.ClipboardEvent) => {
+    const items = e.clipboardData.items;
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].type.indexOf("image") !== -1) {
+        const file = items[i].getAsFile();
+        if (file) {
+          handleFile(file);
+          e.preventDefault();
+          break;
+        }
+      }
     }
   };
 
@@ -102,7 +125,15 @@ export default function ChatInput({ onSend, disabled, value = "", onChange, isVi
               className="flex items-center gap-3 p-2 mb-4 bg-background border border-border rounded-2xl shadow-xl w-fit"
             >
               <div className="relative group">
-                <NextImage src={image.previewUrl} alt="attachment" width={48} height={48} className="h-12 w-12 rounded-xl object-cover border border-border" unoptimized />
+                <NextImage 
+                  src={image.previewUrl} 
+                  alt="attachment" 
+                  width={48} 
+                  height={48} 
+                  style={{ width: '48px', height: '48px' }} 
+                  className="rounded-xl object-cover border border-border" 
+                  unoptimized 
+                />
                 <button
                   type="button"
                   onClick={() => setImage(null)}
@@ -122,7 +153,7 @@ export default function ChatInput({ onSend, disabled, value = "", onChange, isVi
         <form onSubmit={handleSubmit} className="relative group">
           <motion.div
             animate={{
-              borderColor: isFocused ? "hsl(var(--primary))" : "hsl(var(--border))",
+              borderColor: isFocused ? "rgba(255, 255, 255, 0.4)" : "rgba(255, 255, 255, 0.1)",
             }}
             className="flex items-center gap-2 rounded-[28px] bg-background/95 backdrop-blur-xl border-2 p-2 pl-4 md:pl-6 pr-3 md:pr-4 transition-all shadow-sm"
           >
@@ -134,16 +165,44 @@ export default function ChatInput({ onSend, disabled, value = "", onChange, isVi
               onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
             />
 
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onFocus={() => setIsFocused(true)}
-              onBlur={() => setIsFocused(false)}
-              disabled={disabled}
-              placeholder="Enter a prompt here"
-              className="flex-1 bg-transparent border-none outline-none py-2.5 md:py-3 text-[15px] md:text-[17px] font-body text-foreground placeholder:text-muted/60 min-w-0"
-            />
+            <div className="flex-1 relative flex items-center overflow-hidden">
+              {/* Ghost element for measuring text width */}
+              <span ref={ghostRef} className="invisible absolute whitespace-pre font-body text-[15px] md:text-[17px]">
+                {input}
+              </span>
+
+              <input
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onFocus={() => setIsFocused(true)}
+                onBlur={() => setIsFocused(false)}
+                onPaste={handlePaste}
+                disabled={disabled}
+                placeholder="Enter a prompt here"
+                className="w-full bg-transparent border-none outline-none py-2.5 md:py-3 text-[15px] md:text-[17px] font-body text-foreground placeholder:text-muted/60 min-w-0 caret-transparent"
+              />
+              
+              {/* Custom Blinking Cursor */}
+              {isFocused && !disabled && (
+                <div 
+                  className="absolute pointer-events-none flex items-center h-full transition-all duration-75 ease-out"
+                  style={{ 
+                    left: 0,
+                    transform: `translateX(${cursorOffset}px)`
+                  }}
+                >
+                  <motion.div
+                    animate={{ opacity: [0, 1, 0] }}
+                    transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
+                    className="w-[2px] h-[18px] md:h-[22px] bg-primary shadow-[0_0_8px_rgba(48,145,255,0.8)]"
+                    style={{
+                      marginLeft: input.length === 0 ? "0" : "1px"
+                    }}
+                  />
+                </div>
+              )}
+            </div>
             
             <div className="flex items-center gap-1">
               <button

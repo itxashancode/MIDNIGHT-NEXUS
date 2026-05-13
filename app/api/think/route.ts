@@ -33,10 +33,11 @@ export async function POST(req: Request) {
 
     const sanitizedMessage = sanitizeInput(message, 1000);
 
-    const userMessage = `Generate exactly 6 private pre-response thoughts for: "${sanitizedMessage || "this image"}". 
-    Even for simple inputs, generate 6 distinct thoughts exploring different angles, doubts, or follow-up considerations. 
+    const userMessage = `Analyze the complexity of this request: "${sanitizedMessage || "this image"}". 
+    Generate a dynamic set of private pre-response thoughts (between 4 and 10) based on how much depth, research, or logic is required.
+    Simple queries should have ~4 thoughts. Complex, multi-step, or research-based queries should have 8-10 thoughts.
     Each thought must be one sentence under 20 words. 
-    If an image is provided, at least 3 thoughts must directly reference what you observe in the image. 
+    If an image is provided, ensure thoughts reference visual details. 
     Output raw JSON array of strings only.`;
 
     const responseSchema = {
