@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://deadstarai.vercel.app/sitemap.xml

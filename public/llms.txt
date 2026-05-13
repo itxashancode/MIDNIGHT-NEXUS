@@ -1,0 +1,14 @@
+Title: Dead Star AI
+Description: Bending AI reasoning before it arrives. A multimodal experience with Gemma 4.
+URL: https://deadstarai.vercel.app/
+
+# Dead Star AI
+
+Dead Star AI is an advanced thinking engine powered by Gemma 4. It offers a transparent multimodal reasoning process, allowing users to inject custom neural links, observe the internal stream of thoughts before an answer is finalized, and collaborate with the reasoning loop.
+
+Features:
+- Streaming transparent reasoning nodes
+- Real-time Web Search via Tavily
+- Vision analysis
+- Upstash Redis global rate limiting
+- Secure execution in Vercel Edge Runtime
