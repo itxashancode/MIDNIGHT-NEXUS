@@ -106,4 +106,4 @@ graph TD
 
 ## 🏆 Dev.to Gemma 4 Challenge
 This project is an entry for the **Build with Gemma 4** challenge.
-Built by [Your Name] in Pakistan, 2026.
+Built by Ashan in Pakistan, 2026.
