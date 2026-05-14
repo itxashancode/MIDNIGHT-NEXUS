@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono, Outfit } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 
@@ -68,14 +69,15 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: "J1p5DIxzr2GfL6I2Ouuu-ASvS8WgjdKlIu4pqawLAHM",
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ?? "",
     other: {
-      "msvalidate.01": "0CE40AA79AE219E065CCF60DBDD27315",
+      "msvalidate.01": process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION ?? "",
     },
   },
 };
 
 import { ThemeProvider } from "@/components/theme-provider";
+import { Analytics } from "@vercel/analytics/react";
 
 export default function RootLayout({
   children,
@@ -95,6 +97,27 @@ export default function RootLayout({
           jetbrainsMono.variable
         )}
       >
+        {/* Google Analytics */}
+        {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="google-analytics" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}', {
+                  page_path: window.location.pathname,
+                  send_page_view: true
+                });
+              `}
+            </Script>
+          </>
+        )}
+
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
@@ -102,6 +125,8 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
+          {/* Vercel Analytics — tracks page views & web vitals */}
+          <Analytics />
         </ThemeProvider>
       </body>
     </html>
