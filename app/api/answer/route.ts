@@ -3,6 +3,7 @@ import { createSSETransform } from "@/lib/stream";
 import { tavilySearch } from "@/lib/search";
 import { fetchFinanceNews, fetchExchangeRates } from "@/lib/finance";
 import { fetchCryptoPrices, fetchTrendingCrypto } from "@/lib/crypto";
+import { firecrawlScrape } from "@/lib/firecrawl";
 
 export const runtime = "edge";
 
@@ -64,6 +65,21 @@ const cryptoTrendingTool = {
   name: "trending_crypto",
   description: "Get the top trending coins on CoinGecko in the last 24 hours.",
   parameters: { type: "object", properties: {} }
+};
+
+const webScrapeTool = {
+  name: "web_scrape",
+  description: "Scrape the full content of a specific URL and return clean markdown. Use this when the user shares a link or asks about the content of a specific page. Do NOT use for general questions — use web_search instead.",
+  parameters: {
+    type: "object",
+    properties: {
+      url: {
+        type: "string",
+        description: "The full URL to scrape (must start with https://)."
+      }
+    },
+    required: ["url"]
+  }
 };
 
 export async function POST(req: Request) {
@@ -171,7 +187,7 @@ JSON: { "type": "bar"|"line"|"pie", "title": "string", "data": { "labels": [], "
       functionCalls = await fetchGemmaFunctionCalls(
         systemInstruction,
         userMessage,
-        [webSearchTool, financeSearchTool, currencyExchangeTool, cryptoPricesTool, cryptoTrendingTool],
+        [webSearchTool, webScrapeTool, financeSearchTool, currencyExchangeTool, cryptoPricesTool, cryptoTrendingTool],
         toolController.signal,
         imageData,
         cappedHistory
@@ -203,6 +219,10 @@ JSON: { "type": "bar"|"line"|"pie", "title": "string", "data": { "labels": [], "
             if (call.name === "trending_crypto") {
               return await fetchTrendingCrypto(req.signal);
             }
+          if (call.name === "web_scrape" && call.args?.url) {
+            console.log(`[Parallel Execution] web_scrape("${call.args.url}")`);
+            return await firecrawlScrape(call.args.url, req.signal);
+          }
           } catch (e) {
             console.warn(`Tool ${call.name} failed:`, e);
           }
