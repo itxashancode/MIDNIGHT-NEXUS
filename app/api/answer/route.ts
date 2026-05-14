@@ -246,7 +246,7 @@ JSON: { "type": "bar"|"line"|"pie", "title": "string", "data": { "labels": [], "
     const stream = await fetchGemmaStream(
       finalSystem,
       userMessage,
-      1500,  // ⬇️ Reduced from 4096 — cuts cost by ~60% with minimal quality loss
+      4096,  // High-fidelity output window for complex reasoning and design.
       undefined,
       undefined,
       req.signal,
