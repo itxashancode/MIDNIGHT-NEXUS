@@ -3,6 +3,10 @@ export function createSSETransform() {
   let buffer = '';
 
   return new TransformStream({
+    start(controller) {
+      // Force Vercel to flush headers instantly by sending a safe whitespace character
+      controller.enqueue(new TextEncoder().encode(" "));
+    },
     transform(chunk, controller) {
       buffer += decoder.decode(chunk, { stream: true });
       const lines = buffer.split('\n');

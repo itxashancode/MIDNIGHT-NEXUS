@@ -49,8 +49,8 @@ export async function POST(req: Request) {
       systemInstruction,
       userMessage,
       400,
-      "application/json",
-      responseSchema,
+      undefined,
+      undefined,
       req.signal,
       imageData,
       undefined // No history for thinking phase to improve stability
