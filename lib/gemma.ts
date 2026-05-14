@@ -56,10 +56,10 @@ export async function fetchGemmaStream(
     generationConfig.responseSchema = responseSchema;
   }
 
-  // VERIFIED Models for v1beta REST API (Using Gemini Flash for extreme speed)
+  // VERIFIED Gemma 4 Models for v1beta REST API
   const models = [
-    "gemini-2.5-flash",    // High-Throughput (FASTER ✅)
-    "gemini-1.5-flash",    // Fallback (POWERFUL ✅)
+    "gemma-4-26b-a4b-it",  // High-Throughput MoE (FASTER ✅)
+    "gemma-4-31b-it",      // Dense Reasoning (POWERFUL ✅)
   ];
 
   // Official Gemma 4 Prompt Formatting
@@ -90,7 +90,7 @@ export async function fetchGemmaStream(
       try {
         // Add an 8s timeout for initial models to prevent hangs
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 8000);
+        const timeoutId = setTimeout(() => controller.abort(), 15000);
 
         const response = await fetch(
           `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?key=${apiKey}&alt=sse`,
@@ -162,10 +162,12 @@ export async function fetchGemmaFunctionCalls(
 
   const apiKeys = apiKeysRaw.split(",").map(k => k.trim());
 
+  // VERIFIED Gemma 4 Models for v1beta REST API
   const models = [
-    "gemini-2.5-flash",    // Fast tool detection
-    "gemini-1.5-flash",    // Fallback
+    "gemma-4-26b-a4b-it",  // High-Throughput MoE (FASTER ✅)
+    "gemma-4-31b-it",      // Dense Reasoning (POWERFUL ✅)
   ];
+
 
   // STRATEGY: For tool detection, we use a lean instruction to minimize CPU/latency.
   const toolInstruction = "Decide if tools are needed for real-time, financial, or web data. Otherwise, return no tools.";
