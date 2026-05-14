@@ -180,9 +180,9 @@ JSON: { "type": "bar"|"line"|"pie", "title": "string", "data": { "labels": [], "
     const systemInstruction = `${baseIdentity}\n\n[INTERNAL_REASONING]:\n${formattedReasoning}`;
     const userMessage       = sanitizedMessage || "Analyze image";
 
-    // ── Step 1: Tool detection (increased to 8.0s for Gemma 4 stability) ──
+    // ── Step 1: Tool detection (increased to 12.0s for Gemma 4 stability) ──
     const toolController = new AbortController();
-    const toolTimeout    = setTimeout(() => toolController.abort(), 8000);
+    const toolTimeout    = setTimeout(() => toolController.abort(), 12000);
 
     let functionCalls: any[] = [];
     try {

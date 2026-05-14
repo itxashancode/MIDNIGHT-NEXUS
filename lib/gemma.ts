@@ -88,9 +88,9 @@ export async function fetchGemmaStream(
       if (skipModel) break;
 
       try {
-        // Add an 8s timeout for initial models to prevent hangs
+        // Add a 10s timeout for initial models to prevent hangs
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000);
+        const timeoutId = setTimeout(() => controller.abort(), 10000);
 
         const response = await fetch(
           `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?key=${apiKey}&alt=sse`,
@@ -118,9 +118,15 @@ export async function fetchGemmaStream(
           const errorBody = await response.json().catch(() => ({}));
           const message = errorBody.error?.message || response.statusText;
 
-          // If internal error or model not found, skip THIS model and try the next one
-          if (message.includes("internal error") || message.includes("not found") || response.status === 500) {
-            console.warn(`Model ${model} is currently unstable (${message}), skipping entire node...`);
+          // If internal error, retry once after a short delay
+          if (message.includes("internal error") || response.status === 500) {
+            console.warn(`Model ${model} had internal error, retrying...`);
+            await new Promise(r => setTimeout(r, 800));
+            continue; // Try same key/model again
+          }
+
+          if (message.includes("not found")) {
+            console.warn(`Model ${model} not found, skipping...`);
             skipModel = true;
             break;
           }
@@ -133,13 +139,13 @@ export async function fetchGemmaStream(
         if (e instanceof Error) {
           lastError = e;
           if (e.name === 'AbortError') {
-             console.warn(`Model ${model} timed out after 5s, skipping...`);
+             console.warn(`Model ${model} timed out after 10s, skipping...`);
              skipModel = true;
              break;
           }
           console.warn(`Attempt with ${model} failed:`, e.message);
         }
-        await new Promise(resolve => setTimeout(resolve, 50));
+        await new Promise(resolve => setTimeout(resolve, 100));
       }
     }
   }
