@@ -90,7 +90,7 @@ export async function fetchGemmaStream(
       try {
         // Add an 8s timeout for initial models to prevent hangs
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 15000);
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
 
         const response = await fetch(
           `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?key=${apiKey}&alt=sse`,
@@ -133,7 +133,7 @@ export async function fetchGemmaStream(
         if (e instanceof Error) {
           lastError = e;
           if (e.name === 'AbortError') {
-             console.warn(`Model ${model} timed out after 8s, skipping...`);
+             console.warn(`Model ${model} timed out after 5s, skipping...`);
              skipModel = true;
              break;
           }
