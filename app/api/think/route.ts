@@ -62,7 +62,7 @@ export async function POST(req: Request) {
 
     return new Response(stream.pipeThrough(createSSETransform()), {
       headers: {
-        "Content-Type": "text/plain; charset=utf-8",
+        "Content-Type": "text/event-stream; charset=utf-8",
         "Cache-Control": "no-cache",
         "Connection": "keep-alive",
       },
