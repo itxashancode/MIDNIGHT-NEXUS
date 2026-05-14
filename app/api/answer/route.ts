@@ -178,9 +178,9 @@ JSON: { "type": "bar"|"line"|"pie", "title": "string", "data": { "labels": [], "
     const systemInstruction = `${baseIdentity}\n\n[INTERNAL_REASONING]:\n${formattedReasoning}`;
     const userMessage       = sanitizedMessage || "Analyze image";
 
-    // ── Step 1: Tool detection (tight 3.5s timeout) ───────────────────────
+    // ── Step 1: Tool detection (increased to 5.0s for stability) ─────────
     const toolController = new AbortController();
-    const toolTimeout    = setTimeout(() => toolController.abort(), 3500);
+    const toolTimeout    = setTimeout(() => toolController.abort(), 5000);
 
     let functionCalls: any[] = [];
     try {
@@ -192,8 +192,12 @@ JSON: { "type": "bar"|"line"|"pie", "title": "string", "data": { "labels": [], "
         imageData,
         cappedHistory
       );
-    } catch {
-      console.warn("Tool detection timed out or failed — using baseline knowledge.");
+    } catch (e: any) {
+      if (e.name === "AbortError") {
+        console.warn("Tool detection TIMED OUT (5s limit reached). Using baseline knowledge.");
+      } else {
+        console.error("Tool detection FAILED with error:", e.message || e);
+      }
     } finally {
       clearTimeout(toolTimeout);
     }

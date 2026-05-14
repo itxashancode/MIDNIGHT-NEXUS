@@ -168,8 +168,7 @@ export async function fetchGemmaFunctionCalls(
   ];
 
   // STRATEGY: For tool detection, we use a lean instruction to minimize CPU/latency.
-  const toolInstruction = `You are a tool-routing agent. Analyze the user request and determine which tools to call. 
-  Only use tools if necessary for current, real-time, or financial data.`;
+  const toolInstruction = "Decide if tools are needed for real-time, financial, or web data. Otherwise, return no tools.";
   
   const formattedSystem = toolInstruction;
   let promptText = "";
