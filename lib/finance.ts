@@ -28,7 +28,7 @@ export async function fetchFinanceNews(params: {
   try {
     const res = await fetch(url.toString(), {
       method: "GET",
-      headers: { "apikey": apiKey },
+      headers: { "apikey": apiKey || "" },
       signal,
     });
 
@@ -87,7 +87,7 @@ export async function fetchExchangeRates(params: {
     }
 
     const res = await fetch(url.toString(), { 
-      headers: { "apikey": apiKey },
+      headers: { "apikey": apiKey || "" },
       signal,
     });
 
