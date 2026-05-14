@@ -62,10 +62,9 @@ export async function POST(req: Request) {
       "You are a private thinking engine. Output thoughts as a JSON array of strings.";
 
     const userMessage = `Analyze the complexity of this request: "${sanitizedMessage || "this image"}". 
-    Generate a dynamic set of private pre-response thoughts (between 4 and 10) based on how much depth, research, or logic is required.
-    Simple queries should have ~4 thoughts. Complex, multi-step, or research-based queries should have 8-10 thoughts.
-    Each thought must be one sentence under 20 words. 
-    If an image is provided, ensure thoughts reference visual details. 
+    Generate a dynamic set of private pre-response thoughts (between 3 and 6) based on logic required.
+    Simple queries should have 3 thoughts. Complex ones should have 6.
+    Each thought must be one sentence under 15 words. 
     Output raw JSON array of strings only.`;
 
     const stream = await fetchGemmaStream(

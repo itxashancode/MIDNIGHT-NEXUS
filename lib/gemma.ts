@@ -58,8 +58,8 @@ export async function fetchGemmaStream(
 
   // VERIFIED Gemma 4 Models for v1beta REST API
   const models = [
-    "gemma-4-31b-it",      // Dense Reasoning (Verified ✅)
-    "gemma-4-26b-a4b-it",  // High-Throughput MoE (Verified ✅)
+    "gemma-4-26b-a4b-it",  // High-Throughput MoE (FASTER ✅)
+    "gemma-4-31b-it",      // Dense Reasoning (POWERFUL ✅)
   ];
 
   // Official Gemma 4 Prompt Formatting
@@ -90,7 +90,7 @@ export async function fetchGemmaStream(
       try {
         // Add an 8s timeout for initial models to prevent hangs
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 8000);
+        const timeoutId = setTimeout(() => controller.abort(), 4000);
 
         const response = await fetch(
           `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?key=${apiKey}&alt=sse`,

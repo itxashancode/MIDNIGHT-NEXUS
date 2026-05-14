@@ -186,11 +186,11 @@ JSON: { "type": "bar"|"line"|"pie", "title": "string", "data": { "labels": [], "
     try {
       functionCalls = await fetchGemmaFunctionCalls(
         systemInstruction,
-        userMessage,
+        sanitizedMessage, // Only send the latest message for tool detection
         [webSearchTool, webScrapeTool, financeSearchTool, currencyExchangeTool, cryptoPricesTool, cryptoTrendingTool],
         toolController.signal,
         imageData,
-        cappedHistory
+        [] // Pass empty history for faster routing decision
       );
     } catch (e: any) {
       if (e.name === "AbortError") {
