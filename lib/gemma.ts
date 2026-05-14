@@ -56,10 +56,10 @@ export async function fetchGemmaStream(
     generationConfig.responseSchema = responseSchema;
   }
 
-  // VERIFIED Gemma 4 Models for v1beta REST API
+  // VERIFIED Models for v1beta REST API (Using Gemini Flash for extreme speed)
   const models = [
-    "gemma-4-26b-a4b-it",  // High-Throughput MoE (FASTER ✅)
-    "gemma-4-31b-it",      // Dense Reasoning (POWERFUL ✅)
+    "gemini-2.5-flash",    // High-Throughput (FASTER ✅)
+    "gemini-1.5-flash",    // Fallback (POWERFUL ✅)
   ];
 
   // Official Gemma 4 Prompt Formatting
@@ -163,8 +163,8 @@ export async function fetchGemmaFunctionCalls(
   const apiKeys = apiKeysRaw.split(",").map(k => k.trim());
 
   const models = [
-    "gemma-4-26b-a4b-it",  // High-Throughput MoE (Best for fast tool detection)
-    "gemma-4-31b-it",      // Dense Reasoning Fallback
+    "gemini-2.5-flash",    // Fast tool detection
+    "gemini-1.5-flash",    // Fallback
   ];
 
   // STRATEGY: For tool detection, we use a lean instruction to minimize CPU/latency.
