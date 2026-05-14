@@ -76,7 +76,7 @@
 
 /* 3 FONTS CUSTOM CLASSES */
 .halaska-display {
-  font-family: 'Halaska', sans-serif; /* 1. HEADING FONT */
+  font-family: var(--font-space-grotesk), sans-serif; /* 1. HEADING FONT */
   font-size: clamp(4rem, 15vw, 12rem);
   font-weight: 700;
   letter-spacing: -0.05em;
@@ -215,4 +215,14 @@
 
 .premium-button:hover::after {
   transform: translate(100%, 100%);
+}
+
+/* Custom Scrollbar for hiding scrollbars but keeping functionality */
+.custom-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.custom-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }

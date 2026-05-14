@@ -27,14 +27,8 @@ const financeSearchTool = {
   parameters: {
     type: "object",
     properties: {
-      tickers: {
-        type: "string",
-        description: "Comma-separated stock tickers (e.g., 'AAPL,TSLA')."
-      },
-      keywords: {
-        type: "string",
-        description: "Search keywords (e.g., 'merger', 'earnings')."
-      }
+      tickers: { type: "string", description: "Comma-separated stock tickers (e.g., 'AAPL,TSLA')." },
+      keywords: { type: "string", description: "Search keywords (e.g., 'merger', 'earnings')." }
     }
   }
 };
@@ -45,10 +39,10 @@ const currencyExchangeTool = {
   parameters: {
     type: "object",
     properties: {
-      from: { type: "string", description: "Source currency code (e.g., 'USD')." },
-      to: { type: "string", description: "Target currency code (e.g., 'EUR')." },
-      amount: { type: "number", description: "Amount to convert." },
-      base: { type: "string", description: "Base currency for general rates lookup." }
+      from:   { type: "string",  description: "Source currency code (e.g., 'USD')." },
+      to:     { type: "string",  description: "Target currency code (e.g., 'EUR')." },
+      amount: { type: "number",  description: "Amount to convert." },
+      base:   { type: "string",  description: "Base currency for general rates lookup." }
     }
   }
 };
@@ -59,7 +53,7 @@ const cryptoPricesTool = {
   parameters: {
     type: "object",
     properties: {
-      ids: { type: "string", description: "Comma-separated crypto IDs." },
+      ids:          { type: "string", description: "Comma-separated crypto IDs." },
       vs_currencies: { type: "string", description: "Target currency (default: 'usd')." }
     },
     required: ["ids"]
@@ -74,31 +68,57 @@ const cryptoTrendingTool = {
 
 export async function POST(req: Request) {
   try {
-    const { message, thoughts, image, history } = await req.json();
-    const ip = req.headers.get("x-forwarded-for") || "anonymous";
+    const {
+      isApiDisabled,
+      checkRateLimit,
+      checkDailyBudget,
+      isOriginAllowed,
+      isBodyTooLarge,
+      validateImage,
+      sanitizeInput,
+      sanitizeThought,
+      capHistory,
+    } = await import("@/lib/security");
 
-    // 1. Rate Limiting (10 requests per minute)
-    const { checkRateLimit, validateImage, sanitizeThought, sanitizeInput } = await import("@/lib/security");
-    if (!(await checkRateLimit(ip))) {
-      return new Response("Too many requests. Please wait a minute.", { status: 429 });
+    // ── 1. Global Kill Switch ──────────────────────────────────────────────
+    if (isApiDisabled()) {
+      return new Response("Service temporarily disabled.", { status: 503 });
     }
 
-    // Origin Validation (CORS)
+    // ── 2. Strict CORS ────────────────────────────────────────────────────
     const origin = req.headers.get("origin");
-    if (origin && !origin.includes("localhost") && origin !== "https://deadstarai.vercel.app") {
+    if (!isOriginAllowed(origin)) {
       return new Response("Forbidden: Invalid Origin", { status: 403 });
     }
 
-    // 2. Image Validation (Max 2.5MB for Hobby Tier Bandwidth)
-    if (image && !validateImage(image.base64)) {
-      return new Response("Invalid image format or size. Only WebP under 2.5MB is supported.", { status: 400 });
+    // ── 3. Request Body Size Guard (50 KB) ────────────────────────────────
+    if (isBodyTooLarge(req.headers.get("content-length"))) {
+      return new Response("Payload Too Large", { status: 413 });
     }
 
-    const sanitizedMessage = sanitizeInput(message);
+    // ── 4. Per-IP Rate Limit ──────────────────────────────────────────────
+    const ip = req.headers.get("x-forwarded-for")?.split(",")[0].trim() || "anonymous";
+    if (!(await checkRateLimit(ip))) {
+      return new Response("Too many requests — please wait a minute.", { status: 429 });
+    }
+
+    // ── 5. Global Daily Budget ────────────────────────────────────────────
+    if (!(await checkDailyBudget())) {
+      return new Response("Daily request limit reached. Try again tomorrow.", { status: 429 });
+    }
+
+    const { message, thoughts, image, history } = await req.json();
+
+    // ── 6. Image Validation (Max 2MB) ─────────────────────────────────────
+    if (image && !validateImage(image.base64, 2)) {
+      return new Response("Invalid image. Max 2MB; supported: WebP, JPEG, PNG.", { status: 400 });
+    }
+
+    // ── 7. Input Sanitization ─────────────────────────────────────────────
+    const sanitizedMessage = sanitizeInput(message, 500);
     if (sanitizedMessage === "[BLOCKED_POTENTIAL_INJECTION]") {
-      return new Response("Malicious intent detected. Request blocked.", { status: 403 });
+      return new Response("Request blocked.", { status: 403 });
     }
-
     if (!sanitizedMessage && !image) {
       return new Response("Invalid request", { status: 400 });
     }
@@ -106,9 +126,14 @@ export async function POST(req: Request) {
       return new Response("Invalid request", { status: 400 });
     }
 
-    // 3. Prompt Injection Mitigation: Sanitize and use robust delimiters
-    const cleanThoughts = thoughts.map(t => sanitizeThought(t));
-    const formattedReasoning = cleanThoughts.map(t => `###_REASONING_NODE_###\n${t}\n###_END_NODE_###`).join("\n");
+    // ── 8. History Cap (6 turns max — prevents token stuffing) ────────────
+    const cappedHistory = capHistory(history as ConversationTurn[] | undefined);
+
+    // ── 9. Thought Sanitization ───────────────────────────────────────────
+    const cleanThoughts    = thoughts.slice(0, 12).map(t => sanitizeThought(t));
+    const formattedReasoning = cleanThoughts
+      .map(t => `###_REASONING_NODE_###\n${t}\n###_END_NODE_###`)
+      .join("\n");
 
     const imageData: GemmaImagePart | undefined = image
       ? { inlineData: { mimeType: image.mimeType, data: image.base64 } }
@@ -135,13 +160,12 @@ STRICT WRITING RULES (ANTI-AI):
 JSON: { "type": "bar"|"line"|"pie", "title": "string", "data": { "labels": [], "datasets": [{ "label": "string", "data": [] }] } }`;
 
     const systemInstruction = `${baseIdentity}\n\n[INTERNAL_REASONING]:\n${formattedReasoning}`;
+    const userMessage       = sanitizedMessage || "Analyze image";
 
-    const userMessage = sanitizedMessage || "Analyze image";
-
-    // Step 1: First pass — decide tools. Use tight 3.5s timeout to stay under Vercel 10s limit.
+    // ── Step 1: Tool detection (tight 3.5s timeout) ───────────────────────
     const toolController = new AbortController();
-    const toolTimeout = setTimeout(() => toolController.abort(), 3500);
-    
+    const toolTimeout    = setTimeout(() => toolController.abort(), 3500);
+
     let functionCalls: any[] = [];
     try {
       functionCalls = await fetchGemmaFunctionCalls(
@@ -150,49 +174,45 @@ JSON: { "type": "bar"|"line"|"pie", "title": "string", "data": { "labels": [], "
         [webSearchTool, financeSearchTool, currencyExchangeTool, cryptoPricesTool, cryptoTrendingTool],
         toolController.signal,
         imageData,
-        history as ConversationTurn[] | undefined
+        cappedHistory
       );
-    } catch (e) {
-      console.warn("Tool detection timed out or failed, proceeding with baseline knowledge.");
+    } catch {
+      console.warn("Tool detection timed out or failed — using baseline knowledge.");
     } finally {
       clearTimeout(toolTimeout);
     }
 
-    // Step 2: Execute all function calls in parallel for maximum speed
+    // ── Step 2: Execute tool calls in parallel ────────────────────────────
     let liveContext = "";
     if (functionCalls.length > 0) {
-      const results = await Promise.all(functionCalls.map(async (call: any) => {
-        try {
-          if (call.name === "web_search" && call.args?.query) {
-            console.log(`[Parallel Execution] web_search("${call.args.query}")`);
-            return await tavilySearch(call.args.query, req.signal);
+      const results = await Promise.all(
+        functionCalls.map(async (call: any) => {
+          try {
+            if (call.name === "web_search" && call.args?.query) {
+              return await tavilySearch(call.args.query, req.signal);
+            }
+            if (call.name === "finance_search") {
+              return await fetchFinanceNews(call.args, req.signal);
+            }
+            if (call.name === "currency_exchange") {
+              return await fetchExchangeRates(call.args, req.signal);
+            }
+            if (call.name === "crypto_prices") {
+              return await fetchCryptoPrices(call.args, req.signal);
+            }
+            if (call.name === "trending_crypto") {
+              return await fetchTrendingCrypto(req.signal);
+            }
+          } catch (e) {
+            console.warn(`Tool ${call.name} failed:`, e);
           }
-          if (call.name === "finance_search") {
-            console.log(`[Parallel Execution] finance_search(${JSON.stringify(call.args)})`);
-            return await fetchFinanceNews(call.args, req.signal);
-          }
-          if (call.name === "currency_exchange") {
-            console.log(`[Parallel Execution] currency_exchange(${JSON.stringify(call.args)})`);
-            return await fetchExchangeRates(call.args, req.signal);
-          }
-          if (call.name === "crypto_prices") {
-            console.log(`[Parallel Execution] crypto_prices(${JSON.stringify(call.args)})`);
-            return await fetchCryptoPrices(call.args, req.signal);
-          }
-          if (call.name === "trending_crypto") {
-            console.log(`[Parallel Execution] trending_crypto()`);
-            return await fetchTrendingCrypto(req.signal);
-          }
-        } catch (e) {
-          console.warn(`Tool ${call.name} failed:`, e);
-        }
-        return "";
-      }));
+          return "";
+        })
+      );
       liveContext = results.filter(Boolean).join("\n\n");
     }
 
-    // Step 3: Final streaming answer with injected tool results
-    // We use baseIdentity here to STRIP the reasoning instructions from the final output pass.
+    // ── Step 3: Final streaming answer ────────────────────────────────────
     const finalSystem = liveContext
       ? `${baseIdentity}\n\n[LIVE_WEB_DATA]: ${liveContext}`
       : baseIdentity;
@@ -200,12 +220,12 @@ JSON: { "type": "bar"|"line"|"pie", "title": "string", "data": { "labels": [], "
     const stream = await fetchGemmaStream(
       finalSystem,
       userMessage,
-      4096,
+      1500,  // ⬇️ Reduced from 4096 — cuts cost by ~60% with minimal quality loss
       undefined,
       undefined,
       req.signal,
       imageData,
-      history as ConversationTurn[] | undefined
+      cappedHistory
     );
 
     if (!stream) {

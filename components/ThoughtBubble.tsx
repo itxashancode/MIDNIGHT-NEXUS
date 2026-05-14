@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Edit2, Sparkles, AlertCircle, Trash2, Globe } from "lucide-react";
+import { Edit2, Sparkles, AlertCircle, Trash2, Globe, GripVertical } from "lucide-react";
 import { useState } from "react";
 
 interface Thought {
@@ -45,6 +45,11 @@ export default function ThoughtBubble({ thought, onEdit, onDelete, isLocked }: T
     >
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
+          {!isLocked && !thought.isStreaming && (
+            <div className="cursor-grab active:cursor-grabbing text-muted-foreground/30 hover:text-muted-foreground transition-colors mr-1">
+              <GripVertical className="w-4 h-4" />
+            </div>
+          )}
           {thought.isStreaming ? (
             <div className="w-2 h-2 rounded-full bg-primary animate-ping" />
           ) : isWebSearch ? (

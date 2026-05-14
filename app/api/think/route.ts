@@ -5,33 +5,61 @@ export const runtime = "edge";
 
 export async function POST(req: Request) {
   try {
-    const { message, image } = await req.json();
-    const ip = req.headers.get("x-forwarded-for") || "anonymous";
+    const {
+      isApiDisabled,
+      checkRateLimit,
+      checkDailyBudget,
+      isOriginAllowed,
+      isBodyTooLarge,
+      validateImage,
+      sanitizeInput,
+    } = await import("@/lib/security");
 
-    // 1. Rate Limiting (10 requests per minute)
-    const { checkRateLimit, validateImage, sanitizeInput } = await import("@/lib/security");
-    if (!(await checkRateLimit(ip))) {
-      return new Response("Too many requests. Please wait a minute.", { status: 429 });
+    // ── 1. Global Kill Switch ──────────────────────────────────────────────
+    if (isApiDisabled()) {
+      return new Response("Service temporarily disabled.", { status: 503 });
     }
 
-    // Origin Validation (CORS)
+    // ── 2. Strict CORS ────────────────────────────────────────────────────
     const origin = req.headers.get("origin");
-    if (origin && !origin.includes("localhost") && origin !== "https://deadstarai.vercel.app") {
+    if (!isOriginAllowed(origin)) {
       return new Response("Forbidden: Invalid Origin", { status: 403 });
     }
 
-    // 2. Image Validation (Max 5MB, WebP only)
-    if (image && !validateImage(image.base64, 5)) {
-      return new Response("Invalid image format or size. Only WebP under 5MB is supported.", { status: 400 });
+    // ── 3. Request Body Size Guard ────────────────────────────────────────
+    if (isBodyTooLarge(req.headers.get("content-length"))) {
+      return new Response("Payload Too Large", { status: 413 });
+    }
+
+    // ── 4. Per-IP Rate Limit ──────────────────────────────────────────────
+    const ip = req.headers.get("x-forwarded-for")?.split(",")[0].trim() || "anonymous";
+    if (!(await checkRateLimit(ip))) {
+      return new Response("Too many requests — please wait a minute.", { status: 429 });
+    }
+
+    // ── 5. Global Daily Budget ────────────────────────────────────────────
+    if (!(await checkDailyBudget())) {
+      return new Response("Daily request limit reached. Try again tomorrow.", { status: 429 });
+    }
+
+    const { message, image } = await req.json();
+
+    // ── 6. Image Validation (Max 2MB) ─────────────────────────────────────
+    if (image && !validateImage(image.base64, 2)) {
+      return new Response("Invalid image. Max 2MB; supported: WebP, JPEG, PNG.", { status: 400 });
+    }
+
+    const sanitizedMessage = sanitizeInput(message, 500);
+    if (sanitizedMessage === "[BLOCKED_POTENTIAL_INJECTION]") {
+      return new Response("Request blocked.", { status: 403 });
     }
 
     const imageData: GemmaImagePart | undefined = image
       ? { inlineData: { mimeType: image.mimeType, data: image.base64 } }
       : undefined;
 
-    const systemInstruction = "You are a private thinking engine. Output thoughts as a JSON array of strings.";
-
-    const sanitizedMessage = sanitizeInput(message, 1000);
+    const systemInstruction =
+      "You are a private thinking engine. Output thoughts as a JSON array of strings.";
 
     const userMessage = `Analyze the complexity of this request: "${sanitizedMessage || "this image"}". 
     Generate a dynamic set of private pre-response thoughts (between 4 and 10) based on how much depth, research, or logic is required.
@@ -40,20 +68,15 @@ export async function POST(req: Request) {
     If an image is provided, ensure thoughts reference visual details. 
     Output raw JSON array of strings only.`;
 
-    const responseSchema = {
-      type: "ARRAY",
-      items: { type: "STRING" },
-    };
-
     const stream = await fetchGemmaStream(
       systemInstruction,
       userMessage,
-      400,
+      400, // thinking phase is cheap — keep it small
       undefined,
       undefined,
       req.signal,
       imageData,
-      undefined // No history for thinking phase to improve stability
+      undefined // No history for thinking phase
     );
 
     if (!stream) {

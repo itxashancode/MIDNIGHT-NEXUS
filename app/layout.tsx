@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono, Outfit } from "next/font/google";
+import { Inter, JetBrains_Mono, Outfit, Space_Grotesk } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { cn } from "@/lib/utils";
@@ -17,6 +17,11 @@ const outfit = Outfit({
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-jetbrains-mono",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-space-grotesk",
 });
 
 export const metadata: Metadata = {
@@ -88,13 +93,32 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "SoftwareApplication",
+              "name": "Dead Star AI",
+              "description": "Advanced multimodal reasoning engine powered by Gemma 4. Intercept, analyze, and reshape AI cognitive nodes in real-time.",
+              "applicationCategory": "AI Software",
+              "operatingSystem": "Web",
+              "url": "https://deadstarai.vercel.app",
+              "author": {
+                "@type": "Organization",
+                "name": "Dead Star AI"
+              }
+            })
+          }}
+        />
       </head>
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased custom-scrollbar",
           inter.variable,
           outfit.variable,
-          jetbrainsMono.variable
+          jetbrainsMono.variable,
+          spaceGrotesk.variable
         )}
       >
         {/* Google Analytics */}

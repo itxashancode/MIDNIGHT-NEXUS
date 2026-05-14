@@ -129,10 +129,22 @@ export default function ThoughtStream({
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="p-8 border-2 border-dashed border-border rounded-2xl flex flex-col items-center justify-center gap-3 text-muted/40"
+              className="flex flex-col gap-3"
             >
-              <Activity className="w-8 h-8 animate-pulse" />
-              <p className="text-xs font-subheading font-bold uppercase tracking-widest">Waiting for nodes...</p>
+              {[1, 2].map((i) => (
+                <div key={`skeleton-${i}`} className="group relative flex flex-col gap-2 p-4 rounded-2xl border bg-muted/10 border-border animate-pulse">
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2">
+                      <div className="w-3.5 h-3.5 rounded-full bg-muted/40" />
+                      <div className="h-3 w-24 bg-muted/30 rounded" />
+                    </div>
+                  </div>
+                  <div className="relative mt-2">
+                    <div className="h-4 w-3/4 bg-muted/20 rounded mb-2" />
+                    <div className="h-4 w-1/2 bg-muted/20 rounded" />
+                  </div>
+                </div>
+              ))}
             </motion.div>
           )}
         </div>
