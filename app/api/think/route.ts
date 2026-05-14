@@ -1,5 +1,6 @@
 import { fetchGemmaStream, GemmaImagePart } from "@/lib/gemma";
 import { createSSETransform } from "@/lib/stream";
+import { FRONTEND_DESIGN_SKILL } from "@/lib/skills";
 
 export const runtime = "edge";
 
@@ -58,8 +59,9 @@ export async function POST(req: Request) {
       ? { inlineData: { mimeType: image.mimeType, data: image.base64 } }
       : undefined;
 
-    const systemInstruction =
-      "You are a private thinking engine. Output thoughts as a JSON array of strings.";
+    const systemInstruction = `You are a high-speed reasoning engine for Dead Star AI.
+${FRONTEND_DESIGN_SKILL}
+Produce a sequence of short, professional, and analytical "thought nodes" in a JSON array format.`;
 
     const userMessage = `Analyze the complexity of this request: "${sanitizedMessage || "this image"}". 
     Generate a dynamic set of private pre-response thoughts (between 3 and 6) based on logic required.

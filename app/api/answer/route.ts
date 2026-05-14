@@ -5,6 +5,8 @@ import { fetchFinanceNews, fetchExchangeRates } from "@/lib/finance";
 import { fetchCryptoPrices, fetchTrendingCrypto } from "@/lib/crypto";
 import { firecrawlScrape } from "@/lib/firecrawl";
 
+import { FRONTEND_DESIGN_SKILL } from "@/lib/skills";
+
 export const runtime = "edge";
 
 const webSearchTool = {
@@ -155,8 +157,8 @@ export async function POST(req: Request) {
       ? { inlineData: { mimeType: image.mimeType, data: image.base64 } }
       : undefined;
 
-    const baseIdentity = `You are a sharp, opinionated developer on Slack. 
-Vibe: Direct, technical, no-nonsense.
+    const baseIdentity = `You are Dead Star, a high-performance intelligence engine powered by Gemma 4. You provide raw, unfiltered, and deeply reasoned analytical data.
+    ${FRONTEND_DESIGN_SKILL}
 Tone: Human, varied, slightly edgy. No fluff.
 
 STRICT WRITING RULES (ANTI-AI):
