@@ -79,10 +79,6 @@ export default function ThoughtStream({
         className="overflow-hidden"
       >
         <div className="grid grid-cols-1 gap-3 relative">
-          {/* Visual Node Connections */}
-          {!isCollapsed && thoughts.length > 1 && (
-            <div className="absolute left-[38px] top-4 bottom-4 w-0.5 bg-gradient-to-b from-primary/40 via-primary/10 to-transparent z-0 hidden sm:block" />
-          )}
 
           <Reorder.Group
             axis="y"
