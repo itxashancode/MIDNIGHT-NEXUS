@@ -64,7 +64,7 @@ export async function POST(req: Request) {
       return new Response("Invalid image. Max 5MB; supported: WebP, JPEG, PNG.", { status: 400 });
     }
 
-    const sanitizedMessage = sanitizeInput(message, 500);
+    const sanitizedMessage = sanitizeInput(message, 10000);
     if (sanitizedMessage === "[BLOCKED_POTENTIAL_INJECTION]") {
       return new Response("Request blocked.", { status: 403 });
     }

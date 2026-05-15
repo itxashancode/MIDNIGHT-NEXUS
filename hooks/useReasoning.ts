@@ -135,7 +135,7 @@ export function useReasoning() {
 
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 25000);
+      const timeoutId = setTimeout(() => controller.abort(), 60000); // 60s timeout for reasoning phase
       const res = await fetch("/api/think", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -220,7 +220,7 @@ export function useReasoning() {
     }
 
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 30000); // 30s timeout for answer collapse
+    const timeoutId = setTimeout(() => controller.abort(), 120000); // 120s timeout for deep answer generation
 
     try {
       setCurrentAnswer("");

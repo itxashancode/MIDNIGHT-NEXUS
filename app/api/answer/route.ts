@@ -134,7 +134,7 @@ export async function POST(req: Request) {
     }
 
     // ── 7. Input Sanitization ─────────────────────────────────────────────
-    const sanitizedMessage = sanitizeInput(message, 500);
+    const sanitizedMessage = sanitizeInput(message, 10000);
     if (sanitizedMessage === "[BLOCKED_POTENTIAL_INJECTION]") {
       return new Response("Request blocked.", { status: 403 });
     }
@@ -250,7 +250,7 @@ JSON: { "type": "bar"|"line"|"pie", "title": "string", "data": { "labels": [], "
     const stream = await fetchGemmaStream(
       finalSystem,
       userMessage,
-      4096,  // High-fidelity output window for complex reasoning and design.
+      8192,  // Extended fidelity output window for complex reasoning and deep design.
       undefined,
       undefined,
       req.signal,

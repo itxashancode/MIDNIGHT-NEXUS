@@ -128,9 +128,9 @@ export function detectMaliciousIntent(content: string): boolean {
 /**
  * Sanitize a user message.
  * @param content   Raw user input
- * @param maxLength Hard cap (default 500 chars — keeps token costs low)
+ * @param maxLength Hard cap (default 10000 chars — supports complex design instructions)
  */
-export function sanitizeInput(content: string, maxLength: number = 500): string {
+export function sanitizeInput(content: string, maxLength: number = 10000): string {
   if (!content) return '';
   if (detectMaliciousIntent(content)) return '[BLOCKED_POTENTIAL_INJECTION]';
 
