@@ -24,33 +24,40 @@ const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://deadstarai.vercel.app";
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://deadstarai.vercel.app"),
+  metadataBase: new URL(siteUrl),
   title: {
-    default: "Dead Star AI - Bending AI Reasoning",
-    template: "%s | Dead Star AI"
+    default: "Dead Star AI | Advanced Reasoning Protocol",
+    template: "%s | Dead Star"
   },
-  description: "Dead Star AI is an advanced multimodal reasoning engine powered by Gemma 4. Intercept, analyze, and reshape AI cognitive nodes in real-time.",
-  keywords: ["AI", "Gemma 4", "Reasoning Engine", "Multimodal AI", "Dead Star", "Artificial Intelligence", "Developer Tools", "Prompt Engineering"],
-  authors: [{ name: "Dead Star Team", url: "https://deadstarai.vercel.app" }],
-  creator: "Dead Star Team",
+  description: "Experience high-fidelity collaborative reasoning with Gemma 4. Intercept, analyze, and reshape AI cognitive nodes in real-time.",
+  keywords: ["AI", "Gemma 4", "Reasoning Engine", "Multimodal AI", "Dead Star", "Artificial Intelligence", "Developer Tools", "Prompt Engineering", "Interception"],
+  authors: [{ name: "Dead Star AI", url: siteUrl }],
+  creator: "Dead Star AI",
   publisher: "Dead Star AI",
+  manifest: "/manifest.json",
+  icons: {
+    icon: "/icon.svg",
+    apple: "/apple-icon.png",
+  },
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
   openGraph: {
-    title: "Dead Star AI - Bending AI Reasoning",
-    description: "Dead Star AI is an advanced multimodal reasoning engine powered by Gemma 4. Intercept, analyze, and reshape AI cognitive nodes in real-time.",
-    url: "https://deadstarai.vercel.app",
+    title: "Dead Star AI | Advanced Reasoning Protocol",
+    description: "Experience high-fidelity collaborative reasoning with Gemma 4. Intercept, analyze, and reshape AI cognitive nodes in real-time.",
+    url: siteUrl,
     siteName: "Dead Star AI",
     images: [
       {
-        url: "/icon.svg",
-        width: 800,
-        height: 600,
-        alt: "Dead Star AI Logo",
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Dead Star AI Interface Preview",
       },
     ],
     locale: "en_US",
@@ -60,7 +67,8 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Dead Star AI",
     description: "Intercept, analyze, and reshape AI cognitive nodes in real-time with Gemma 4.",
-    creator: "@DeadStarAI",
+    creator: "@itxashancode",
+    images: ["/og-image.png"],
   },
   robots: {
     index: true,
@@ -75,11 +83,9 @@ export const metadata: Metadata = {
   },
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ?? "",
-    other: {
-      "msvalidate.01": process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION ?? "",
-    },
   },
 };
+
 
 import { ThemeProvider } from "@/components/theme-provider";
 import { Analytics } from "@vercel/analytics/react";

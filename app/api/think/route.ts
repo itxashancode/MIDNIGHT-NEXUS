@@ -34,20 +34,34 @@ export async function POST(req: Request) {
 
     // ── 4. Per-IP Rate Limit ──────────────────────────────────────────────
     const ip = req.headers.get("x-forwarded-for")?.split(",")[0].trim() || "anonymous";
-    if (!(await checkRateLimit(ip))) {
-      return new Response("Too many requests — please wait a minute.", { status: 429 });
+    const { success, limit, remaining, reset } = await checkRateLimit(ip);
+    
+    const rateLimitHeaders = {
+      "X-RateLimit-Limit": limit.toString(),
+      "X-RateLimit-Remaining": remaining.toString(),
+      "X-RateLimit-Reset": reset.toString(),
+    };
+
+    if (!success) {
+      return new Response("Too many requests — please wait a minute.", { 
+        status: 429,
+        headers: rateLimitHeaders
+      });
     }
+
+
 
     // ── 5. Global Daily Budget ────────────────────────────────────────────
     if (!(await checkDailyBudget())) {
       return new Response("Daily request limit reached. Try again tomorrow.", { status: 429 });
     }
 
-    const { message, image } = await req.json();
+    const { message, image, protocol } = await req.json();
 
-    // ── 6. Image Validation (Max 2MB) ─────────────────────────────────────
-    if (image && !validateImage(image.base64, 2)) {
-      return new Response("Invalid image. Max 2MB; supported: WebP, JPEG, PNG.", { status: 400 });
+
+    // ── 6. Image Validation (Max 5MB) ─────────────────────────────────────
+    if (image && !validateImage(image.base64, 5)) {
+      return new Response("Invalid image. Max 5MB; supported: WebP, JPEG, PNG.", { status: 400 });
     }
 
     const sanitizedMessage = sanitizeInput(message, 500);
@@ -61,7 +75,10 @@ export async function POST(req: Request) {
 
     const systemInstruction = `You are a high-speed reasoning engine for Dead Star AI.
 ${FRONTEND_DESIGN_SKILL}
+Protocol: ${protocol === "local" ? "LOCAL_RESOURCES" : "CLOUD_COMPUTE"}.
+${protocol === "local" ? "Instruction: Simulate on-device processing patterns. Be concise." : "Instruction: Utilize full model capacity for deep reasoning."}
 Produce a sequence of short, professional, and analytical "thought nodes" in a JSON array format.`;
+
 
     const userMessage = `Analyze the complexity of this request: "${sanitizedMessage || "this image"}". 
     Generate a dynamic set of private pre-response thoughts (between 3 and 6) based on logic required.
@@ -77,7 +94,8 @@ Produce a sequence of short, professional, and analytical "thought nodes" in a J
       undefined,
       req.signal,
       imageData,
-      undefined // No history for thinking phase
+      undefined, // No history for thinking phase
+      protocol
     );
 
     if (!stream) {

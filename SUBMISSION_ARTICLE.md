@@ -65,9 +65,9 @@ const parseStreamingThoughts = (raw: string) => {
   const extracted: string[] = [];
   let inString = false;
   let currentThought = "";
-  // ... (Full implementation in /app/page.tsx)
-  // We utilize the "thought" tag format native to Gemma 4's 
-  // advanced reasoning tokens to segment the logic.
+  // ... (Full implementation in /hooks/useReasoning.ts)
+  // We utilize the official Gemma 4 thought delimiters 
+  // to segment the reasoning stream in real-time.
 };
 ```
 
@@ -117,6 +117,15 @@ export function getGemmaApiKey() {
   return keys[Math.floor(Math.random() * keys.length)];
 }
 ```
+
+### 4. Zustand-based Decentralized State Machine
+To eliminate race conditions during high-speed streaming, Dead Star was refactored to use a **Zustand global store**. This transition from local React state to a decoupled state machine allows for:
+- **Zero Prop-Drilling**: The `Intelligence HUD`, `ThoughtStream`, and `ChatContainer` all consume a single source of truth.
+- **Persistent Interaction History**: Interaction exchanges are automatically persisted to local storage, allowing for long-running tactical sessions.
+- **Atomic State Updates**: Ensures that user interventions (edits) and machine streams (updates) never clash, maintaining a "Glitch-Free" reasoning UI.
+
+### 5. High-Fidelity Diff Highlighting
+When a human intervenes in the machine's reasoning, the UI doesn't just overwrite the thought. Using the `diff` library, Dead Star calculates and renders a **tactical diff** between the AI's original logic and the human's modification. This visualizes the precise "delta" of human oversight in the machine's reasoning path.
 
 ---
 
@@ -175,7 +184,8 @@ Dead Star was not built in a day. It evolved through three critical phases durin
 2. **Phase 2: The Resilient Matrix**: Implementing the 4-tier failover system and API key rotation to handle the unpredictable nature of high-load inference endpoints.
 3. **Phase 3: The Tactile Interface**: Adding premium micro-interactions (ClickSpark), Halaska-inspired design systems, and the "Intelligence Intel" HUD.
 4. **Phase 4: Competition Readiness**: Integrating **Context Depth Proof (128k)**, logic intervention tutorials, and high-stakes **Architecture Audit Scenarios**.
-5. **Phase 5: Security & Production Hardening**: Implementing the **Security Middleware Matrix** to protect against Reasoning Node Injection and API abuse, ensuring the platform is safe for public use.
+5. **Phase 5: Security & Production Hardening**: Implementing the **Security Middleware Matrix** to protect against Reasoning Node Injection and API abuse.
+6. **Phase 6: Engineering Sophistication**: Transitioned to **Zustand-based state management** and implemented **High-Fidelity Diff Highlighting** to maximize human-machine logic transparency.
 
 ---
 

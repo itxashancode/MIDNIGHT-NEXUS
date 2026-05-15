@@ -28,6 +28,32 @@ function anySignal(signals: (AbortSignal | undefined)[]) {
   return controller.signal;
 }
 
+/**
+ * Rotates through multiple API keys to prevent rate-limiting.
+ * Uses a random selection from the pool for even distribution.
+ */
+export function getGemmaApiKey(): string {
+  const apiKeysRaw = process.env.GEMMA_API_KEY;
+  if (!apiKeysRaw) {
+    throw new Error("GEMMA_API_KEY is not set");
+  }
+  const keys = apiKeysRaw.split(",").map(k => k.trim()).filter(Boolean);
+  if (keys.length === 0) {
+    throw new Error("No API keys found in GEMMA_API_KEY");
+  }
+  return keys[Math.floor(Math.random() * keys.length)];
+}
+
+const LOCAL_OLLAMA_URL = "http://localhost:11434/api/generate";
+
+/**
+ * INSTRUCTIONS FOR LOCAL INFERENCE:
+ * 1. Install Ollama: https://ollama.ai
+ * 2. Run: ollama run gemma:2b-instruct (or any gemma variant)
+ * 3. Set protocol to 'local' in the UI.
+ * 4. This bridge will attempt to proxy requests to your local instance.
+ */
+
 export async function fetchGemmaStream(
   systemInstruction: string,
   userMessage: string,
@@ -36,14 +62,38 @@ export async function fetchGemmaStream(
   responseSchema?: unknown,
   signal?: AbortSignal,
   image?: GemmaImagePart,
-  history?: ConversationTurn[]
+  history?: ConversationTurn[],
+  protocol: 'cloud' | 'local' = 'cloud'
 ) {
-  const apiKeysRaw = process.env.GEMMA_API_KEY;
-  if (!apiKeysRaw) {
-    throw new Error("GEMMA_API_KEY is not set");
+  // ─── LOCAL OLLAMA BRIDGE ────────────────────────────────────────────────
+  if (protocol === 'local') {
+    try {
+      console.log("Attempting Local Neural Link via Ollama...");
+      const localResponse = await fetch(LOCAL_OLLAMA_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "gemma:2b-instruct", // Default to 2B for local speed
+          prompt: `<|turn>system\n${systemInstruction}<turn|>\n${userMessage}`,
+          stream: true,
+          options: {
+            num_predict: maxTokens,
+            temperature: 0.3,
+          }
+        }),
+        signal
+      });
+
+      if (localResponse.ok) {
+        return localResponse.body;
+      }
+      console.warn("Local Ollama bridge failed or not found. Falling back to Cloud Matrix...");
+    } catch (e) {
+      console.warn("Local Ollama connection refused. Ensure Ollama is running on port 11434.");
+    }
   }
 
-  const apiKeys = apiKeysRaw.split(",").map(k => k.trim());
+  // ─── CLOUD INFRASTRUCTURE ────────────────────────────────────────────────
   const generationConfig: Record<string, unknown> = {
     temperature: 0.3,
     maxOutputTokens: maxTokens,
@@ -81,10 +131,11 @@ export async function fetchGemmaStream(
 
   // Try each model
   for (const model of models) {
-    // Smart Failover: If a model fails with Internal Error, skip all keys for it
     let skipModel = false;
-
-    for (const apiKey of apiKeys) {
+    // Try to get a valid response using available keys
+    const keys = process.env.GEMMA_API_KEY?.split(",").map(k => k.trim()).filter(Boolean) || [];
+    
+    for (const apiKey of keys) {
       if (skipModel) break;
 
       try {
@@ -161,12 +212,8 @@ export async function fetchGemmaFunctionCalls(
   image?: GemmaImagePart,
   history?: ConversationTurn[]
 ) {
-  const apiKeysRaw = process.env.GEMMA_API_KEY;
-  if (!apiKeysRaw) {
-    throw new Error("GEMMA_API_KEY is not set");
-  }
+  const keys = process.env.GEMMA_API_KEY?.split(",").map(k => k.trim()).filter(Boolean) || [];
 
-  const apiKeys = apiKeysRaw.split(",").map(k => k.trim());
 
   // VERIFIED Gemma 4 Models for v1beta REST API
   const models = [
@@ -191,7 +238,7 @@ export async function fetchGemmaFunctionCalls(
 
   for (const model of models) {
     let skipModel = false;
-    for (const apiKey of apiKeys) {
+    for (const apiKey of keys) {
       if (skipModel) break;
 
       try {

@@ -125,11 +125,12 @@ export async function POST(req: Request) {
       return new Response("Daily request limit reached. Try again tomorrow.", { status: 429 });
     }
 
-    const { message, thoughts, image, history } = await req.json();
+    const { message, thoughts, image, history, protocol } = await req.json();
 
-    // ── 6. Image Validation (Max 2MB) ─────────────────────────────────────
-    if (image && !validateImage(image.base64, 2)) {
-      return new Response("Invalid image. Max 2MB; supported: WebP, JPEG, PNG.", { status: 400 });
+
+    // ── 6. Image Validation (Max 5MB) ─────────────────────────────────────
+    if (image && !validateImage(image.base64, 5)) {
+      return new Response("Invalid image. Max 5MB; supported: WebP, JPEG, PNG.", { status: 400 });
     }
 
     // ── 7. Input Sanitization ─────────────────────────────────────────────
@@ -159,6 +160,8 @@ export async function POST(req: Request) {
 
     const baseIdentity = `You are Dead Star, a high-performance intelligence engine powered by Gemma 4. You provide raw, unfiltered, and deeply reasoned analytical data.
     ${FRONTEND_DESIGN_SKILL}
+Protocol: ${protocol === "local" ? "LOCAL_RESOURCES" : "CLOUD_COMPUTE"}.
+${protocol === "local" ? "Instruction: Execute as LOCAL_INF. Simulate on-device processing. Be extremely concise and efficient." : "Instruction: Execute as CLOUD_INF. Utilize high-fidelity compute for maximum depth."}
 Tone: Human, varied, slightly edgy. No fluff.
 
 STRICT WRITING RULES (ANTI-AI):
@@ -176,6 +179,7 @@ STRICT WRITING RULES (ANTI-AI):
 
 [CHART_CAPABILITY]: Use \`\`\`chart-json blocks for stats/metrics.
 JSON: { "type": "bar"|"line"|"pie", "title": "string", "data": { "labels": [], "datasets": [{ "label": "string", "data": [] }] } }`;
+
 
     const systemInstruction = `${baseIdentity}\n\n[INTERNAL_REASONING]:\n${formattedReasoning}`;
     const userMessage       = sanitizedMessage || "Analyze image";
@@ -251,7 +255,8 @@ JSON: { "type": "bar"|"line"|"pie", "title": "string", "data": { "labels": [], "
       undefined,
       req.signal,
       imageData,
-      cappedHistory
+      cappedHistory,
+      protocol
     );
 
     if (!stream) {

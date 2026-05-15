@@ -66,16 +66,29 @@ export default function ThoughtStream({
       </div>
 
       <motion.div 
-        animate={{ height: isCollapsed ? 0 : "auto", opacity: isCollapsed ? 0 : 1 }}
-        transition={{ duration: 0.1, ease: "easeInOut" }}
+        animate={{ 
+          height: isCollapsed ? 0 : "auto", 
+          opacity: isCollapsed ? 0 : 1,
+          scale: isCollapsed ? 0.95 : 1,
+          filter: isCollapsed ? "blur(10px)" : "blur(0px)"
+        }}
+        transition={{ 
+          duration: 0.4, 
+          ease: [0.23, 1, 0.32, 1] // Aggressive quint ease
+        }}
         className="overflow-hidden"
       >
-        <div className="grid grid-cols-1 gap-3">
+        <div className="grid grid-cols-1 gap-3 relative">
+          {/* Visual Node Connections */}
+          {!isCollapsed && thoughts.length > 1 && (
+            <div className="absolute left-[38px] top-4 bottom-4 w-0.5 bg-gradient-to-b from-primary/40 via-primary/10 to-transparent z-0 hidden sm:block" />
+          )}
+
           <Reorder.Group
             axis="y"
             values={thoughts}
             onReorder={setThoughts}
-            className="flex flex-col gap-3"
+            className="flex flex-col gap-3 relative z-10"
           >
             {thoughts.map((thought) => (
               <Reorder.Item

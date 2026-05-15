@@ -49,11 +49,11 @@ export function isApiDisabled(): boolean {
 
 // ─── 2. Per-IP Rate Limit ───────────────────────────────────────────────────
 
-export async function checkRateLimit(ip: string): Promise<boolean> {
-  if (!perIpLimiter) return true; // Bypass in local dev
-  const { success } = await perIpLimiter.limit(ip);
-  return success;
+export async function checkRateLimit(ip: string) {
+  if (!perIpLimiter) return { success: true, limit: 0, remaining: 0, reset: 0 }; 
+  return await perIpLimiter.limit(ip);
 }
+
 
 // ─── 3. Global Daily Cap ────────────────────────────────────────────────────
 
@@ -78,7 +78,8 @@ export async function checkDailyBudget(): Promise<boolean> {
 const ALLOWED_ORIGINS = new Set([
   'https://deadstarai.vercel.app',
   'https://www.deadstarai.vercel.app',
-  // Add preview URLs here if needed, e.g. 'https://dead-star-git-main-*.vercel.app'
+  'https://dead-star-gemma.vercel.app',
+  'https://www.dead-star-gemma.vercel.app',
 ]);
 
 export function isOriginAllowed(origin: string | null): boolean {
@@ -89,7 +90,7 @@ export function isOriginAllowed(origin: string | null): boolean {
 
 // ─── 5. Request Body Size Guard ─────────────────────────────────────────────
 
-const MAX_BODY_BYTES = 50 * 1024; // 50 KB
+const MAX_BODY_BYTES = 10 * 1024 * 1024; // 10 MB (supports 5MB image + base64 overhead)
 
 export function isBodyTooLarge(contentLength: string | null): boolean {
   if (!contentLength) return false; // Unknown length — let it through (handled below)
@@ -146,7 +147,7 @@ export function sanitizeInput(content: string, maxLength: number = 500): string 
  * Validate a base64-encoded image.
  * Accepts WebP (UklGR), JPEG (base64 /9j/), PNG (iVBOR) under maxSizeMb.
  */
-export function validateImage(base64?: string, maxSizeMb: number = 2): boolean {
+export function validateImage(base64?: string, maxSizeMb: number = 5): boolean {
   if (!base64) return true;
 
   const sizeInBytes = (base64.length * 3) / 4;
