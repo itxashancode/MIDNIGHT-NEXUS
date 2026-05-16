@@ -1,4 +1,4 @@
-export interface GemmaImagePart {
+export interface NexusImagePart {
   inlineData: {
     mimeType: string;
     data: string; // base64
@@ -32,14 +32,14 @@ function anySignal(signals: (AbortSignal | undefined)[]) {
  * Rotates through multiple API keys to prevent rate-limiting.
  * Uses a random selection from the pool for even distribution.
  */
-export function getGemmaApiKey(): string {
-  const apiKeysRaw = process.env.GEMMA_API_KEY;
+export function getNexusApiKey(): string {
+  const apiKeysRaw = process.env.NEXUS_API_KEY;
   if (!apiKeysRaw) {
-    throw new Error("GEMMA_API_KEY is not set");
+    throw new Error("NEXUS_API_KEY is not set");
   }
   const keys = apiKeysRaw.split(",").map(k => k.trim()).filter(Boolean);
   if (keys.length === 0) {
-    throw new Error("No API keys found in GEMMA_API_KEY");
+    throw new Error("No API keys found in NEXUS_API_KEY");
   }
   return keys[Math.floor(Math.random() * keys.length)];
 }
@@ -49,19 +49,19 @@ const LOCAL_OLLAMA_URL = "http://localhost:11434/api/generate";
 /**
  * INSTRUCTIONS FOR LOCAL INFERENCE:
  * 1. Install Ollama: https://ollama.ai
- * 2. Run: ollama run gemma:2b-instruct (or any gemma variant)
+ * 2. Run: ollama run nexus-local-core (or any local variant)
  * 3. Set protocol to 'local' in the UI.
  * 4. This bridge will attempt to proxy requests to your local instance.
  */
 
-export async function fetchGemmaStream(
+export async function fetchNexusStream(
   systemInstruction: string,
   userMessage: string,
   maxTokens: number = 1024,
   responseMimeType?: string,
   responseSchema?: unknown,
   signal?: AbortSignal,
-  image?: GemmaImagePart,
+  image?: NexusImagePart,
   history?: ConversationTurn[],
   protocol: 'cloud' | 'local' = 'cloud'
 ) {
@@ -106,13 +106,13 @@ export async function fetchGemmaStream(
     generationConfig.responseSchema = responseSchema;
   }
 
-  // VERIFIED Gemma 4 Models for v1beta REST API
+  // VERIFIED Nexus 4 Models for v1beta REST API
   const models = [
     "gemma-4-26b-a4b-it",  // High-Throughput MoE (FASTER ✅)
     "gemma-4-31b-it",      // Dense Reasoning (POWERFUL ✅)
   ];
 
-  // Official Gemma 4 Prompt Formatting
+  // Official Nexus 4 Prompt Formatting
   const formattedSystem = `<|turn>system\n<|think|>${systemInstruction}<turn|>`;
   
   // Format history and current message into official turns
@@ -133,7 +133,7 @@ export async function fetchGemmaStream(
   for (const model of models) {
     let skipModel = false;
     // Try to get a valid response using available keys
-    const keys = process.env.GEMMA_API_KEY?.split(",").map(k => k.trim()).filter(Boolean) || [];
+    const keys = process.env.NEXUS_API_KEY?.split(",").map(k => k.trim()).filter(Boolean) || [];
     
     for (const apiKey of keys) {
       if (skipModel) break;
@@ -182,7 +182,7 @@ export async function fetchGemmaStream(
             break;
           }
 
-          throw new Error(`Gemma API error (${model}): ${message}`);
+          throw new Error(`Nexus API error (${model}): ${message}`);
         }
 
         return response.body;
@@ -204,18 +204,18 @@ export async function fetchGemmaStream(
   throw lastError || new Error("All model/key combinations failed");
 }
 
-export async function fetchGemmaFunctionCalls(
+export async function fetchNexusFunctionCalls(
   systemInstruction: string,
   userMessage: string,
   tools: unknown[],
   signal?: AbortSignal,
-  image?: GemmaImagePart,
+  image?: NexusImagePart,
   history?: ConversationTurn[]
 ) {
-  const keys = process.env.GEMMA_API_KEY?.split(",").map(k => k.trim()).filter(Boolean) || [];
+  const keys = process.env.NEXUS_API_KEY?.split(",").map(k => k.trim()).filter(Boolean) || [];
 
 
-  // VERIFIED Gemma 4 Models for v1beta REST API
+  // VERIFIED Nexus 4 Models for v1beta REST API
   const models = [
     "gemma-4-26b-a4b-it",  // High-Throughput MoE (FASTER ✅)
     "gemma-4-31b-it",      // Dense Reasoning (POWERFUL ✅)
@@ -270,7 +270,7 @@ export async function fetchGemmaFunctionCalls(
             break;
           }
 
-          throw new Error(`Gemma API error (${model}): ${message}`);
+          throw new Error(`Nexus API error (${model}): ${message}`);
         }
 
         const data = await response.json();

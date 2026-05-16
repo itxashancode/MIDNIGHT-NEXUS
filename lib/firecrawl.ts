@@ -1,5 +1,5 @@
 /**
- * DEAD STAR — Firecrawl Integration
+ * MIDNIGHT-NEXUS — Firecrawl Integration
  * 
  * Used for deep scraping of specific URLs that Tavily search can't fully extract.
  * The model calls this when a user asks about content at a known URL, or when

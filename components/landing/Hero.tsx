@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Camera } from "lucide-react";
-import GemmaLogo from "@/components/GemmaLogo";
+import NexusLogo from "@/components/NexusLogo";
 import ScenarioHUD from "@/components/ScenarioHUD";
 
 interface HeroProps {
@@ -27,7 +27,7 @@ export default function Hero({ setUserInput, onSend, protocol }: HeroProps) {
           <div className="p-6 md:p-12 rounded-[48px] bg-white/[0.02] border border-white/5 backdrop-blur-3xl relative overflow-hidden">
 
              <div className="absolute top-0 right-0 p-8">
-               <GemmaLogo size={64} className="opacity-10" />
+               <NexusLogo size={64} className="opacity-10" />
              </div>
              
              <div className="relative z-10">
@@ -49,7 +49,7 @@ export default function Hero({ setUserInput, onSend, protocol }: HeroProps) {
                  <div className="flex flex-col gap-4">
                    <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-sm font-bold border border-white/10">02</div>
                    <h3 className="font-subheading font-bold text-lg">Load Model Weights</h3>
-                   <p className="text-sm text-muted leading-relaxed">The Gemma 4 model (approx. 2.4GB) will be cached in your browser's IndexedDB for subsequent runs.</p>
+                   <p className="text-sm text-muted leading-relaxed">The Nexus Core model (approx. 2.4GB) will be cached in your browser's IndexedDB for subsequent runs.</p>
                  </div>
                  <div className="flex flex-col gap-4">
                    <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-sm font-bold border border-white/10">03</div>
@@ -74,16 +74,16 @@ export default function Hero({ setUserInput, onSend, protocol }: HeroProps) {
         <>
 
       <div className="flex flex-col items-center gap-6 md:gap-10 mb-12 md:mb-20 mt-4 md:mt-12">
-        <GemmaLogo size={80} className="drop-shadow-2xl md:hidden" priority />
-        <GemmaLogo size={120} className="drop-shadow-2xl hidden md:block" priority />
+        <NexusLogo size={80} className="drop-shadow-2xl md:hidden" priority />
+        <NexusLogo size={120} className="drop-shadow-2xl hidden md:block" priority />
         <div className="text-center relative">
           <div className="hero-glow" />
           <h1 className="halaska-display mb-6 tracking-tighter relative z-10">
-            DEAD STAR
+            MIDNIGHT-NEXUS
           </h1>
           <p className="text-lg md:text-2xl lg:text-3xl font-body font-medium text-muted leading-tight max-w-[700px] mx-auto relative z-10 px-2">
             The first reasoning interface designed to <span className="text-foreground font-semibold">partner with your logic</span>.
-            Optimized for <span className="text-primary font-bold">Gemma 4 Expert Intelligence</span>.
+            Optimized for <span className="text-primary font-bold">Nexus Expert Intelligence</span>.
           </p>
         </div>
       </div>
@@ -114,7 +114,7 @@ export default function Hero({ setUserInput, onSend, protocol }: HeroProps) {
             </h2>
             <p className="text-base md:text-xl lg:text-2xl text-muted font-body leading-relaxed max-w-lg">
               Share an architecture diagram, a complex flowchart, or a technical challenge.
-              Gemma 4 will collaborate with you to map out every reasoning step.
+              Nexus Core will collaborate with you to map out every reasoning step.
             </p>
           </div>
 

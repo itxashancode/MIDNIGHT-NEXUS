@@ -1,10 +1,10 @@
 const dotenv = require('dotenv');
 dotenv.config({ path: '.env.local' });
 
-async function testGemmaStream() {
-  const apiKey = process.env.GEMMA_API_KEY;
+async function testNexusStream() {
+  const apiKey = process.env.NEXUS_API_KEY;
   if (!apiKey) {
-    console.error("GEMMA_API_KEY missing");
+    console.error("NEXUS_API_KEY missing");
     return;
   }
 
@@ -48,4 +48,4 @@ async function testGemmaStream() {
   }
 }
 
-testGemmaStream();
+testNexusStream();

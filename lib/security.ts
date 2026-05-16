@@ -2,7 +2,7 @@ import { Redis } from '@upstash/redis';
 import { Ratelimit } from '@upstash/ratelimit';
 
 /**
- * DEAD STAR - Security Middleware Utilities
+ * MIDNIGHT-NEXUS - Security Middleware Utilities
  * Optimized for Next.js Edge Runtime
  *
  * Defence layers:
@@ -76,10 +76,10 @@ export async function checkDailyBudget(): Promise<boolean> {
 // ─── 4. Strict CORS Allowlist ───────────────────────────────────────────────
 
 const ALLOWED_ORIGINS = new Set([
-  'https://deadstarai.vercel.app',
-  'https://www.deadstarai.vercel.app',
-  'https://dead-star-gemma.vercel.app',
-  'https://www.dead-star-gemma.vercel.app',
+  'https://midnightnexusai.vercel.app',
+  'https://www.midnightnexusai.vercel.app',
+  'https://midnight-nexus.vercel.app',
+  'https://www.midnight-nexus.vercel.app',
 ]);
 
 export function isOriginAllowed(origin: string | null): boolean {

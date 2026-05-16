@@ -1,7 +1,7 @@
 "use client";
 
 import { Info } from "lucide-react";
-import GemmaLogo from "@/components/GemmaLogo";
+import NexusLogo from "@/components/NexusLogo";
 import { cn } from "@/lib/utils";
 import { useReasoningStore } from "@/store/useReasoningStore";
 
@@ -39,7 +39,7 @@ export default function DashboardNav() {
             <div className="absolute left-0 top-full mt-5 w-80 p-6 rounded-3xl bg-background/95 backdrop-blur-2xl border border-border shadow-2xl opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300 z-[300] text-left">
               <p className="text-[13px] leading-relaxed text-muted font-body tracking-normal normal-case">
                 <strong className="text-primary block mb-2 text-sm font-subheading uppercase tracking-wider">Guided Reasoning Service</strong>
-                Dead Star provides a high-fidelity partnership with **Gemma 4**, allowing you to refine and co-create complex intelligence streams. Experience the next generation of collaborative reasoning.
+                MIDNIGHT-NEXUS provides a high-fidelity partnership with **Nexus Core**, allowing you to refine and co-create complex intelligence streams. Experience the next generation of collaborative reasoning.
               </p>
               <div className="mt-4 pt-4 border-t border-border/50 flex items-center justify-between text-[11px] font-subheading font-bold text-muted uppercase tracking-widest">
                 <span>Protocol: RIP v1.0</span>
@@ -77,10 +77,10 @@ export default function DashboardNav() {
                     <span className="text-[10px] font-bold uppercase tracking-widest">Local Setup Required</span>
                   </div>
                   <p className="text-[11px] leading-relaxed text-muted">
-                    To enable true on-device inference, run Gemma 4 locally via **Ollama** or **gemma.cpp**:
+                    To enable true on-device inference, run Nexus Core locally via **Ollama** or **local C++ engines**:
                   </p>
                   <div className="p-2 rounded-lg bg-black/50 font-mono text-[9px] text-primary/80 border border-white/5">
-                    ollama run gemma:2b-instruct
+                    ollama run nexus-local-core
                   </div>
                   <p className="text-[10px] leading-relaxed text-muted italic">
                     Note: The current demo simulates local system constraints via system prompting. Future versions will support `localhost:11434` integration.
@@ -93,8 +93,8 @@ export default function DashboardNav() {
 
         <div className="flex items-center justify-start md:justify-center gap-3">
           <div className="flex items-center gap-3">
-            <GemmaLogo size={32} priority />
-            <span className="font-heading font-bold text-lg md:text-xl tracking-tight uppercase">Dead Star</span>
+            <NexusLogo size={32} priority />
+            <span className="font-heading font-bold text-lg md:text-xl tracking-tight uppercase">MIDNIGHT-NEXUS</span>
           </div>
         </div>
 
@@ -136,7 +136,7 @@ export default function DashboardNav() {
             </span>
             <div className="absolute right-0 top-full mt-2 w-48 p-3 rounded-xl bg-background/95 backdrop-blur-2xl border border-border shadow-2xl opacity-0 translate-y-1 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all text-left z-[300]">
               <p className="text-[10px] leading-relaxed text-muted font-body">
-                Gemma 4 Native Long Context enabled. Currently holding <span className="text-primary font-bold">131,072 tokens</span> in active reasoning memory.
+                Nexus Core Long Context enabled. Currently holding <span className="text-primary font-bold">131,072 tokens</span> in active reasoning memory.
               </p>
             </div>
           </div>

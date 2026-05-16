@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { User } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import GemmaLogo from "@/components/GemmaLogo";
+import NexusLogo from "@/components/NexusLogo";
 import { ImageAttachment } from "@/components/ChatInput";
 
 interface UserRowProps {
@@ -61,7 +61,7 @@ export const AIRow = memo(({ children }: AIRowProps) => {
       className="flex items-start gap-4"
     >
       <div className="mt-1">
-        <GemmaLogo size={32} />
+        <NexusLogo size={32} />
       </div>
       <div className="flex flex-col gap-2 flex-1 min-w-0">
         {children}

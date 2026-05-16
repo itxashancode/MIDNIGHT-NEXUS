@@ -2,14 +2,14 @@
 
 import { motion } from "framer-motion";
 
-interface GemmaLogoProps {
+interface NexusLogoProps {
   className?: string;
   size?: number;
   animated?: boolean;
   priority?: boolean;
 }
 
-export default function GemmaLogo({ className = "", size = 40, priority = false }: GemmaLogoProps) {
+export default function NexusLogo({ className = "", size = 40, priority = false }: NexusLogoProps) {
   const draw = {
     hidden: { pathLength: 0, opacity: 0 },
     visible: (i: number) => {
@@ -54,7 +54,7 @@ export default function GemmaLogo({ className = "", size = 40, priority = false 
       className={className}
     >
       <defs>
-        <linearGradient id="gemma-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <linearGradient id="nexus-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stopColor="#3b82f6" />
           <stop offset="50%" stopColor="#6366f1" />
           <stop offset="100%" stopColor="#8b5cf6" />
@@ -106,10 +106,10 @@ export default function GemmaLogo({ className = "", size = 40, priority = false 
         custom={5}
       />
 
-      {/* The Gemma Star (Central shape) */}
+      {/* The Nexus Star (Central shape) */}
       <motion.path
         d="M50 15C50 15 54 46 85 50C54 54 50 85 50 85C50 85 46 54 15 50C46 46 50 15 50 15Z"
-        fill="url(#gemma-gradient)"
+        fill="url(#nexus-gradient)"
         initial="initial"
         animate="animate"
         variants={starPulse}

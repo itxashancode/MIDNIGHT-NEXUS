@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { Thought } from '@/components/ThoughtStream';
-import { ConversationTurn } from '@/lib/gemma';
+import { ConversationTurn } from '@/lib/nexus';
 import { ImageAttachment } from '@/components/ChatInput';
 import { calculateShannonEntropy } from '@/lib/entropy';
 import { calculateInfluence } from '@/lib/diff';

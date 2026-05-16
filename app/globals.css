@@ -12,7 +12,7 @@
     --popover-foreground: 240 10% 3.9%;
     
     /* 3 CORE COLORS */
-    --primary: 212 100% 59%; /* Brand Blue: #3091ff */
+    --primary: 230 100% 67%; /* Electric Indigo */
     --primary-foreground: 0 0% 100%; /* Pure White */
     --muted: 240 5% 64.9%; /* Muted Zinc: #a1a1aa */
     
@@ -38,7 +38,7 @@
     --popover-foreground: 0 0% 98%;
     
     /* 3 CORE COLORS (DARK MODE) */
-    --primary: 212 100% 59%; /* Brand Blue: #3091ff */
+    --primary: 230 100% 67%; /* Electric Indigo */
     --primary-foreground: 0 0% 100%; /* Pure White */
     --muted: 240 5% 64.9%; /* Muted Zinc */
     
@@ -139,9 +139,9 @@
   z-index: -1;
   pointer-events: none;
   background: 
-    radial-gradient(circle at 50% 50%, rgba(48, 145, 255, 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 20% 80%, rgba(143, 184, 255, 0.12) 0%, transparent 40%),
-    radial-gradient(circle at 80% 20%, rgba(64, 112, 255, 0.12) 0%, transparent 40%);
+    radial-gradient(circle at 50% 50%, rgba(138, 43, 226, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 20% 80%, rgba(0, 191, 255, 0.12) 0%, transparent 40%),
+    radial-gradient(circle at 80% 20%, rgba(75, 0, 130, 0.12) 0%, transparent 40%);
   filter: blur(80px);
 }
 
@@ -155,7 +155,7 @@
   border-radius: 9999px;
   z-index: -1;
   pointer-events: none;
-  background: radial-gradient(circle at center, rgba(162, 191, 255, 0.2) 0%, transparent 70%);
+  background: radial-gradient(circle at center, rgba(138, 43, 226, 0.2) 0%, transparent 70%);
   filter: blur(60px);
 }
 

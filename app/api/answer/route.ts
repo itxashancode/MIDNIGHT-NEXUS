@@ -1,4 +1,4 @@
-import { fetchGemmaFunctionCalls, fetchGemmaStream, ConversationTurn, GemmaImagePart } from "@/lib/gemma";
+import { fetchNexusFunctionCalls, fetchNexusStream, ConversationTurn, NexusImagePart } from "@/lib/nexus";
 import { createSSETransform } from "@/lib/stream";
 import { tavilySearch } from "@/lib/search";
 import { fetchFinanceNews, fetchExchangeRates } from "@/lib/finance";
@@ -154,11 +154,11 @@ export async function POST(req: Request) {
       .map(t => `###_REASONING_NODE_###\n${t}\n###_END_NODE_###`)
       .join("\n");
 
-    const imageData: GemmaImagePart | undefined = image
+    const imageData: NexusImagePart | undefined = image
       ? { inlineData: { mimeType: image.mimeType, data: image.base64 } }
       : undefined;
 
-    const baseIdentity = `You are Dead Star, a high-performance intelligence engine powered by Gemma 4. You provide raw, unfiltered, and deeply reasoned analytical data.
+    const baseIdentity = `You are MIDNIGHT-NEXUS, a high-performance intelligence engine powered by Nexus Core. You provide raw, unfiltered, and deeply reasoned analytical data.
     ${FRONTEND_DESIGN_SKILL}
 Protocol: ${protocol === "local" ? "LOCAL_RESOURCES" : "CLOUD_COMPUTE"}.
 ${protocol === "local" ? "Instruction: Execute as LOCAL_INF. Simulate on-device processing. Be extremely concise and efficient." : "Instruction: Execute as CLOUD_INF. Utilize high-fidelity compute for maximum depth."}
@@ -184,13 +184,13 @@ JSON: { "type": "bar"|"line"|"pie", "title": "string", "data": { "labels": [], "
     const systemInstruction = `${baseIdentity}\n\n[INTERNAL_REASONING]:\n${formattedReasoning}`;
     const userMessage       = sanitizedMessage || "Analyze image";
 
-    // ── Step 1: Tool detection (increased to 12.0s for Gemma 4 stability) ──
+    // ── Step 1: Tool detection (increased to 12.0s for Nexus Core stability) ──
     const toolController = new AbortController();
     const toolTimeout    = setTimeout(() => toolController.abort(), 12000);
 
     let functionCalls: any[] = [];
     try {
-      functionCalls = await fetchGemmaFunctionCalls(
+      functionCalls = await fetchNexusFunctionCalls(
         systemInstruction,
         sanitizedMessage, // Only send the latest message for tool detection
         [webSearchTool, webScrapeTool, financeSearchTool, currencyExchangeTool, cryptoPricesTool, cryptoTrendingTool],
@@ -247,7 +247,7 @@ JSON: { "type": "bar"|"line"|"pie", "title": "string", "data": { "labels": [], "
       ? `${baseIdentity}\n\n[LIVE_WEB_DATA]: ${liveContext}`
       : baseIdentity;
 
-    const stream = await fetchGemmaStream(
+    const stream = await fetchNexusStream(
       finalSystem,
       userMessage,
       8192,  // Extended fidelity output window for complex reasoning and deep design.

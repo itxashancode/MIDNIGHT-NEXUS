@@ -1,4 +1,4 @@
-import { fetchGemmaStream, GemmaImagePart } from "@/lib/gemma";
+import { fetchNexusStream, NexusImagePart } from "@/lib/nexus";
 import { createSSETransform } from "@/lib/stream";
 import { FRONTEND_DESIGN_SKILL } from "@/lib/skills";
 
@@ -69,11 +69,11 @@ export async function POST(req: Request) {
       return new Response("Request blocked.", { status: 403 });
     }
 
-    const imageData: GemmaImagePart | undefined = image
+    const imageData: NexusImagePart | undefined = image
       ? { inlineData: { mimeType: image.mimeType, data: image.base64 } }
       : undefined;
 
-    const systemInstruction = `You are a high-speed reasoning engine for Dead Star AI.
+    const systemInstruction = `You are a high-speed reasoning engine for MIDNIGHT-NEXUS AI.
 ${FRONTEND_DESIGN_SKILL}
 Protocol: ${protocol === "local" ? "LOCAL_RESOURCES" : "CLOUD_COMPUTE"}.
 ${protocol === "local" ? "Instruction: Simulate on-device processing patterns. Be concise." : "Instruction: Utilize full model capacity for deep reasoning."}
@@ -86,7 +86,7 @@ Produce a sequence of short, professional, and analytical "thought nodes" in a J
     Each thought must be one sentence under 15 words. 
     Output raw JSON array of strings only.`;
 
-    const stream = await fetchGemmaStream(
+    const stream = await fetchNexusStream(
       systemInstruction,
       userMessage,
       400, // thinking phase is cheap — keep it small

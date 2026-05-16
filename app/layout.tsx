@@ -24,19 +24,19 @@ const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://deadstarai.vercel.app";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://midnightnexusai.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Dead Star AI | Advanced Reasoning Protocol",
-    template: "%s | Dead Star"
+    default: "MIDNIGHT-NEXUS AI | Advanced Reasoning Protocol",
+    template: "%s | MIDNIGHT-NEXUS"
   },
-  description: "Experience high-fidelity collaborative reasoning with Gemma 4. Intercept, analyze, and reshape AI cognitive nodes in real-time.",
-  keywords: ["AI", "Gemma 4", "Reasoning Engine", "Multimodal AI", "Dead Star", "Artificial Intelligence", "Developer Tools", "Prompt Engineering", "Interception"],
-  authors: [{ name: "Dead Star AI", url: siteUrl }],
-  creator: "Dead Star AI",
-  publisher: "Dead Star AI",
+  description: "Experience high-fidelity collaborative reasoning with Nexus Core. Intercept, analyze, and reshape AI cognitive nodes in real-time.",
+  keywords: ["AI", "Nexus Core", "Reasoning Engine", "Multimodal AI", "MIDNIGHT-NEXUS", "Artificial Intelligence", "Developer Tools", "Prompt Engineering", "Interception"],
+  authors: [{ name: "MIDNIGHT-NEXUS AI", url: siteUrl }],
+  creator: "MIDNIGHT-NEXUS AI",
+  publisher: "MIDNIGHT-NEXUS AI",
   manifest: "/manifest.json",
   icons: {
     icon: "/icon.svg",
@@ -48,16 +48,16 @@ export const metadata: Metadata = {
     telephone: false,
   },
   openGraph: {
-    title: "Dead Star AI | Advanced Reasoning Protocol",
-    description: "Experience high-fidelity collaborative reasoning with Gemma 4. Intercept, analyze, and reshape AI cognitive nodes in real-time.",
+    title: "MIDNIGHT-NEXUS AI | Advanced Reasoning Protocol",
+    description: "Experience high-fidelity collaborative reasoning with Nexus Core. Intercept, analyze, and reshape AI cognitive nodes in real-time.",
     url: siteUrl,
-    siteName: "Dead Star AI",
+    siteName: "MIDNIGHT-NEXUS AI",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Dead Star AI Interface Preview",
+        alt: "MIDNIGHT-NEXUS AI Interface Preview",
       },
     ],
     locale: "en_US",
@@ -65,8 +65,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Dead Star AI",
-    description: "Intercept, analyze, and reshape AI cognitive nodes in real-time with Gemma 4.",
+    title: "MIDNIGHT-NEXUS AI",
+    description: "Intercept, analyze, and reshape AI cognitive nodes in real-time with Nexus Core.",
     creator: "@itxashancode",
     images: ["/og-image.png"],
   },
@@ -105,14 +105,14 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "SoftwareApplication",
-              "name": "Dead Star AI",
-              "description": "Advanced multimodal reasoning engine powered by Gemma 4. Intercept, analyze, and reshape AI cognitive nodes in real-time.",
+              "name": "MIDNIGHT-NEXUS AI",
+              "description": "Advanced multimodal reasoning engine powered by Nexus Core. Intercept, analyze, and reshape AI cognitive nodes in real-time.",
               "applicationCategory": "AI Software",
               "operatingSystem": "Web",
-              "url": "https://deadstarai.vercel.app",
+              "url": "https://midnightnexusai.vercel.app",
               "author": {
                 "@type": "Organization",
-                "name": "Dead Star AI"
+                "name": "MIDNIGHT-NEXUS AI"
               }
             })
           }}

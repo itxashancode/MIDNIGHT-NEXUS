@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import GemmaLogo from "@/components/GemmaLogo";
+import NexusLogo from "@/components/NexusLogo";
 
 export default function Loading() {
   return (
@@ -25,7 +25,7 @@ export default function Loading() {
           }}
           className="relative z-10"
         >
-          <GemmaLogo size={80} priority />
+          <NexusLogo size={80} priority />
         </motion.div>
 
         {/* Shimmering Text */}

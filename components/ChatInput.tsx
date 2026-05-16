@@ -233,7 +233,7 @@ export default function ChatInput({ onSend, disabled, value = "", onChange, isVi
         </form>
         
         <p className="text-center text-[10px] md:text-[11px] text-muted mt-3 md:mt-4 font-body font-medium px-2">
-          Dead Star may display inaccurate info. <span className="hidden sm:inline">Double-check its responses.</span> <a href="#" className="underline">Your privacy</a>
+          MIDNIGHT-NEXUS may display inaccurate info. <span className="hidden sm:inline">Double-check its responses.</span> <a href="#" className="underline">Your privacy</a>
         </p>
       </div>
     </motion.div>

@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowLeft, SearchX, AlertTriangle, Sparkles, Binary } from "lucide-react";
-import GemmaLogo from "@/components/GemmaLogo";
+import NexusLogo from "@/components/NexusLogo";
 import { cn } from "@/lib/utils";
 
 export default function NotFound() {
@@ -28,8 +28,8 @@ export default function NotFound() {
             className="mb-12 lg:mb-20"
           >
             <Link href="/" className="flex items-center gap-3 w-fit">
-              <GemmaLogo size={48} priority />
-              <span className="font-outfit font-extrabold text-2xl tracking-tighter text-foreground">DEAD STAR</span>
+              <NexusLogo size={48} priority />
+              <span className="font-outfit font-extrabold text-2xl tracking-tighter text-foreground">MIDNIGHT-NEXUS</span>
             </Link>
           </motion.div>
 

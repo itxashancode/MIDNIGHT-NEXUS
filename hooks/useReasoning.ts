@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Thought } from "@/components/ThoughtStream";
 import { calculateInfluence } from "@/lib/diff";
-import { ConversationTurn } from "@/lib/gemma";
+import { ConversationTurn } from "@/lib/nexus";
 import { ImageAttachment } from "@/components/ChatInput";
 import { calculateShannonEntropy } from "@/lib/entropy";
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { RefObject } from "react";
-import GemmaLogo from "@/components/GemmaLogo";
+import NexusLogo from "@/components/NexusLogo";
 
 interface FooterProps {
   footerRef: RefObject<HTMLElement | null>;
@@ -15,12 +15,12 @@ export default function Footer({ footerRef }: FooterProps) {
         {/* Left Column */}
         <div className="p-8 md:p-16 border-b md:border-b-0 md:border-r border-black/10 dark:border-white/10 flex flex-col justify-between min-h-[300px]">
           <div className="flex items-center gap-4">
-            <GemmaLogo size={48} className="invert dark:invert-0" />
-            <span className="text-4xl font-subheading font-medium tracking-tighter uppercase">Dead Star</span>
+            <NexusLogo size={48} className="invert dark:invert-0" />
+            <span className="text-4xl font-subheading font-medium tracking-tighter uppercase">MIDNIGHT-NEXUS</span>
           </div>
           <div className="flex flex-col gap-2 mt-8">
             <div className="text-xs text-muted font-body font-medium uppercase tracking-widest mb-4">
-              ©2026 Dead Star, Inc. All Rights Reserved.
+              ©2026 MIDNIGHT-NEXUS, Inc. All Rights Reserved.
             </div>
             <a
               href="https://calendly.com/ashandev/new-meeting"

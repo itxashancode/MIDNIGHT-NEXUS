@@ -1,5 +1,5 @@
 /**
- * DEAD STAR AI - SKILL REPOSITORY
+ * MIDNIGHT-NEXUS AI - SKILL REPOSITORY
  * This file contains specialized instruction sets (Skills) that are injected 
  * into the model's system prompt to enhance specific capabilities.
  */
