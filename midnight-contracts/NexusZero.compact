@@ -1,0 +1,36 @@
+pragma language_version >= 0.22;
+
+import CompactStandardLibrary;
+
+export ledger verifiedSessions: Set<Bytes<32>>;
+
+witness aiExecutionLogHash(): Bytes<32>;
+witness callerSecret(): Bytes<32>;
+
+export circuit verify_ai_execution(
+  executionAttestation: Bytes<32>,
+  isCompliant: Boolean
+): [] {
+  // Verify the caller has the correct secret (proves identity)
+  const callerPubKey = publicKey(callerSecret());
+  assert(verifiedSessions.member(callerPubKey), "Caller not authorized");
+  
+  // Use commitment pattern to store sensitive AI execution hash privately
+  const nonce = freshNonce();
+  const privateExecutionCommitment = persistentCommit<Bytes<32>>(
+    executionAttestation, 
+    nonce
+  );
+  
+  // Disclose only the fact that verification was performed and its outcome
+  // The actual execution log hash remains private in the commitment
+  const verificationRecord = persistentCommit<Vector<2, Bytes<32>>>(
+    [pad(32, "nexus:verification:"), privateExecutionCommitment]
+  );
+  
+  // Add to verified sessions - only reveal verification status, not sensitive data
+  verifiedSessions.insert(disclose(verificationRecord));
+  
+  // Assert the compliance outcome (this becomes public on-chain)
+  assert(isCompliant, "AI execution failed compliance check");
+}
