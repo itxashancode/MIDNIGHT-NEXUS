@@ -1,228 +1,1599 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;0,500&family=Space+Mono:ital,wght@0,400;0,700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    
-    /* 3 CORE COLORS */
-    --primary: 230 100% 67%; /* Electric Indigo */
-    --primary-foreground: 0 0% 100%; /* Pure White */
-    --muted: 240 5% 64.9%; /* Muted Zinc: #a1a1aa */
-    
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 240 5.9% 10%;
-    --radius: 0.75rem;
-  }
+/* =============================================================
+   MIDNIGHT-NEXUS DESIGN SYSTEM — COMPLETE REWRITE
+   Brutalist Cyberpunk Editorial
+   Destroyed and rebuilt from scratch. No legacy.
+   ============================================================= */
 
-  .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    
-    /* 3 CORE COLORS (DARK MODE) */
-    --primary: 230 100% 67%; /* Electric Indigo */
-    --primary-foreground: 0 0% 100%; /* Pure White */
-    --muted: 240 5% 64.9%; /* Muted Zinc */
-    
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
-  }
+/* === DESIGN TOKENS === */
+:root {
+  /* Core palette — non-negotiable */
+  --void: #08080D;
+  --surface: #0F0F18;
+  --border: #1A1A2E;
+  --cyan-primary: #00FFE0;
+  --cyan-dim: rgba(0, 255, 224, 0.12);
+  --bone: #F0EBE1;
+  --muted: #4A4A6A;
+  --amber: #FFB020;
+  --shield-green: #00FF88;
+
+  /* Semantic aliases */
+  --bg-primary: var(--void);
+  --bg-surface: var(--surface);
+  --border-structural: var(--border);
+  --accent: var(--cyan-primary);
+  --text-primary: var(--bone);
+  --text-secondary: var(--muted);
+  --warning: var(--amber);
+  --success: var(--shield-green);
 }
 
-@layer base {
-  * {
-    border-color: hsl(var(--border));
-  }
-  body {
-    background-color: hsl(var(--background));
-    color: hsl(var(--muted)); /* Default Body Text Color */
-    font-family: var(--font-inter), sans-serif; /* 3. BODY FONT */
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-  
-  h1, h2, h3, h4, h5, h6 {
-    color: hsl(var(--foreground)); /* 2. HEADING COLOR */
-  }
-
-  h1 { font-family: var(--font-outfit), sans-serif; font-weight: 800; } /* 1. HEADING FONT (Fallback) */
+/* === BASE RESET === */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-/* 3 FONTS CUSTOM CLASSES */
-.halaska-display {
-  font-family: var(--font-space-grotesk), sans-serif; /* 1. HEADING FONT */
-  font-size: clamp(4rem, 15vw, 12rem);
-  font-weight: 700;
-  letter-spacing: -0.05em;
-  line-height: 0.85;
-  text-transform: uppercase;
-  color: hsl(var(--foreground));
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 255, 224, 0.3) transparent;
 }
 
-.subheading-style {
-  font-family: var(--font-outfit), sans-serif; /* 2. SUBHEADING FONT */
-  font-weight: 700;
-  color: hsl(var(--foreground));
-  letter-spacing: -0.02em;
+/* Custom scrollbar — 3px, cyan, rounded */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 255, 224, 0.3);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 255, 224, 0.6);
 }
 
-.body-style {
-  font-family: var(--font-inter), sans-serif; /* 3. BODY FONT */
+body {
+  background-color: var(--void);
+  color: var(--bone);
+  font-family: 'DM Mono', 'Courier New', monospace;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  line-height: 1.7;
+  font-size: 14px;
+}
+
+::selection {
+  background: rgba(0, 255, 224, 0.2);
+  color: var(--text-primary);
+}
+
+/* === TYPOGRAPHY HIERARCHY ===
+   Level 1 — Display / Wordmark: Bebas Neue, ALL CAPS, ultra-wide tracking
+   Level 2 — UI Labels / Nav: Space Mono, 13px–14px
+   Level 3 — Body / Chat: DM Mono, 14px–15px, 1.7 line-height
+   Level 4 — Timestamps / Meta: Space Mono, 11px, uppercase, muted
+*/
+
+/* Level 1 — Display */
+.nx-display,
+.nx-wordmark {
+  font-family: 'Bebas Neue', 'Impact', monospace;
   font-weight: 400;
-  color: hsl(var(--muted));
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  line-height: 1;
 }
 
-/* Suggestion Cards */
-.suggestion-card {
+/* Level 2 — UI Labels / Nav */
+.nx-label,
+.nx-nav-label {
+  font-family: 'Space Mono', 'Courier New', monospace;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Level 3 — Body / Messages */
+.nx-body,
+.nx-message-text {
+  font-family: 'DM Mono', 'Courier New', monospace;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.7;
+  color: var(--bone);
+}
+
+/* Level 4 — Meta / Timestamps */
+.nx-meta,
+.nx-timestamp {
+  font-family: 'Space Mono', 'Courier New', monospace;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* =============================================================
+   BACKGROUND SYSTEM — layered, CSS only
+   ============================================================= */
+
+/* Container for all background layers */
+.nx-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Layer 1 — Void solid */
+.nx-bg-void {
+  position: absolute;
+  inset: 0;
+  background-color: var(--void);
+}
+
+/* Layer 2 — Dot grid: radial-gradient dots, 28px grid, 1.5px dots, rgba(0,255,224,0.06) */
+.nx-bg-dots {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle, rgba(0, 255, 224, 0.06) 1.5px, transparent 1.5px);
+  background-size: 28px 28px;
+}
+
+/* Layer 3 — Vignette: transparent center to rgba(0,0,0,0.6) edges */
+.nx-bg-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 40%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+}
+
+/* Layer 4 — Noise texture: repeating gradient, 3% opacity */
+.nx-bg-noise {
+  position: absolute;
+  inset: 0;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+  pointer-events: none;
+}
+
+/* Sidebar scanline texture — vertical lines, 1px, 2% opacity */
+.nx-sidebar-scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 1px,
+    rgba(0, 0, 0, 0.02) 1px,
+    rgba(0, 0, 0, 0.02) 2px
+  );
+  pointer-events: none;
+}
+
+/* =============================================================
+   LAYOUT: CHAT CONTAINER
+   Two-panel asymmetric — intentionally off-balance
+   ============================================================= */
+
+.nx-chat-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  z-index: 10;
+}
+
+/* =============================================================
+   LAYOUT: LEFT SIDEBAR — 240px fixed
+   ============================================================= */
+
+.nx-sidebar {
+  width: 240px;
+  min-width: 240px;
+  height: 100%;
+  background-color: var(--void);
+  border-right: 1px solid var(--border-structural);
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  padding: 2rem;
-  border-radius: 32px;
-  background-color: hsl(var(--background) / 0.3);
-  backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  cursor: pointer;
+  padding: 2rem 1.25rem;
   position: relative;
+  z-index: 20;
   overflow: hidden;
 }
 
-.suggestion-card:hover {
-  border-color: hsl(var(--primary) / 0.4);
-  background-color: hsl(var(--background) / 0.5);
-}
-
-.solidroad-nav {
-  width: 100%;
-  max-width: 1200px;
-  background-color: hsl(var(--background) / 0.8);
-  backdrop-filter: blur(12px);
-  border: 1px solid hsl(var(--border));
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  border-radius: 2rem;
-  padding: 0.75rem 1.5rem;
-  transition: all 0.3s ease;
-  font-family: var(--font-outfit); /* Use subheading font for nav */
-}
-
-/* Star-Mesh Background */
-.star-mesh {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background: 
-    radial-gradient(circle at 50% 50%, rgba(138, 43, 226, 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 20% 80%, rgba(0, 191, 255, 0.12) 0%, transparent 40%),
-    radial-gradient(circle at 80% 20%, rgba(75, 0, 130, 0.12) 0%, transparent 40%);
-  filter: blur(80px);
-}
-
-.hero-glow {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 600px;
-  height: 600px;
-  border-radius: 9999px;
-  z-index: -1;
-  pointer-events: none;
-  background: radial-gradient(circle at center, rgba(138, 43, 226, 0.2) 0%, transparent 70%);
-  filter: blur(60px);
-}
-
-
-/* Star-Grid Animation */
-.star-grid {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background-image: 
-    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-  background-size: 50px 50px;
-  mask-image: radial-gradient(circle at center, black 0%, transparent 80%);
-}
-
-@media (max-width: 768px) {
-  .halaska-display {
-    font-size: clamp(2.5rem, 12vw, 4rem);
-    line-height: 0.9;
-  }
-  
-  .solidroad-nav {
-    border-radius: 1.5rem;
-    padding: 0.5rem 1rem;
-  }
-
-  .star-grid {
-    background-size: 30px 30px;
-  }
-}
-
-/* Premium Button Effects */
-.premium-button {
+/* Sidebar wordmark — Bebas Neue, 22px, tracked, cyan underline animates in */
+.nx-sidebar-brand {
+  font-family: 'Bebas Neue', 'Impact', monospace;
+  font-size: 22px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--bone);
+  padding-bottom: 1.5rem;
+  margin-bottom: 2rem;
   position: relative;
-  overflow: hidden;
-  transition: all 0.3s ease;
+  display: inline-block;
 }
 
-.premium-button::after {
+.nx-sidebar-brand::after {
   content: '';
   position: absolute;
-  top: -50%;
-  left: -50%;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--cyan-primary);
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: brandUnderline 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.8s forwards;
+}
+
+/* ZK Shield status widget — breathing glow pulse */
+.nx-shield {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.75rem 1rem;
+  background: var(--cyan-dim);
+  border: 1px solid rgba(0, 255, 224, 0.2);
+  border-radius: 4px;
+  margin-bottom: 2.5rem;
+  position: relative;
+  animation: shieldBreathe 2.4s ease-in-out infinite;
+}
+
+.nx-shield.flash {
+  background: rgba(0, 255, 224, 0.3);
+  border-color: var(--cyan-primary);
+  box-shadow: 0 0 30px rgba(0, 255, 224, 0.5), inset 0 0 20px rgba(0, 255, 224, 0.1);
+  animation: shieldBreathe 2.4s ease-in-out infinite, shieldFlash 0.3s ease-out;
+}
+
+.nx-shield-icon {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--cyan-primary);
+  box-shadow: 0 0 12px rgba(0, 255, 224, 0.6);
+  animation: shieldPulse 2s ease-in-out infinite;
+}
+
+.nx-shield-label {
+  font-family: 'Space Mono', 'Courier New', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--cyan-primary);
+}
+
+/* Sidebar navigation */
+.nx-sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.nx-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem 0.75rem;
+  color: var(--muted);
+  font-family: 'Space Mono', 'Courier New', monospace;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.18s ease, background 0.18s ease, transform 0.18s ease;
+  transform: translateX(0);
+}
+
+.nx-nav-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 2px;
+  height: 0;
+  background: var(--cyan-primary);
+  transition: height 0.18s ease;
+  transform-origin: top;
+}
+
+.nx-nav-item:hover {
+  color: var(--bone);
+  background: rgba(0, 255, 224, 0.04);
+  transform: translateX(6px);
+}
+
+.nx-nav-item:hover::before {
+  height: 100%;
+}
+
+.nx-nav-icon {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Sidebar bottom attribution */
+.nx-sidebar-bottom {
+  margin-top: auto;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-structural);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--muted);
+  font-family: 'Space Mono', 'Courier New', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.5;
+}
+
+/* =============================================================
+   LAYOUT: MAIN CHAT AREA — fills remaining width
+   ============================================================= */
+
+.nx-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  min-width: 0;
+}
+
+/* Header — session ID, encrypted badge, connection bars */
+.nx-header {
+  height: 72px;
+  min-height: 72px;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.nx-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--cyan-primary), transparent);
+  background-size: 200% 100%;
+  animation: headerBorderShimmer 3s linear infinite;
+}
+
+.nx-session-id {
+  font-family: 'Space Mono', 'Courier New', monospace;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  color: var(--bone);
+  text-transform: uppercase;
+}
+
+.nx-session-id .nx-session-highlight {
+  color: var(--cyan-primary);
+}
+
+.nx-header-right {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+/* End-to-End Encrypted badge */
+.nx-e2e-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.3rem 0.6rem;
+  border: 1px solid rgba(255, 176, 32, 0.3);
+  border-radius: 2px;
+  background: rgba(255, 176, 32, 0.05);
+  font-family: 'Space Mono', 'Courier New', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--warning);
+}
+
+.nx-e2e-badge svg {
+  width: 11px;
+  height: 11px;
+  color: var(--warning);
+}
+
+/* Connection bars — audio-visualizer pattern */
+.nx-connection-bars {
+  display: flex;
+  gap: 2.5px;
+  align-items: flex-end;
+  height: 14px;
+}
+
+.nx-conn-bar {
+  width: 2.5px;
+  background: rgba(0, 255, 224, 0.8);
+  border-radius: 1px;
+}
+
+.nx-conn-bar:nth-child(1) {
+  animation: connBar1 1.4s ease-in-out infinite;
+}
+
+.nx-conn-bar:nth-child(2) {
+  animation: connBar2 1.4s ease-in-out infinite;
+}
+
+.nx-conn-bar:nth-child(3) {
+  animation: connBar3 1.4s ease-in-out infinite;
+}
+
+/* =============================================================
+   CHAT VIEWPORT — scrollable, custom scrollbar
+   ============================================================= */
+
+.nx-chat-viewport {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 2rem 12% 1rem 12%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  scroll-behavior: smooth;
+  scrollbar-width: 3px;
+  scrollbar-color: rgba(0, 255, 224, 0.3) transparent;
+}
+
+.nx-chat-viewport::-webkit-scrollbar { width: 3px; }
+.nx-chat-viewport::-webkit-scrollbar-track { background: transparent; }
+.nx-chat-viewport::-webkit-scrollbar-thumb {
+  background: rgba(0, 255, 224, 0.3);
+  border-radius: 2px;
+}
+.nx-chat-viewport::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 255, 224, 0.6);
+}
+
+/* Scroll fade indicator at bottom */
+.nx-scroll-fade {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+  pointer-events: none;
+  z-index: 5;
+  background: linear-gradient(to top, var(--void) 0%, transparent 100%);
+  animation: scrollFadePulse 2s ease-in-out infinite;
+}
+
+.nx-chat-viewport-wrapper {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+/* =============================================================
+   MESSAGES — stacking layout
+   ============================================================= */
+
+.nx-msg-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.nx-msg-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  animation: msgEntrance 0.38s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.nx-msg-row-user {
+  flex-direction: row-reverse;
+}
+
+/* Avatar */
+.nx-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-family: 'Space Mono', 'Courier New', monospace;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.nx-avatar-user {
+  background: rgba(0, 255, 224, 0.08);
+  border: 1px solid rgba(0, 255, 224, 0.2);
+  color: var(--cyan-primary);
+}
+
+.nx-avatar-ai {
+  background: var(--surface);
+  border: 1px solid rgba(0, 255, 224, 0.15);
+  color: var(--cyan-primary);
+}
+
+/* Timestamps */
+.nx-msg-timestamp {
+  font-family: 'Space Mono', 'Courier New', monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.375rem;
+}
+
+.nx-msg-timestamp-label {
+  opacity: 0.5;
+}
+
+/* =============================================================
+   CHAT BUBBLES
+   ============================================================= */
+
+/* Common bubble base */
+.nx-bubble {
+  position: relative;
+  padding: 0.875rem 1.125rem;
+  font-family: 'DM Mono', 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--bone);
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* User message bubble — right-aligned, max 68% */
+.nx-bubble-user {
+  max-width: 68%;
+  margin-left: auto;
+  background: linear-gradient(135deg, rgba(0, 255, 224, 0.15), rgba(0, 255, 224, 0.08));
+  border: 1px solid rgba(0, 255, 224, 0.3);
+  border-radius: 2px 8px 8px 8px;
+}
+
+/* AI message bubble — left-aligned, max 78%, left cyan border */
+.nx-bubble-ai {
+  max-width: 78%;
+  margin-right: auto;
+  background: var(--surface);
+  border-left: 3px solid var(--cyan-primary);
+  border-top: 1px solid var(--border-structural);
+  border-right: 1px solid var(--border-structural);
+  border-bottom: 1px solid var(--border-structural);
+  border-radius: 0 8px 8px 8px;
+  padding-left: 1.25rem;
+}
+
+/* ZK Verified badge — bottom-right of AI bubble */
+.nx-proof-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 0.625rem;
+  margin-left: auto;
+  font-family: 'Space Mono', 'Courier New', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--success);
+  border: 1px solid rgba(0, 255, 136, 0.3);
+  border-radius: 2px;
+  padding: 0.15rem 0.5rem;
+  background: rgba(0, 255, 136, 0.05);
+  animation: badgeReveal 0.22s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.nx-proof-badge svg {
+  width: 10px;
+  height: 10px;
+  color: var(--success);
+}
+
+/* =============================================================
+   INPUT DOCK — sticky bottom
+   ============================================================= */
+
+.nx-input-dock {
+  flex-shrink: 0;
+  padding: 1rem 12% 1rem 12%;
+  background: linear-gradient(to top, var(--surface) 90%, transparent);
+  position: relative;
+  z-index: 10;
+}
+
+.nx-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem 1rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-structural);
+  border-bottom: 1px solid var(--cyan-primary);
+  border-radius: 4px;
+  transition: background 0.28s ease-out, border-color 0.28s ease-out;
+  position: relative;
+}
+
+.nx-input-wrapper:focus-within {
+  background: var(--cyan-dim);
+  border-color: var(--cyan-primary);
+}
+
+/* Input focus underline animation — left to right */
+.nx-input-underline {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--cyan-primary);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.28s ease-out;
+}
+
+.nx-input-wrapper:focus-within .nx-input-underline {
+  transform: scaleX(1);
+}
+
+/* Floating label */
+.nx-input-label {
+  position: absolute;
+  left: 2.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: 'Space Mono', 'Courier New', monospace;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cyan-primary);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.28s ease-out;
+  background: var(--surface);
+  padding: 0 0.375rem;
+}
+
+.nx-input-wrapper:focus-within .nx-input-label {
+  opacity: 1;
+  transform: translateY(calc(-50% - 14px));
+  letter-spacing: 0.15em;
+}
+
+.nx-input-icon {
+  color: var(--muted);
+  flex-shrink: 0;
+  transition: color 0.2s ease;
+  cursor: pointer;
+}
+
+.nx-input-icon:hover {
+  color: var(--bone);
+}
+
+.nx-input-field {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: 'DM Mono', 'Courier New', monospace;
+  font-size: 14px;
+  color: var(--bone);
+  min-width: 0;
+}
+
+.nx-input-field::placeholder {
+  color: var(--muted);
+  font-style: italic;
+  opacity: 0.6;
+}
+
+.nx-input-field:focus::placeholder {
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* =============================================================
+   SEND BUTTON — 44x44, border-radius 4px, cyan bg
+   ============================================================= */
+
+.nx-send-btn {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 4px;
+  overflow: hidden;
+  flex-shrink: 0;
+  cursor: pointer;
+  border: none;
+  background: var(--cyan-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Conic-gradient running light on hover */
+.nx-send-btn-glow {
+  position: absolute;
+  inset: -25%;
   width: 200%;
   height: 200%;
+  background: conic-gradient(from 0deg, transparent 60%, var(--bone) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.nx-send-btn:hover .nx-send-btn-glow {
+  opacity: 1;
+  animation: sendBtnSpin 1.2s linear infinite;
+}
+
+.nx-send-btn-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--void);
+}
+
+.nx-send-btn-inner svg {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.nx-send-btn:hover .nx-send-btn-inner svg {
+  transform: rotate(18deg);
+}
+
+/* Click spring — scale(0.94) → scale(1.08) → scale(1.0) */
+.nx-send-btn:active {
+  animation: sendBtnSpring 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Input meta text */
+.nx-input-meta {
+  text-align: center;
+  font-family: 'Space Mono', 'Courier New', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 0.625rem;
+  opacity: 0.5;
+}
+
+/* =============================================================
+   PRIVACY STATS FOOTER — floats above void
+   ============================================================= */
+
+.nx-privacy-stats {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2.5rem;
+  padding: 0.75rem 1rem;
+  position: relative;
+  z-index: 15;
+}
+
+.nx-stat {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Space Mono', 'Courier New', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.nx-stat-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--shield-green);
+  box-shadow: 0 0 6px rgba(0, 255, 136, 0.4);
+  animation: statDotPulse 2s ease-in-out infinite;
+}
+
+/* =============================================================
+   AI TYPING INDICATOR — three dots, sine-wave motion
+   ============================================================= */
+
+.nx-typing-indicator {
+  display: flex;
+  gap: 4px;
+  padding: 0.5rem 0.75rem;
+}
+
+.nx-typing-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--cyan-primary);
+  opacity: 0.4;
+}
+
+.nx-typing-dot:nth-child(1) {
+  animation: typingDotWave 1.4s ease-in-out infinite;
+}
+
+.nx-typing-dot:nth-child(2) {
+  animation: typingDotWave 1.4s ease-in-out 0.12s infinite;
+}
+
+.nx-typing-dot:nth-child(3) {
+  animation: typingDotWave 1.4s ease-in-out 0.24s infinite;
+}
+
+/* =============================================================
+   GLASS PANELS — shared component styling
+   ============================================================= */
+
+.nx-glass {
+  background: rgba(15, 15, 24, 0.6);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 1px solid rgba(26, 26, 46, 0.8);
+  border-radius: 4px;
+  transition: border-color 0.4s ease, background 0.4s ease;
+}
+
+.nx-glass:hover {
+  border-color: rgba(0, 255, 224, 0.15);
+  background: rgba(15, 15, 24, 0.8);
+}
+
+/* Subtle cyan wash on hover */
+.nx-glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0, 255, 224, 0.04), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.nx-glass:hover::before {
+  opacity: 1;
+}
+
+.nx-glass-strong {
+  background: rgba(15, 15, 24, 0.8);
+  backdrop-filter: blur(40px) saturate(200%);
+  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  border: 1px solid rgba(26, 26, 46, 0.6);
+  border-radius: 4px;
+}
+
+/* =============================================================
+   BUTTON SYSTEM
+   ============================================================= */
+
+/* Primary — cyan outlined, brutalist */
+.nx-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  padding: 0.75rem 1.5rem;
+  background: transparent;
+  border: 1px solid var(--cyan-primary);
+  color: var(--cyan-primary);
+  font-family: 'Space Mono', 'Courier New', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+  transition: color 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.nx-btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--cyan-primary);
+  transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nx-btn-primary:hover {
+  color: var(--void);
+  box-shadow: 0 0 30px rgba(0, 255, 224, 0.25), 0 0 80px rgba(0, 255, 224, 0.08);
+}
+
+.nx-btn-primary:hover::before {
+  transform: translateY(0);
+}
+
+.nx-btn-primary span {
+  position: relative;
+  z-index: 1;
+}
+
+/* Ghost — subtle outlined */
+.nx-btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: var(--muted);
+  font-family: 'Space Mono', 'Courier New', monospace;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.25s ease;
+}
+
+.nx-btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: var(--bone);
+}
+
+/* =============================================================
+   ZK SHIELD WIDGET (sidebar)
+   ============================================================= */
+
+/* Breathing glow pulse — 2.4s ease-in-out infinite */
+@keyframes shieldBreathe {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(0, 255, 224, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 24px rgba(0, 255, 224, 0.25);
+  }
+}
+
+@keyframes shieldPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 6px rgba(0, 255, 224, 0.3);
+  }
+  50% {
+    transform: scale(1.15);
+    box-shadow: 0 0 18px rgba(0, 255, 224, 0.6);
+  }
+}
+
+/* Flash on message send */
+@keyframes shieldFlash {
+  0% {
+    background: rgba(0, 255, 224, 0.5);
+    border-color: #fff;
+    box-shadow: 0 0 50px rgba(0, 255, 224, 0.8);
+  }
+  100% {
+    background: var(--cyan-dim);
+    border-color: rgba(0, 255, 224, 0.2);
+  }
+}
+
+/* =============================================================
+   MESSAGE ENTRANCE ANIMATION
+   ============================================================= */
+
+@keyframes msgEntrance {
+  0% {
+    transform: translateY(16px);
+    opacity: 0;
+    filter: blur(4px);
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+/* Stagger: apply via individual style or nth-child with delays */
+.nx-msg-group .nx-msg-row:nth-child(1) { animation-delay: 0ms; }
+.nx-msg-group .nx-msg-row:nth-child(2) { animation-delay: 60ms; }
+.nx-msg-group .nx-msg-row:nth-child(3) { animation-delay: 120ms; }
+.nx-msg-group .nx-msg-row:nth-child(4) { animation-delay: 180ms; }
+.nx-msg-group .nx-msg-row:nth-child(5) { animation-delay: 240ms; }
+.nx-msg-group .nx-msg-row:nth-child(6) { animation-delay: 300ms; }
+
+/* =============================================================
+   INPUT FOCUS ANIMATION
+   ============================================================= */
+
+/* Underline draws left→right: scaleX(0)→scaleX(1), 280ms ease-out */
+/* Already defined in .nx-input-underline / .nx-input-wrapper:focus-within */
+
+/* Background shifts to --cyan-dim — already in .nx-input-wrapper:focus-within */
+
+/* Label float: translateY(-4px), letter-spacing +0.5px */
+/* Already in .nx-input-wrapper:focus-within .nx-input-label */
+
+/* =============================================================
+   ZK VERIFIED BADGE ANIMATION
+   ============================================================= */
+
+@keyframes badgeReveal {
+  0% {
+    transform: scale(0) rotate(-8deg);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+/* =============================================================
+   SEND BUTTON ANIMATIONS
+   ============================================================= */
+
+@keyframes sendBtnSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes sendBtnSpring {
+  0% { transform: scale(0.94); }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+/* =============================================================
+   SIDEBAR NAV HOVER
+   ============================================================= */
+
+/* Left border: scaleY(0)→scaleY(1), 180ms ease, transform-origin top */
+/* Text: translateX(0)→translateX(6px), 180ms ease */
+/* Background: transparent→rgba(0,255,224,0.04), 180ms */
+/* Already defined in .nx-nav-item and .nx-nav-item::before */
+
+/* =============================================================
+   CONNECTION BARS — staggered audio-visualizer
+   ============================================================= */
+
+@keyframes connBar1 {
+  0%, 100% { height: 40%; }
+  50% { height: 100%; }
+}
+
+@keyframes connBar2 {
+  0%, 100% { height: 60%; }
+  50% { height: 40%; }
+}
+
+@keyframes connBar3 {
+  0%, 100% { height: 100%; }
+  50% { height: 60%; }
+}
+
+/* =============================================================
+   SCROLL FADE INDICATOR — gradient mask pulse
+   ============================================================= */
+
+@keyframes scrollFadePulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.9; }
+}
+
+/* =============================================================
+   TYPING INDICATOR — sine-wave dot motion
+   ============================================================= */
+
+@keyframes typingDotWave {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translateY(-8px);
+    opacity: 1;
+  }
+}
+
+/* =============================================================
+   PAGE LOAD SEQUENCE
+   Staggered orchestration — applied via animation-delay in JSX
+   ============================================================= */
+
+@keyframes bgGridFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes sidebarSlideIn {
+  from {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes headerDrawIn {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes chatPanelScaleIn {
+  from {
+    transform: scale(0.97);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes inputDockRise {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* =============================================================
+   CIPHER TEXT — user message character scramble effect
+   Applied via JS (.nx-cipher-active triggers animation)
+   ============================================================= */
+
+.nx-cipher-text {
+  font-family: 'DM Mono', 'Courier New', monospace;
+  position: relative;
+}
+
+.nx-cipher-char {
+  display: inline-block;
+  transition: opacity 0.05s;
+}
+
+/* =============================================================
+   BLINKING CURSOR
+   ============================================================= */
+
+.nx-cursor-blink {
+  display: inline-block;
+  width: 2px;
+  height: 1.1em;
+  background: var(--cyan-primary);
+  vertical-align: middle;
+  margin-left: 3px;
+  animation: cursorBlink 0.8s step-end infinite;
+  box-shadow: 0 0 4px rgba(0, 255, 224, 0.4);
+}
+
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* =============================================================
+   PRIVACY STATS PULSING DOTS
+   ============================================================= */
+
+@keyframes statDotPulse {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(1);
+    box-shadow: 0 0 0 transparent;
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.6);
+    box-shadow: 0 0 6px var(--shield-green);
+  }
+}
+
+/* =============================================================
+   SHARED LANDING PAGE COMPONENTS
+   Preserved for cross-page consistency
+   ============================================================= */
+
+/* Marquee track */
+.nx-marquee-track {
+  display: flex;
+  gap: 0;
+  animation: marqueeScroll 25s linear infinite;
+  width: max-content;
+}
+
+.nx-marquee-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes marqueeScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* Section divider */
+.nx-section-divider {
+  height: 1px;
   background: linear-gradient(
-    45deg,
-    transparent 45%,
-    rgba(255, 255, 255, 0.1) 50%,
-    transparent 55%
+    to right,
+    transparent 0%,
+    rgba(255, 255, 255, 0.04) 20%,
+    rgba(0, 255, 224, 0.08) 50%,
+    rgba(255, 255, 255, 0.04) 80%,
+    transparent 100%
   );
-  transform: translate(-100%, -100%);
-  transition: transform 0.6s ease;
 }
 
-.premium-button:hover::after {
-  transform: translate(100%, 100%);
+/* Gradient text — uses --cyan-primary, NOT purple */
+.nx-gradient-text {
+  background: linear-gradient(135deg, var(--cyan-primary) 0%, rgba(0, 255, 224, 0.6) 60%, var(--cyan-primary) 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientShift 4s ease infinite;
 }
 
-/* Custom Scrollbar for hiding scrollbars but keeping functionality */
-.custom-scrollbar::-webkit-scrollbar {
-  display: none;
+.nx-gradient-text-subtle {
+  background: linear-gradient(135deg, var(--cyan-primary) 0%, rgba(0, 255, 224, 0.4) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.custom-scrollbar {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Glow effects — cyan only, no purple */
+.nx-glow-cyan {
+  box-shadow:
+    0 0 20px rgba(0, 255, 224, 0.12),
+    0 0 60px rgba(0, 255, 224, 0.04),
+    inset 0 0 30px rgba(0, 255, 224, 0.02);
+}
+
+.nx-glow-cyan-strong {
+  box-shadow:
+    0 0 30px rgba(0, 255, 224, 0.3),
+    0 0 80px rgba(0, 255, 224, 0.1),
+    0 0 120px rgba(0, 255, 224, 0.04);
+}
+
+.nx-text-glow {
+  text-shadow:
+    0 0 20px rgba(0, 255, 224, 0.5),
+    0 0 60px rgba(0, 255, 224, 0.2);
+}
+
+/* Glass card — subtle depth with border + backdrop */
+.nx-glass-card {
+  position: relative;
+  background: rgba(15, 15, 24, 0.4);
+  border: 1px solid rgba(26, 26, 46, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  overflow: hidden;
+  transition: border-color 0.4s ease, background 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nx-glass-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0, 255, 224, 0.03), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.nx-glass-card:hover::before {
+  opacity: 1;
+}
+
+.nx-glass-card:hover {
+  border-color: rgba(0, 255, 224, 0.12);
+}
+
+/* Clip corner — brutalist angular */
+.nx-clip-corner {
+  clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
+}
+
+.nx-clip-corner-sm {
+  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+}
+
+/* Tech label — Space Mono, uppercase, tight tracking */
+.nx-tech-label {
+  font-family: 'Space Mono', 'Courier New', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: var(--muted);
+}
+
+.nx-tech-label-cyan {
+  font-family: 'Space Mono', 'Courier New', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: var(--cyan-primary);
+}
+
+/* Status dot */
+.nx-status-dot {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.nx-status-dot-indicator {
+  position: relative;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--shield-green);
+  box-shadow: 0 0 8px rgba(0, 255, 136, 0.5);
+}
+
+.nx-status-dot-indicator::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: rgba(0, 255, 136, 0.15);
+  animation: statusPing 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes statusPing {
+  75%, 100% { transform: scale(2.2); opacity: 0; }
+}
+
+/* Number badge */
+.nx-number-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  font-family: 'Space Mono', 'Courier New', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+/* ZK ring — subtle pulsing border */
+.nx-zk-ring {
+  position: relative;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 255, 224, 0.15);
+  animation: zkRingPulse 3s ease-in-out infinite;
+}
+
+@keyframes zkRingPulse {
+  0%, 100% { border-color: rgba(0, 255, 224, 0.08); }
+  50% { border-color: rgba(0, 255, 224, 0.35); box-shadow: 0 0 24px rgba(0, 255, 224, 0.08); }
+}
+
+/* =============================================================
+   INIT OVERLAY — boot sequence
+   ============================================================= */
+
+.nx-init-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: var(--void);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.nx-init-scan {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1.5px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--cyan-primary) 25%,
+    rgba(0, 255, 224, 0.7) 50%,
+    var(--cyan-primary) 75%,
+    transparent
+  );
+  box-shadow: 0 0 16px rgba(0, 255, 224, 0.5), 0 0 50px rgba(0, 255, 224, 0.15);
+  animation: initScanLine 1.8s ease-in-out infinite;
+}
+
+@keyframes initScanLine {
+  0% { top: -5%; opacity: 0; }
+  5% { opacity: 1; }
+  95% { opacity: 1; }
+  100% { top: 105%; opacity: 0; }
+}
+
+/* =============================================================
+   SCROLL REVEAL — used by IntersectionObserver
+   ============================================================= */
+
+.nx-reveal {
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+.nx-reveal-up { transform: translateY(32px); }
+.nx-reveal-left { transform: translateX(-32px); }
+.nx-reveal-right { transform: translateX(32px); }
+.nx-reveal-scale { transform: scale(0.92); }
+
+.nx-reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+.nx-reveal-up,
+.nx-reveal-left,
+.nx-reveal-right,
+.nx-reveal-scale {
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nx-reveal-clip { clip-path: inset(0 100% 0 0); opacity: 1; transition: clip-path 1s cubic-bezier(0.16, 1, 0.3, 1); }
+.nx-reveal-clip.is-visible { clip-path: inset(0 0 0 0); }
+
+/* Delay helpers */
+.nx-delay-100 { transition-delay: 100ms !important; }
+.nx-delay-200 { transition-delay: 200ms !important; }
+.nx-delay-300 { transition-delay: 300ms !important; }
+.nx-delay-400 { transition-delay: 400ms !important; }
+.nx-delay-500 { transition-delay: 500ms !important; }
+.nx-delay-600 { transition-delay: 600ms !important; }
+.nx-delay-700 { transition-delay: 700ms !important; }
+.nx-delay-800 { transition-delay: 800ms !important; }
+
+/* =============================================================
+   FLOATING PARTICLES — CSS only
+   ============================================================= */
+
+.nx-particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: var(--cyan-primary);
+  opacity: 0;
+  animation: particleFloat var(--duration, 8s) var(--delay, 0s) ease-in-out infinite;
+}
+
+@keyframes particleFloat {
+  0% { opacity: 0; transform: translateY(0) scale(0); }
+  10% { opacity: 0.5; transform: scale(1); }
+  90% { opacity: 0.15; }
+  100% { opacity: 0; transform: translateY(-100px) scale(0.4); }
+}
+
+/* =============================================================
+   ACGRID LINES — subtle horizontal accents
+   ============================================================= */
+
+.nx-accent-line {
+  position: absolute;
+  background: linear-gradient(to right, transparent, rgba(0, 255, 224, 0.12), transparent);
+  height: 1px;
+  width: 100%;
+}
+
+/* =============================================================
+   UTILITIES
+   ============================================================= */
+
+.nx-select-none { user-select: none; }
+.nx-cursor-pointer { cursor: pointer; }
+
+/* Template for cursor: none on interactive elements */
+.nx-interactive {
+  cursor: none;
+}
+
+.nx-interactive:hover {
+  cursor: none;
+}
+
+/* Accessible focus ring */
+.nx-focus-ring:focus-visible {
+  outline: 1px solid var(--cyan-primary);
+  outline-offset: 2px;
+}
+
+/* =============================================================
+   ACCESSIBILITY: prefers-reduced-motion
+   ============================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .nx-scroll-fade { display: none; }
+  .nx-bg-dots,
+  .nx-bg-noise { display: none; }
 }

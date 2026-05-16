@@ -41,64 +41,63 @@ export default function ThoughtBubble({ thought, onEdit, onDelete, isLocked }: T
       layout
       initial={{ opacity: 0, x: -10 }}
       animate={{ opacity: 1, x: 0 }}
-      className={`group relative flex flex-col gap-2 p-4 rounded-2xl border transition-all duration-300 ${
+      className={`group relative flex flex-col gap-2 p-6 rounded-3xl border transition-all duration-500 ${
         thought.isStreaming 
-          ? "bg-muted/40 border-primary/30 animate-pulse" 
+          ? "bg-primary/5 border-primary/20 animate-pulse" 
           : isChanged 
-            ? "bg-primary/5 border-primary/40 shadow-[0_0_20px_rgba(48,145,255,0.05)]" 
-            : "bg-muted/10 border-border hover:bg-muted/20 hover:border-primary/50 hover:shadow-md"
+            ? "glass-panel border-primary shadow-[0_0_40px_rgba(48,145,255,0.15)] bg-primary/10" 
+            : "glass-panel border-white/5 hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/5"
       }`}
     >
       <div className="flex items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           {!isLocked && !thought.isStreaming && (
-            <div className="cursor-grab active:cursor-grabbing text-muted-foreground/30 hover:text-muted-foreground transition-colors mr-1">
+            <div className="cursor-grab active:cursor-grabbing text-muted/20 hover:text-primary transition-colors">
               <GripVertical className="w-4 h-4" />
             </div>
           )}
           {thought.isStreaming ? (
             <div className="w-2 h-2 rounded-full bg-primary animate-ping" />
           ) : isWebSearch ? (
-            <Globe className="w-3.5 h-3.5 text-blue-500" />
+            <Globe className="w-4 h-4 text-primary" />
           ) : (
-            <Sparkles className={`w-3.5 h-3.5 ${isChanged ? "text-primary" : "text-muted-foreground"}`} />
+            <Sparkles className={`w-4 h-4 ${isChanged ? "text-primary" : "text-muted"}`} />
           )}
-          <span className="text-[10px] font-subheading font-bold uppercase tracking-widest text-primary/80">
-            {thought.isStreaming ? "Synthesizing..." : isWebSearch ? "Action Node" : isChanged ? "Intelligence Override" : "Neural Path"}
+          <span className="text-[10px] font-subheading font-bold uppercase tracking-[0.2em] text-primary">
+            {thought.isStreaming ? "Streaming Intelligence" : isWebSearch ? "Protocol Action" : isChanged ? "Nexus Override" : "Neural Node"}
           </span>
           {isWebSearch && !thought.isStreaming && (
-            <span className="ml-2 px-1.5 py-0.5 rounded bg-blue-500/10 text-blue-500 text-[9px] font-bold uppercase tracking-wider border border-blue-500/20">
-              Web Search
+            <span className="ml-2 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[9px] font-bold uppercase tracking-widest border border-primary/20">
+              Web Intelligence
             </span>
           )}
         </div>
 
         {!isLocked && !thought.isStreaming && (
-          <div className="flex items-center gap-1 opacity-100 transition-all">
+          <div className="flex items-center gap-2">
             {!isEditing && !isChanged && (
-              <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-primary mr-1 sm:mr-2 animate-pulse flex items-center gap-1 opacity-70 group-hover:opacity-100">
-                <Edit2 className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+              <span className="text-[10px] font-bold uppercase tracking-widest text-primary mr-2 animate-pulse flex items-center gap-2 opacity-60 group-hover:opacity-100 transition-opacity">
+                <Edit2 className="w-3 h-3" />
                 <span className="hidden sm:inline">Intercept</span>
-                <span className="sm:hidden">Edit</span>
               </span>
             )}
-            <div className="flex items-center gap-1 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-all">
+            <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-2 group-hover:translate-x-0">
               <button
-              onClick={() => {
-                setEditValue(thought.content);
-                setIsEditing(!isEditing);
-              }}
-              className="p-1.5 rounded-lg hover:bg-muted text-muted hover:text-primary transition-all"
-              title="Edit thought"
-            >
-              <Edit2 className="w-3.5 h-3.5" />
-            </button>
-            <button
-              onClick={onDelete}
-              className="p-1.5 rounded-lg hover:bg-red-50 text-muted hover:text-red-500 transition-all"
-              title="Remove node"
-            >
-              <Trash2 className="w-3.5 h-3.5" />
+                onClick={() => {
+                  setEditValue(thought.content);
+                  setIsEditing(!isEditing);
+                }}
+                className="p-2 rounded-xl glass-panel hover:text-primary transition-all"
+                title="Edit thought"
+              >
+                <Edit2 className="w-4 h-4" />
+              </button>
+              <button
+                onClick={onDelete}
+                className="p-2 rounded-xl glass-panel hover:text-destructive transition-all"
+                title="Remove node"
+              >
+                <Trash2 className="w-4 h-4" />
               </button>
             </div>
           </div>
@@ -107,37 +106,37 @@ export default function ThoughtBubble({ thought, onEdit, onDelete, isLocked }: T
 
       {isEditing && (
         <div 
-          className="fixed inset-0 bg-black/60 backdrop-blur-md z-[150] cursor-default pointer-events-auto"
+          className="fixed inset-0 bg-background/80 backdrop-blur-xl z-[1000] cursor-default pointer-events-auto"
           onClick={() => setIsEditing(false)}
         />
       )}
 
       {isEditing ? (
-        <div className="flex flex-col gap-3 mt-1 relative z-[160]">
-          <div className="flex items-center gap-2 mb-1">
-            <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-            <span className="text-[10px] font-subheading font-bold uppercase tracking-widest text-primary">Interception Active: Modifying Neural Logic</span>
+        <div className="flex flex-col gap-4 mt-2 relative z-[1001]">
+          <div className="flex items-center gap-3">
+            <div className="w-3 h-3 rounded-full bg-primary animate-pulse" />
+            <span className="text-[10px] font-subheading font-bold uppercase tracking-[0.2em] text-primary">Interception Active • Modifying Neural Sequence</span>
           </div>
           <textarea
             autoFocus
             value={editValue}
             onChange={(e) => setEditValue(e.target.value)}
-            maxLength={500}
+            maxLength={1000}
             placeholder="Redefine this reasoning node..."
-            className="w-full bg-background border-2 border-primary rounded-xl p-4 text-[15px] font-body font-medium focus:ring-8 focus:ring-primary/10 outline-none min-h-[140px] resize-none shadow-[0_20px_50px_rgba(48,145,255,0.3)]"
+            className="w-full glass-panel border-primary rounded-[32px] p-8 text-xl font-body font-medium outline-none min-h-[200px] resize-none shadow-2xl shadow-primary/20 focus:ring-4 focus:ring-primary/10 transition-all"
           />
-          <div className="flex justify-end gap-3">
+          <div className="flex justify-end gap-4">
             <button
               onClick={() => setIsEditing(false)}
-              className="px-4 py-2 text-[11px] font-subheading font-bold text-muted hover:text-foreground transition-colors uppercase tracking-widest"
+              className="px-8 py-3 text-[10px] font-subheading font-bold text-muted hover:text-foreground transition-colors uppercase tracking-[0.2em]"
             >
-              Abort
+              Abort Sequence
             </button>
             <button
               onClick={handleSave}
-              className="px-6 py-2 bg-primary text-primary-foreground text-[11px] font-bold rounded-xl shadow-xl hover:scale-105 active:scale-95 transition-all uppercase tracking-widest flex items-center gap-2"
+              className="px-10 py-4 bg-primary text-primary-foreground text-[10px] font-bold rounded-full shadow-2xl shadow-primary/20 hover:scale-105 active:scale-95 transition-all uppercase tracking-[0.2em] flex items-center gap-3"
             >
-              <Check className="w-3.5 h-3.5" />
+              <Check className="w-4 h-4" />
               Commit Logic
             </button>
           </div>
@@ -145,15 +144,15 @@ export default function ThoughtBubble({ thought, onEdit, onDelete, isLocked }: T
       ) : (
         <div className="relative">
           {isChanged && diff ? (
-            <div className="text-[15px] leading-relaxed font-body font-medium">
+            <div className="text-lg leading-relaxed font-body font-medium mt-2">
               {diff.map((part, index) => (
                 <span
                   key={index}
                   className={
                     part.added
-                      ? "text-primary font-bold bg-primary/20 px-0.5 rounded"
+                      ? "text-primary font-bold bg-primary/10 px-1 rounded-lg"
                       : part.removed
-                      ? "text-red-500/50 line-through decoration-red-500/30"
+                      ? "text-destructive/30 line-through decoration-destructive/20"
                       : "text-foreground/90"
                   }
                 >
@@ -162,19 +161,19 @@ export default function ThoughtBubble({ thought, onEdit, onDelete, isLocked }: T
               ))}
             </div>
           ) : (
-            <p className={`text-[15px] leading-relaxed font-body font-medium ${isChanged ? "text-primary font-bold" : "text-foreground"}`}>
+            <p className={`text-lg leading-relaxed font-body font-medium mt-2 ${isChanged ? "text-primary font-bold" : "text-foreground"}`}>
               {thought.content}
             </p>
           )}
           
           {isChanged && (
-            <div className="mt-3 flex items-center justify-between border-t border-primary/10 pt-2">
-              <div className="flex items-center gap-1.5 text-[9px] font-mono text-primary/60 uppercase tracking-tighter">
-                <AlertCircle className="w-2.5 h-2.5" />
-                <span>Deterministic Path Altered</span>
+            <div className="mt-4 flex items-center justify-between border-t border-primary/10 pt-4">
+              <div className="flex items-center gap-2 text-[10px] font-mono text-primary uppercase tracking-widest opacity-60">
+                <AlertCircle className="w-3 h-3" />
+                <span>Sequence Altered • ZK-Verified Override</span>
               </div>
-              <span className="text-[9px] font-mono text-muted tabular-nums">
-                LEV_DIST: {Math.abs(thought.content.length - (thought.originalContent?.length || 0))}
+              <span className="text-[10px] font-mono text-muted tabular-nums opacity-40">
+                DELTA_IDX: {Math.abs(thought.content.length - (thought.originalContent?.length || 0))}
               </span>
             </div>
           )}

@@ -32,9 +32,20 @@ pnpm-debug.log*
 *.log
 logs/
 
-# local env files
+# ── Environment / Secrets ─────────────────────────────────────
+# NEVER commit any .env file or env templates.
 .env
-.env*.local
+.env.*
+.env.example
+*.local
+secrets/
+secrets.json
+secrets.yaml
+secrets.yml
+*.pem
+*.key
+*.p12
+*.pfx
 
 # vercel
 .vercel
@@ -43,8 +54,10 @@ logs/
 *.tsbuildinfo
 next-env.d.ts
 
-# agents and skills
+# agents, tools, and skills
 .agents/
+.agent/
+.opencode/
 skills-lock.json
 
 # IDEs and editors

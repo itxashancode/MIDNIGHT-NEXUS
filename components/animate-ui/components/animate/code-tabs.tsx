@@ -1,183 +1,75 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { useTheme } from 'next-themes';
+import { useState } from "react";
+import { Check, Copy } from "lucide-react";
 
-import { cn } from '@/lib/utils';
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-  TabsContents,
-  TabsHighlight,
-  TabsHighlightItem,
-  type TabsProps,
-} from '@/components/animate-ui/primitives/animate/tabs';
-import { CopyButton } from '@/components/animate-ui/components/buttons/copy';
-
-type CodeTabsProps = {
+interface CodeTabsProps {
+  /** Map of language → code string. Only the first entry is displayed. */
   codes: Record<string, string>;
+  /** Primary language label shown in the tab (falls back to first key). */
   lang?: string;
-  themes?: { light: string; dark: string };
+  /** When true, shows a streaming / loading shimmer instead of the code. */
   isStreaming?: boolean;
-  copyButton?: boolean;
-  onCopiedChange?: (copied: boolean, content?: string) => void;
-} & Omit<TabsProps, 'children'>;
-
-function CodeTabs({
-  codes,
-  lang = 'bash',
-  themes = {
-    light: 'github-light',
-    dark: 'github-dark',
-  },
-  className,
-  defaultValue,
-  value,
-  onValueChange,
-  copyButton = true,
-  onCopiedChange,
-  isStreaming = false,
-  ...props
-}: CodeTabsProps) {
-  const { resolvedTheme } = useTheme();
-
-  const [highlightedCodes, setHighlightedCodes] = React.useState<Record<
-    string,
-    string
-  > | null>(null);
-  const [selectedCode, setSelectedCode] = React.useState<string>(
-    value ?? defaultValue ?? Object.keys(codes)[0] ?? '',
-  );
-
-  React.useEffect(() => {
-    if (isStreaming) {
-      setHighlightedCodes(null);
-      return;
-    }
-
-    let isMounted = true;
-    const timeoutId = setTimeout(async () => {
-      try {
-        const { codeToHtml } = await import('shiki');
-        const newHighlightedCodes: Record<string, string> = {};
-
-        // Sanitize language for Shiki
-        const shikiLang = (lang === 'chart' || lang === 'chart-json') ? 'json' : (lang || 'txt');
-
-        for (const [command, val] of Object.entries(codes)) {
-          try {
-            const highlighted = await codeToHtml(val, {
-              lang: shikiLang,
-              themes: {
-                light: themes.light,
-                dark: themes.dark,
-              },
-              defaultColor: resolvedTheme === 'dark' ? 'dark' : 'light',
-            });
-            newHighlightedCodes[command] = highlighted;
-          } catch (langError) {
-            // Internal fallback for specific language failures
-            console.warn(`Shiki: falling back to txt for ${shikiLang}`, langError);
-            const fallback = await codeToHtml(val, {
-              lang: 'txt',
-              themes: {
-                light: themes.light,
-                dark: themes.dark,
-              },
-              defaultColor: resolvedTheme === 'dark' ? 'dark' : 'light',
-            });
-            newHighlightedCodes[command] = fallback;
-          }
-        }
-
-        if (isMounted) {
-          setHighlightedCodes(newHighlightedCodes);
-        }
-      } catch (error) {
-        // Only log if it's a real fatal error, not just a missing language
-        if (isMounted) {
-          console.warn('Shiki highlighting failed, falling back to raw code.', error);
-          setHighlightedCodes(null);
-        }
-      }
-    }, 200);
-
-    return () => {
-      isMounted = false;
-      clearTimeout(timeoutId);
-    };
-  }, [resolvedTheme, lang, themes.light, themes.dark, codes, isStreaming]);
-
-  const displayCodes = highlightedCodes || codes;
-
-  return (
-    <Tabs
-      data-slot="install-tabs"
-      className={cn(
-        'w-full gap-0 bg-muted/50 rounded-xl border overflow-hidden',
-        className,
-      )}
-      {...props}
-      value={selectedCode}
-      onValueChange={(val) => {
-        setSelectedCode(val);
-        onValueChange?.(val);
-      }}
-    >
-      <TabsHighlight className="absolute z-0 inset-0 rounded-none shadow-none bg-transparent after:content-[''] after:absolute after:inset-x-0 after:h-0.5 after:bottom-0 dark:after:bg-white after:bg-black after:rounded-t-full">
-        <TabsList
-          data-slot="install-tabs-list"
-          className="w-full relative flex items-center justify-between rounded-none h-10 bg-muted border-b border-border/75 dark:border-border/50 text-current py-0 px-4"
-        >
-          <div className="flex gap-x-3 h-full">
-            {Object.keys(codes).map((code) => (
-              <TabsHighlightItem
-                key={code}
-                value={code}
-                className="flex items-center justify-center"
-              >
-                <TabsTrigger
-                  key={code}
-                  value={code}
-                  className="text-muted-foreground h-full text-sm font-medium data-[state=active]:text-current px-4"
-                >
-                  {code}
-                </TabsTrigger>
-              </TabsHighlightItem>
-            ))}
-          </div>
-
-          {copyButton && (
-            <CopyButton
-              content={codes[selectedCode]}
-              size="xs"
-              variant="ghost"
-              className="-me-2.5 bg-transparent hover:bg-black/5 dark:hover:bg-white/10"
-              onCopiedChange={onCopiedChange}
-            />
-          )}
-        </TabsList>
-      </TabsHighlight>
-
-      <TabsContents data-slot="install-tabs-contents" className="bg-zinc-950/50 dark:bg-zinc-900/50 border-t border-border/50">
-        {Object.entries(codes).map(([code, val]) => (
-          <TabsContent
-            data-slot="install-tabs-content"
-            key={code}
-            className="w-full m-0"
-            value={code}
-          >
-            <div
-              className="w-full min-h-[120px] text-[14px] overflow-auto p-6 [&>pre]:!bg-transparent [&>pre]:!p-0 [&_code]:!bg-transparent [&>pre,_&_code]:border-none font-mono leading-relaxed selection:bg-primary/30"
-              dangerouslySetInnerHTML={{ __html: highlightedCodes?.[code] ? highlightedCodes[code] : `<pre><code>${val}</code></pre>` }}
-            />
-          </TabsContent>
-        ))}
-      </TabsContents>
-    </Tabs>
-  );
 }
 
-export { CodeTabs, type CodeTabsProps };
+/**
+ * Lightweight code-block with a language tab and a copy button.
+ * Drop-in replacement for the missing animate-ui CodeTabs component.
+ */
+export function CodeTabs({ codes, lang, isStreaming = false }: CodeTabsProps) {
+  const [copied, setCopied] = useState(false);
+
+  const language = lang ?? Object.keys(codes)[0] ?? "text";
+  const code = codes[language] ?? codes[Object.keys(codes)[0]] ?? "";
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(code);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  if (isStreaming) {
+    return (
+      <div className="rounded-2xl overflow-hidden border border-border/50 bg-[#0d1117] animate-pulse">
+        <div className="flex items-center justify-between px-4 py-2 border-b border-border/30 bg-muted/10">
+          <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-muted">
+            {language}
+          </span>
+        </div>
+        <div className="p-4 space-y-2">
+          <div className="h-3 w-3/4 bg-muted/30 rounded" />
+          <div className="h-3 w-1/2 bg-muted/30 rounded" />
+          <div className="h-3 w-5/6 bg-muted/30 rounded" />
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="rounded-2xl overflow-hidden border border-border/50 bg-[#0d1117] shadow-lg">
+      {/* Tab bar */}
+      <div className="flex items-center justify-between px-4 py-2 border-b border-border/30 bg-muted/10">
+        <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-primary/80">
+          {language}
+        </span>
+        <button
+          onClick={handleCopy}
+          aria-label="Copy code"
+          className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-subheading font-bold uppercase tracking-widest text-muted hover:text-primary border border-transparent hover:border-primary/20 transition-all"
+        >
+          {copied ? (
+            <Check className="w-3 h-3 text-green-400" />
+          ) : (
+            <Copy className="w-3 h-3" />
+          )}
+          {copied ? "Copied" : "Copy"}
+        </button>
+      </div>
+
+      {/* Code content */}
+      <pre className="overflow-x-auto p-4 text-[13px] leading-relaxed font-mono text-slate-300 whitespace-pre-wrap break-words">
+        <code>{code}</code>
+      </pre>
+    </div>
+  );
+}

@@ -4,7 +4,7 @@ import { memo, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { motion } from "framer-motion";
 import { Copy, Check, Share2 } from "lucide-react";
-import { CodeTabs } from "@/components/animate-ui/components/animate/code-tabs";
+import { CodeTabs } from "./animate-ui/components/animate/code-tabs";
 import { ChartRenderer } from "@/components/ChartRenderer";
 
 interface AnswerPanelProps {
@@ -12,7 +12,7 @@ interface AnswerPanelProps {
   isStreaming: boolean;
 }
 
-const AnswerPanel = memo(({ answer, isStreaming }: AnswerPanelProps) => {
+const AnswerPanel = ({ answer, isStreaming }: AnswerPanelProps) => {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
@@ -156,7 +156,7 @@ const AnswerPanel = memo(({ answer, isStreaming }: AnswerPanelProps) => {
       </motion.div>
     </div>
   );
-});
+};
 
 AnswerPanel.displayName = "AnswerPanel";
 

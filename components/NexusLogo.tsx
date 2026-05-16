@@ -55,9 +55,9 @@ export default function NexusLogo({ className = "", size = 40, priority = false 
     >
       <defs>
         <linearGradient id="nexus-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#3b82f6" />
-          <stop offset="50%" stopColor="#6366f1" />
-          <stop offset="100%" stopColor="#8b5cf6" />
+          <stop offset="0%" stopColor="#3091ff" />
+          <stop offset="50%" stopColor="#1d4ed8" />
+          <stop offset="100%" stopColor="#60a5fa" />
         </linearGradient>
       </defs>
 

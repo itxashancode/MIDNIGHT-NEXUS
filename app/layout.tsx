@@ -1,27 +1,28 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono, Outfit, Space_Grotesk } from "next/font/google";
-import Script from "next/script";
-import "./globals.css";
-import { cn } from "@/lib/utils";
+import { Bebas_Neue, Space_Mono, DM_Mono } from "next/font/google";
 
-const inter = Inter({
+const bebasNeue = Bebas_Neue({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-display",
+  weight: ["400"],
 });
 
-const outfit = Outfit({
+const dmMono = DM_Mono({
   subsets: ["latin"],
-  variable: "--font-outfit",
+  variable: "--font-dm",
+  weight: ["300", "400", "500"],
 });
 
-const jetbrainsMono = JetBrains_Mono({
+const spaceMono = Space_Mono({
   subsets: ["latin"],
-  variable: "--font-jetbrains-mono",
+  variable: "--font-space",
+  weight: ["400", "700"],
 });
 
-const spaceGrotesk = Space_Grotesk({
+const spaceMono = Space_Mono({
   subsets: ["latin"],
-  variable: "--font-space-grotesk",
+  variable: "--font-space",
+  weight: ["400", "700"],
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://midnightnexusai.vercel.app";
@@ -88,7 +89,6 @@ export const metadata: Metadata = {
 
 
 import { ThemeProvider } from "@/components/theme-provider";
-import { Analytics } from "@vercel/analytics/react";
 
 export default function RootLayout({
   children,
@@ -118,15 +118,14 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body
-        className={cn(
-          "min-h-screen bg-background font-sans antialiased custom-scrollbar",
-          inter.variable,
-          outfit.variable,
-          jetbrainsMono.variable,
-          spaceGrotesk.variable
-        )}
-      >
+<body
+         className={cn(
+           "min-h-screen bg-background font-dm antialiased",
+           bebasNeue.variable,
+           dmMono.variable,
+           spaceMono.variable
+         )}
+       >
         {/* Google Analytics */}
         {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
           <>
@@ -155,8 +154,6 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
-          {/* Vercel Analytics — tracks page views & web vitals */}
-          <Analytics />
         </ThemeProvider>
       </body>
     </html>

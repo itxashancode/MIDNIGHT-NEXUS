@@ -46,6 +46,11 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // Direct token access
+        cyan: "var(--cyan)",
+        violet: "var(--violet)",
+        obsidian: "var(--obsidian)",
+        bone: "var(--bone)",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -53,16 +58,29 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        heading: ["Halaska", "sans-serif"],
-        subheading: ["var(--font-outfit)", "sans-serif"],
-        body: ["var(--font-inter)", "sans-serif"],
-        sans: ["var(--font-inter)", "sans-serif"],
-        mono: ["var(--font-jetbrains-mono)", "monospace"],
+        // MANDATED TYPOGRAPHY — no substitutions
+        heading: ["Bebas Neue", "Impact", "monospace"],
+        subheading: ["Space Mono", "Courier New", "monospace"],
+        body: ["DM Mono", "Courier New", "monospace"],
+        sans: ["DM Mono", "Courier New", "monospace"],
+        mono: ["DM Mono", "Courier New", "monospace"],
+        space: ["Space Mono", "Courier New", "monospace"],
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "shimmer": "shimmer 2s linear infinite",
+        shimmer: "shimmer 2s linear infinite",
+        "rotate-slow": "rotate-slow 12s linear infinite",
+        float: "float 6s ease-in-out infinite",
+        "marquee-scroll": "marquee-scroll 25s linear infinite",
+        "gradient-shift": "gradientShift 4s ease infinite",
+        "status-ping": "statusPing 2s cubic-bezier(0,0,0.2,1) infinite",
+        "scan-line": "scan-line 1.8s ease-in-out infinite",
+        flicker: "flicker 8s ease-in-out infinite",
+        "tw-blink": "tw-blink 0.8s step-end infinite",
+        "border-glow": "borderGlow 3s ease-in-out infinite",
+        "zk-pulse": "zk-pulse 3s ease-in-out infinite",
+        "particle-float": "particleFloat 8s ease-in-out infinite",
       },
       keyframes: {
         "accordion-down": {
@@ -76,7 +94,10 @@ const config: Config = {
         shimmer: {
           from: { transform: "translateX(-100%)" },
           to: { transform: "translateX(100%)" },
-        }
+        },
+      },
+      backgroundSize: {
+        "200%": "200% 200%",
       },
     },
   },
