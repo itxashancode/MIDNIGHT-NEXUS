@@ -19,15 +19,15 @@ Meet the minds bridging Gemma 4 with Midnight ZK-protocol:
       💻 Team Member
     </td>
     <td align="center">
-      <a href="https://github.com/EvanMastro">
-        <img src="https://github.com/EvanMastro.png" width="100px;" alt="Evan Mastro"/><br />
+      <a href="https://github.com/mastroevan">
+        <img src="https://github.com/mastroevan.png" width="100px;" alt="Evan Mastro"/><br />
         <sub><b>Evan Mastro</b></sub>
       </a><br />
       💻 Team Member
     </td>
     <td align="center">
       <a href="https://github.com/mutayyab63">
-        <img src="https://github.com/MuhammadTayyab.png" width="100px;" alt="Muhammad Tayyab"/><br />
+        <img src="https://github.com/mutayyab63.png" width="100px;" alt="Muhammad Tayyab"/><br />
         <sub><b>M. Tayyab</b></sub>
       </a><br />
       💻 Team Member
