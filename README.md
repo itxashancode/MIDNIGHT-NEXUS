@@ -26,7 +26,7 @@ Meet the minds bridging Gemma 4 with Midnight ZK-protocol:
       💻 Team Member
     </td>
     <td align="center">
-      <a href="https://github.com/MuhammadTayyab">
+      <a href="https://github.com/mutayyab63">
         <img src="https://github.com/MuhammadTayyab.png" width="100px;" alt="Muhammad Tayyab"/><br />
         <sub><b>M. Tayyab</b></sub>
       </a><br />
