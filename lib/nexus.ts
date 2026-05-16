@@ -106,10 +106,10 @@ export async function fetchNexusStream(
     generationConfig.responseSchema = responseSchema;
   }
 
-  // VERIFIED Nexus 4 Models for v1beta REST API
+  // VERIFIED Gemini Models for v1beta REST API
   const models = [
-    "gemma-4-26b-a4b-it",  // High-Throughput MoE (FASTER ✅)
-    "gemma-4-31b-it",      // Dense Reasoning (POWERFUL ✅)
+    "gemini-1.5-flash",  // High-Throughput (FASTER ✅)
+    "gemini-1.5-pro",    // Dense Reasoning (POWERFUL ✅)
   ];
 
   // Official Nexus 4 Prompt Formatting
@@ -215,10 +215,10 @@ export async function fetchNexusFunctionCalls(
   const keys = process.env.NEXUS_API_KEY?.split(",").map(k => k.trim()).filter(Boolean) || [];
 
 
-  // VERIFIED Nexus 4 Models for v1beta REST API
+  // VERIFIED Gemini Models for v1beta REST API
   const models = [
-    "gemma-4-26b-a4b-it",  // High-Throughput MoE (FASTER ✅)
-    "gemma-4-31b-it",      // Dense Reasoning (POWERFUL ✅)
+    "gemini-1.5-flash",  // High-Throughput (FASTER ✅)
+    "gemini-1.5-pro",    // Dense Reasoning (POWERFUL ✅)
   ];
 
 

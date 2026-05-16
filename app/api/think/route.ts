@@ -49,15 +49,12 @@ export async function POST(req: Request) {
       });
     }
 
-
-
     // ── 5. Global Daily Budget ────────────────────────────────────────────
     if (!(await checkDailyBudget())) {
       return new Response("Daily request limit reached. Try again tomorrow.", { status: 429 });
     }
 
     const { message, image, protocol } = await req.json();
-
 
     // ── 6. Image Validation (Max 5MB) ─────────────────────────────────────
     if (image && !validateImage(image.base64, 5)) {
@@ -74,13 +71,12 @@ export async function POST(req: Request) {
       : undefined;
 
     const systemInstruction = `You are a high-speed reasoning engine for MIDNIGHT-NEXUS AI.
-${FRONTEND_DESIGN_SKILL}
-Protocol: ${protocol === "local" ? "LOCAL_RESOURCES" : "CLOUD_COMPUTE"}.
-${protocol === "local" ? "Instruction: Simulate on-device processing patterns. Be concise." : "Instruction: Utilize full model capacity for deep reasoning."}
+\${FRONTEND_DESIGN_SKILL}
+Protocol: \${protocol === "local" ? "LOCAL_RESOURCES" : "CLOUD_COMPUTE"}.
+\${protocol === "local" ? "Instruction: Simulate on-device processing patterns. Be concise." : "Instruction: Utilize full model capacity for deep reasoning."}
 Produce a sequence of short, professional, and analytical "thought nodes" in a JSON array format.`;
 
-
-    const userMessage = `Analyze the complexity of this request: "${sanitizedMessage || "this image"}". 
+    const userMessage = `Analyze the complexity of this request: "\${sanitizedMessage || "this image"}". 
     Generate a dynamic set of private pre-response thoughts (between 3 and 6) based on logic required.
     Simple queries should have 3 thoughts. Complex ones should have 6.
     Each thought must be one sentence under 15 words. 

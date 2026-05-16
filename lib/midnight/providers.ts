@@ -12,7 +12,7 @@ function getRequiredEnv(key: string): string {
 }
 
 export function buildProviders() {
-  const networkId = getRequiredEnv("MIDNIGHT_NETWORK_ID") || "testnet-1";
+   const networkId = getRequiredEnv("MIDNIGHT_NETWORK_ID") || "preprod";
   const indexerUrl = getRequiredEnv("MIDNIGHT_INDEXER_HTTP_URL");
   const provingUrl = getRequiredEnv("MIDNIGHT_PROVING_SERVER_URL");
 

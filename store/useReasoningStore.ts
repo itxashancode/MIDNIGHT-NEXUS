@@ -30,6 +30,8 @@ interface ReasoningState {
   entropyData: number[];
   protocol: 'cloud' | 'local';
   isProcessing: boolean;
+  isPrivacyEnabled: boolean;
+  isProving: boolean;
 
   // Actions
   setAppState: (state: AppState) => void;
@@ -39,8 +41,10 @@ interface ReasoningState {
   setCurrentThoughts: (thoughts: Thought[] | ((prev: Thought[]) => Thought[])) => void;
   setCurrentAnswer: (answer: string) => void;
   setProtocol: (protocol: 'cloud' | 'local') => void;
+  setPrivacyEnabled: (enabled: boolean) => void;
+  setIsProving: (proving: boolean) => void;
   clearHistory: () => void;
-  
+
   // Complex Actions
   handleSend: (message: string, image?: ImageAttachment) => Promise<void>;
   handleAnswer: () => Promise<void>;
@@ -56,24 +60,30 @@ export const useReasoningStore = create<ReasoningState>()(
       currentImage: undefined,
       currentThoughts: [],
       currentAnswer: '',
-      entropyData: [],
-      protocol: 'cloud',
-      isProcessing: false,
+       entropyData: [],
+       protocol: 'cloud',
+       isProcessing: false,
+       isPrivacyEnabled: false,
+       isProving: false,
 
-      setAppState: (appState) => set({ appState }),
-      setUserInput: (userInput) => set({ userInput }),
-      setCurrentMessage: (currentMessage) => set({ currentMessage }),
-      setCurrentImage: (currentImage) => set({ currentImage }),
-      setCurrentThoughts: (thoughts) => {
-        if (typeof thoughts === 'function') {
-          set((state) => ({ currentThoughts: thoughts(state.currentThoughts) }));
-        } else {
-          set({ currentThoughts: thoughts });
-        }
-      },
-      setCurrentAnswer: (currentAnswer) => set({ currentAnswer }),
-      setProtocol: (protocol) => set({ protocol }),
-      clearHistory: () => {
+       // Actions
+       setAppState: (appState) => set({ appState }),
+       setUserInput: (userInput) => set({ userInput }),
+       setCurrentMessage: (currentMessage) => set({ currentMessage }),
+       setCurrentImage: (currentImage) => set({ currentImage }),
+       setCurrentThoughts: (thoughts) => {
+         if (typeof thoughts === 'function') {
+           set((state) => ({ currentThoughts: thoughts(state.currentThoughts) }));
+         } else {
+           set({ currentThoughts: thoughts });
+         }
+       },
+       setCurrentAnswer: (currentAnswer) => set({ currentAnswer }),
+       setProtocol: (protocol) => set({ protocol }),
+       setPrivacyEnabled: (isPrivacyEnabled) => set({ isPrivacyEnabled }),
+       setIsProving: (isProving) => set({ isProving }),
+       clearHistory: () => {
+
         if (confirm('Clear all intelligence history?')) {
           set({ exchanges: [] });
         }
