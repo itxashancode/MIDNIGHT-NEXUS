@@ -8,7 +8,7 @@ import { NodeZkConfigProvider } from '@midnight-ntwrk/midnight-js-node-zk-config
 import { levelPrivateStateProvider } from '@midnight-ntwrk/midnight-js-level-private-state-provider';
 import { FluentWalletBuilder } from '@midnight-ntwrk/testkit-js';
 import type { EnvironmentConfiguration } from '@midnight-ntwrk/testkit-js';
-import { ZswapSecretKeys, DustSecretKey } from '@midnight-ntwrk/ledger-v8';
+import { ZswapSecretKeys, DustSecretKey } from '@midnight-ntwrk/ledger';
 import * as Rx from 'rxjs';
 import type { Logger } from 'pino';
 
