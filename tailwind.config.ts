@@ -58,13 +58,12 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        // MANDATED TYPOGRAPHY — no substitutions
-        heading: ["Bebas Neue", "Impact", "monospace"],
-        subheading: ["Space Mono", "Courier New", "monospace"],
-        body: ["DM Mono", "Courier New", "monospace"],
-        sans: ["DM Mono", "Courier New", "monospace"],
-        mono: ["DM Mono", "Courier New", "monospace"],
-        space: ["Space Mono", "Courier New", "monospace"],
+        heading: ["Plus Jakarta Sans", "Inter", "sans-serif"],
+        subheading: ["Plus Jakarta Sans", "Inter", "sans-serif"],
+        body: ["Inter", "sans-serif"],
+        sans: ["Inter", "sans-serif"],
+        mono: ["JetBrains Mono", "monospace"],
+        space: ["Inter", "sans-serif"],
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",

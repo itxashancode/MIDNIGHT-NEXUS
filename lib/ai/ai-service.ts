@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { OpenAI } from "openai";
+import OpenAI from "openai";
 
 const AnalysisSchema = z.object({
   risk_level: z.enum(["LOW", "MEDIUM", "HIGH"]),
@@ -8,64 +8,86 @@ const AnalysisSchema = z.object({
   confidence: z.string(),
 });
 
-type AnalysisResult = z.infer<typeof AnalysisSchema>;
+type AnalysisSchemaType = z.infer<typeof AnalysisSchema>;
 
-function getMockResult(): AnalysisResult {
-  return {
-    risk_level: "LOW",
-    summary: "AI execution verified compliant via ZK proof on Midnight.",
-    recommendation: "No action required. Session cryptographically verified.",
-    confidence: "HIGH — cryptographically verified by Midnight ZK proof",
-  };
-}
+export async function analyzeVerifiedSession(params: {
+  sessionId: string
+  isCompliant: boolean
+  txHash: string
+  totalVerifications: number
+  verifiedAt: string
+}): Promise<{
+  riskLevel: 'LOW' | 'MEDIUM' | 'HIGH'
+  summary: string
+  recommendation: string
+  confidence: string
+  isMocked: boolean
+}> {
+  const getMockResult = (): {
+    riskLevel: 'LOW' | 'MEDIUM' | 'HIGH'
+    summary: string
+    recommendation: string
+    confidence: string
+    isMocked: boolean
+  } => ({
+    riskLevel: 'LOW',
+    summary: 'AI execution verified compliant on Midnight blockchain.',
+    recommendation: 'Session cryptographically verified. No action required.',
+    confidence: 'HIGH — cryptographically verified by Midnight ZK proof',
+    isMocked: true
+  });
 
-export async function analyzeVerifiedSession(
-  blockchainResult: {
-    sessionId: string;
-    isCompliant: boolean;
-    txHash: string;
-    totalVerifications: number;
-    verifiedAt: string;
-  }
-): Promise<AnalysisResult> {
-  const apiKey = process.env.OPENAI_API_KEY;
-
-  if (!apiKey) {
+  if (!process.env.OPENAI_API_KEY) {
     return getMockResult();
   }
 
-  const client = new OpenAI({ apiKey });
+  const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-  const prompt = `You are a medical AI compliance analyst.
-The following session data has been cryptographically verified 
-on the Midnight blockchain via zero-knowledge proof.
-This data is mathematically guaranteed authentic.
+  const prompt = `
+You are a medical AI compliance analyst.
+The following data is cryptographically verified on the
+Midnight Network blockchain via zero-knowledge proof.
+It is mathematically guaranteed authentic.
 
-Verified Session:
-- Session ID: ${blockchainResult.sessionId}
-- AI Was Compliant: ${blockchainResult.isCompliant}
-- Transaction: ${blockchainResult.txHash}
-- Verified at block: ${blockchainResult.totalVerifications}
+ZK-Verified Session:
+- Session ID: ${params.sessionId}
+- AI Execution Compliant: ${params.isCompliant}
+- Verified At: ${params.verifiedAt}
+- Verification #${params.totalVerifications} on Midnight Preprod
+- Transaction: ${params.txHash}
 
-Respond ONLY in this JSON format:
+Provide compliance analysis in this exact JSON:
 {
   "risk_level": "LOW | MEDIUM | HIGH",
-  "summary": "one sentence",
+  "summary": "one sentence max",
   "recommendation": "one actionable sentence",
   "confidence": "HIGH — cryptographically verified by Midnight ZK proof"
-}`;
+}
+Respond ONLY with JSON. No markdown. No explanation.
+  `.trim();
 
   try {
     const completion = await client.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [{ role: "user", content: prompt }],
-      temperature: 0.3,
+      max_tokens: 200,
+      response_format: { type: "json_object" }
     });
 
-    const content = completion.choices[0]?.message?.content || "{}";
+    const content = completion.choices[0]?.message?.content;
+    if (!content) return getMockResult();
+
     const parsed = JSON.parse(content);
-    return AnalysisSchema.parse(parsed);
-  } catch {
+    const validated = AnalysisSchema.parse(parsed);
+
+    return {
+      riskLevel: validated.risk_level,
+      summary: validated.summary,
+      recommendation: validated.recommendation,
+      confidence: validated.confidence,
+      isMocked: false
+    };
+  } catch (error) {
     return getMockResult();
   }
 }

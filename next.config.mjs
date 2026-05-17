@@ -1,7 +1,18 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  turbopack: {},
   experimental: {
     optimizePackageImports: ["lucide-react", "framer-motion"],
+  },
+  webpack: (config) => {
+    // Midnight packages often use ES modules and need special handling
+    config.externals = config.externals || []
+    config.experiments = { 
+      ...config.experiments, 
+      asyncWebAssembly: true,
+      layers: true
+    }
+    return config
   },
   async headers() {
     return [
@@ -9,20 +20,20 @@ const nextConfig = {
         source: "/(.*)",
         headers: [
           {
-            key: "X-Frame-Options",
-            value: "DENY",
-          },
-          {
             key: "X-Content-Type-Options",
             value: "nosniff",
           },
           {
-            key: "Referrer-Policy",
-            value: "strict-origin-when-cross-origin",
+            key: "X-Frame-Options",
+            value: "DENY",
           },
           {
-            key: "Content-Security-Policy",
-            value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data: https:; font-src 'self' data:; connect-src 'self' https: wss: https://www.google-analytics.com https://*.google-analytics.com;",
+            key: "X-XSS-Protection",
+            value: "1; mode=block",
+          },
+          {
+            key: "Referrer-Policy",
+            value: "strict-origin-when-cross-origin",
           },
         ],
       },
@@ -31,3 +42,4 @@ const nextConfig = {
 };
 
 export default nextConfig;
+

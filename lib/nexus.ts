@@ -108,9 +108,9 @@ export async function fetchNexusStream(
 
   // VERIFIED Gemini Models for v1beta REST API
   const models = [
-    "gemini-1.5-flash",  // High-Throughput (FASTER ✅)
-    "gemini-1.5-pro",    // Dense Reasoning (POWERFUL ✅)
-  ];
+      "gemma-4-26b-a4b-it",  // High-Throughput MoE (FASTER ✅)
+      "gemma-4-31b-it",      // Dense Reasoning (POWERFUL ✅)
+    ];
 
   // Official Nexus 4 Prompt Formatting
   const formattedSystem = `<|turn>system\n<|think|>${systemInstruction}<turn|>`;
@@ -129,12 +129,15 @@ export async function fetchNexusStream(
 
   let lastError: Error | null = null;
 
+  const keys = process.env.NEXUS_API_KEY?.split(",").map(k => k.trim()).filter(k => k && k !== "undefined" && k !== "null") || [];
+  if (keys.length === 0) {
+    throw new Error("NEXUS_API_KEY is not set or contains no valid keys.");
+  }
+
   // Try each model
   for (const model of models) {
     let skipModel = false;
-    // Try to get a valid response using available keys
-    const keys = process.env.NEXUS_API_KEY?.split(",").map(k => k.trim()).filter(Boolean) || [];
-    
+
     for (const apiKey of keys) {
       if (skipModel) break;
 
@@ -165,25 +168,27 @@ export async function fetchNexusStream(
 
         clearTimeout(timeoutId);
 
-        if (!response.ok) {
-          const errorBody = await response.json().catch(() => ({}));
-          const message = errorBody.error?.message || response.statusText;
+          if (!response.ok) {
+            const errorBody = await response.json().catch(() => ({}));
+            const message = errorBody.error?.message || response.statusText;
+            console.warn(`API Error (${model}, status ${response.status}): ${message}`, errorBody);
 
-          // If internal error, retry once after a short delay
-          if (message.includes("internal error") || response.status === 500) {
-            console.warn(`Model ${model} had internal error, retrying...`);
-            await new Promise(r => setTimeout(r, 800));
-            continue; // Try same key/model again
+            // If internal error, retry once after a short delay
+            if (message.includes("internal error") || response.status === 500) {
+              console.warn(`Model ${model} had internal error, retrying...`);
+              await new Promise(r => setTimeout(r, 800));
+              continue; // Try same key/model again
+            }
+
+            if (message.includes("not found")) {
+              console.warn(`Model ${model} not found, skipping...`);
+              skipModel = true;
+              break;
+            }
+
+            throw new Error(`Nexus API error (${model}): ${message}`);
           }
 
-          if (message.includes("not found")) {
-            console.warn(`Model ${model} not found, skipping...`);
-            skipModel = true;
-            break;
-          }
-
-          throw new Error(`Nexus API error (${model}): ${message}`);
-        }
 
         return response.body;
       } catch (e: unknown) {
@@ -212,13 +217,16 @@ export async function fetchNexusFunctionCalls(
   image?: NexusImagePart,
   history?: ConversationTurn[]
 ) {
-  const keys = process.env.NEXUS_API_KEY?.split(",").map(k => k.trim()).filter(Boolean) || [];
+  const keys = process.env.NEXUS_API_KEY?.split(",").map(k => k.trim()).filter(k => k && k !== "undefined" && k !== "null") || [];
+  if (keys.length === 0) {
+    throw new Error("NEXUS_API_KEY is not set or contains no valid keys.");
+  }
 
 
   // VERIFIED Gemini Models for v1beta REST API
   const models = [
-    "gemini-1.5-flash",  // High-Throughput (FASTER ✅)
-    "gemini-1.5-pro",    // Dense Reasoning (POWERFUL ✅)
+    "gemma-4-26b-a4b-it",  // High-Throughput MoE (FASTER ✅)
+    "gemma-4-31b-it",      // Dense Reasoning (POWERFUL ✅)
   ];
 
 
@@ -263,6 +271,7 @@ export async function fetchNexusFunctionCalls(
         if (!response.ok) {
           const errorBody = await response.json().catch(() => ({}));
           const message = errorBody.error?.message || response.statusText;
+          console.warn(`API Error (${model}, status ${response.status}): ${message}`, errorBody);
 
           if (message.includes("internal error") || message.includes("not found") || response.status === 500) {
             console.warn(`Function call model ${model} is unstable (${message}), skipping...`);

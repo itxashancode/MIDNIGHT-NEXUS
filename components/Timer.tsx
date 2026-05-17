@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, useAnimation } from "framer-motion";
+import { motion } from "framer-motion";
 
 interface TimerProps {
   duration?: number;
@@ -11,7 +11,6 @@ interface TimerProps {
 
 export default function Timer({ duration = 30, onComplete, isActive = true }: TimerProps) {
   const [timeLeft, setTimeLeft] = useState(duration);
-  const controls = useAnimation();
 
   useEffect(() => {
     if (!isActive) return;
@@ -27,27 +26,13 @@ export default function Timer({ duration = 30, onComplete, isActive = true }: Ti
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [duration, isActive]);
+  }, [isActive, duration]);
 
   useEffect(() => {
     if (timeLeft === 0 && isActive) {
       onComplete?.();
     }
   }, [timeLeft, onComplete, isActive]);
-
-  useEffect(() => {
-    if (!isActive) {
-      controls.stop();
-      return;
-    }
-    controls.start({
-      strokeDashoffset: [0, 88],
-      transition: { duration: duration, ease: "linear" }
-    });
-  }, [duration, controls, isActive]);
-
-  // Welcoming color palette
-  const color = timeLeft > 15 ? "hsl(var(--primary))" : timeLeft > 5 ? "#3b82f6" : "#6366f1";
 
   return (
     <div className="relative flex items-center justify-center w-10 h-10">
@@ -57,24 +42,24 @@ export default function Timer({ duration = 30, onComplete, isActive = true }: Ti
           cy="18"
           r="14"
           fill="none"
-          stroke="hsl(var(--muted))"
+          stroke="currentColor"
           strokeWidth="3"
+          className="text-muted"
         />
         <motion.circle
           cx="18"
           cy="18"
           r="14"
           fill="none"
-          stroke={color}
+          stroke="var(--cyan-primary)"
           strokeWidth="3"
           strokeDasharray="88"
-          animate={controls}
-          style={{ transition: "stroke 1s ease" }}
+          animate={{ strokeDashoffset: [0, 88] }}
+          transition={{ duration: duration, ease: "linear" }}
         />
       </svg>
       <div
-        className="absolute inset-0 flex items-center justify-center text-[11px] font-bold font-mono"
-        style={{ color }}
+        className="absolute inset-0 flex items-center justify-center nx-font-dm text-[11px] font-bold text-accent"
       >
         {timeLeft}
       </div>

@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "target": "ESNext",
     "lib": [
       "dom",
       "dom.iterable",
@@ -25,14 +26,14 @@
       "@/*": [
         "./*"
       ]
-    },
-    "target": "ES2017"
+    }
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
+    "midnight-contracts/managed/**/*.js",
     ".next/dev/types/**/*.ts"
   ],
   "exclude": [

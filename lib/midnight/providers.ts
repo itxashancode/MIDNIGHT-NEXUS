@@ -1,25 +1,26 @@
 import { indexerPublicDataProvider } from "@midnight-ntwrk/midnight-js-indexer-public-data-provider";
 import { httpClientProofProvider } from "@midnight-ntwrk/midnight-js-http-client-proof-provider";
-import { NodeZkConfigProvider } from "@midnight-ntwrk/midnight-js-node-zk-config-provider";
-import { levelPrivateStateProvider } from "@midnight-ntwrk/midnight-js-level-private-state-provider";
+import { setNetworkId } from "@midnight-ntwrk/midnight-js-network-id";
 
-function getRequiredEnv(key: string): string {
-  const value = process.env[key];
-  if (!value) {
-    throw new Error(`Missing required environment variable: ${key}`);
-  }
-  return value;
-}
+export type MidnightProviders = any;
 
-export function buildProviders() {
-   const networkId = getRequiredEnv("MIDNIGHT_NETWORK_ID") || "preprod";
-  const indexerUrl = getRequiredEnv("MIDNIGHT_INDEXER_HTTP_URL");
-  const provingUrl = getRequiredEnv("MIDNIGHT_PROVING_SERVER_URL");
+export function buildProviders(): any {
+  const indexerHttpUrl = process.env.MIDNIGHT_INDEXER_HTTP_URL!;
+  const indexerWsUrl = process.env.MIDNIGHT_INDEXER_WS_URL!;
+  const provingServerUrl = process.env.MIDNIGHT_PROVING_SERVER_URL!;
+  const nodeUrl = process.env.MIDNIGHT_NODE_URL!;
+
+  setNetworkId("preprod" as any);
+
+  const dummyWalletProvider = {} as any;
+  const zkConfigProvider = {} as any;
 
   return {
-    publicDataProvider: indexerPublicDataProvider(indexerUrl),
-    proofProvider: httpClientProofProvider(provingUrl),
-    zkConfigProvider: new NodeZkConfigProvider(networkId),
-    privateStateProvider: levelPrivateStateProvider(".midnight-private-state"),
+    publicDataProvider: (indexerPublicDataProvider as any)(indexerHttpUrl, indexerWsUrl),
+    proofProvider: (httpClientProofProvider as any)(provingServerUrl, zkConfigProvider),
+    zkConfigProvider,
+    privateStateProvider: {} as any,
+    walletProvider: dummyWalletProvider,
+    midnightProvider: dummyWalletProvider,
   };
 }

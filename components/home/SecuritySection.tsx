@@ -46,22 +46,22 @@ function ProofTerminal() {
     { text: "→ Loading ZK circuit...", delay: 0.3, color: "text-muted/60" },
     { text: "→ Generating witness...", delay: 0.7, color: "text-muted/60" },
     { text: "→ Computing proof...", delay: 1.1, color: "text-muted/60" },
-    { text: "✓ Proof verified in 2.1s", delay: 1.6, color: "text-[var(--cyan)]" },
-    { text: "✓ No personal data exposed", delay: 1.9, color: "text-[var(--cyan)]" },
-    { text: "✓ Session integrity: VALID", delay: 2.2, color: "text-[var(--cyan)]" },
+    { text: "✓ Proof verified in 2.1s", delay: 1.6, color: "text-violet-400" },
+    { text: "✓ No personal data exposed", delay: 1.9, color: "text-violet-400" },
+    { text: "✓ Session integrity: VALID", delay: 2.2, color: "text-violet-400" },
   ];
 
   return (
     <div
-      className="glass-card rounded-[24px] p-6 font-mono text-xs leading-relaxed nx-clip-corner"
+      className="nx-glass-card p-6 nx-font-dm text-xs leading-relaxed"
       data-reveal="fade-left"
     >
       {/* Terminal header */}
-      <div className="flex items-center gap-2 mb-5 pb-4 border-b border-white/5">
-        <div className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
-        <div className="w-2.5 h-2.5 rounded-full bg-amber-400/60" />
-        <div className="w-2.5 h-2.5 rounded-full bg-green-400/60" />
-        <span className="ml-3 tech-label">nexus-zkproof-terminal</span>
+      <div className="flex items-center gap-2 mb-5 pb-4 border-b border-foreground/5">
+        <div className="w-2.5 h-2.5 rounded-full bg-red-500/40" />
+        <div className="w-2.5 h-2.5 rounded-full bg-amber-400/40" />
+        <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/40" />
+        <span className="ml-3 text-xs text-muted-foreground font-medium">verification-log</span>
       </div>
 
       <div className="space-y-2">
@@ -82,8 +82,7 @@ function ProofTerminal() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 2.8 }}
-          className="inline-block w-2 h-3 bg-[var(--cyan)] align-middle ml-1"
-          style={{ animation: "tw-blink 0.8s step-end infinite" }}
+          className="inline-block w-2 h-3 bg-violet-400 align-middle ml-1 animate-pulse"
         />
       </div>
     </div>
@@ -105,7 +104,7 @@ export default function SecuritySection() {
       <motion.div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] rounded-full pointer-events-none"
         style={{
-          background: "radial-gradient(ellipse, rgba(0,229,200,1) 0%, transparent 70%)",
+          background: "radial-gradient(ellipse, rgba(139, 92, 246, 0.4) 0%, transparent 70%)",
           opacity: bgGlow,
           filter: "blur(60px)",
         }}
@@ -114,13 +113,13 @@ export default function SecuritySection() {
       <div className="max-w-7xl mx-auto px-6">
         {/* Section header */}
         <div className="max-w-2xl mb-24" data-reveal="fade-up">
-          <span className="tech-label-cyan block mb-4">— Trust Architecture</span>
-          <h2 className="text-4xl md:text-6xl font-subheading font-bold tracking-tighter text-foreground mb-6">
+          <span className="text-sm font-medium text-violet-400 block mb-4">— Trust Architecture</span>
+          <h2 className="nx-display text-4xl md:text-6xl font-bold tracking-tighter text-foreground mb-6">
             Privacy isn&apos;t a feature.
             <br />
-            <span className="gradient-text-static">It&apos;s the foundation.</span>
+            <span className="nx-gradient-text-subtle">It&apos;s the foundation.</span>
           </h2>
-          <p className="text-muted/70 leading-relaxed">
+          <p className="nx-body text-muted/70 leading-relaxed">
             Midnight Nexus combines the power of advanced reasoning with the immutable security of
             the Midnight blockchain — creating a space where AI innovation meets absolute privacy.
           </p>
@@ -141,25 +140,25 @@ export default function SecuritySection() {
                 >
                   {/* Number */}
                   <div className="flex-shrink-0">
-                    <div className="nx-number-badge group-hover:border-[var(--cyan)]/30 group-hover:text-[var(--cyan)] transition-colors duration-300">
+                    <div className="nx-number-badge group-hover:border-violet-500/30 group-hover:text-violet-400 transition-colors duration-300">
                       {pillar.num}
                     </div>
                   </div>
 
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 mb-2">
-                      <Icon size={16} className="text-[var(--cyan)] opacity-70 flex-shrink-0" />
-                      <h3 className="font-subheading font-bold text-foreground text-lg">{pillar.title}</h3>
+                      <Icon size={16} className="text-violet-400 opacity-70 flex-shrink-0" />
+                      <h3 className="nx-display text-lg text-foreground">{pillar.title}</h3>
                     </div>
-                    <p className="text-sm text-muted/60 leading-relaxed mb-3">{pillar.description}</p>
+                    <p className="nx-body text-sm text-muted/60 leading-relaxed mb-3">{pillar.description}</p>
                     <div className="flex items-center gap-2">
-                      <CheckCircle size={10} className="text-[var(--cyan)]" />
-                      <span className="tech-label">{pillar.proof}</span>
+                      <CheckCircle size={10} className="text-violet-400" />
+                      <span className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium">{pillar.proof}</span>
                     </div>
                   </div>
 
                   {/* Hover line */}
-                  <div className="absolute left-0 bottom-0 h-px bg-gradient-to-r from-[var(--cyan)] to-transparent w-0 group-hover:w-full transition-all duration-500" />
+                  <div className="absolute left-0 bottom-0 h-px bg-gradient-to-r from-violet-500/40 to-transparent w-0 group-hover:w-full transition-all duration-500" />
                 </div>
               );
             })}
@@ -179,10 +178,10 @@ export default function SecuritySection() {
               ].map((b) => (
                 <div
                   key={b.label}
-                  className="glass-card rounded-2xl p-4 flex flex-col gap-1"
+                  className="nx-glass-card p-4 flex flex-col gap-1"
                 >
-                  <span className="tech-label">{b.label}</span>
-                  <span className="text-xl font-mono font-bold text-[var(--cyan)]">{b.value}</span>
+                  <span className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium">{b.label}</span>
+                  <span className="nx-font-dm text-xl font-bold text-violet-400">{b.value}</span>
                 </div>
               ))}
             </div>

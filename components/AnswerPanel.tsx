@@ -5,7 +5,7 @@ import ReactMarkdown from "react-markdown";
 import { motion } from "framer-motion";
 import { Copy, Check, Share2 } from "lucide-react";
 import { CodeTabs } from "./animate-ui/components/animate/code-tabs";
-import { ChartRenderer } from "@/components/ChartRenderer";
+import ChartRenderer from "@/components/ChartRenderer";
 
 interface AnswerPanelProps {
   answer: string;

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;0,500&family=Space+Mono:ital,wght@0,400;0,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,22 +6,24 @@
 
 /* =============================================================
    MIDNIGHT-NEXUS DESIGN SYSTEM — COMPLETE REWRITE
-   Brutalist Cyberpunk Editorial
-   Destroyed and rebuilt from scratch. No legacy.
+   Calm, Welcoming, Professional Zero-Knowledge Human Interface
+   Rebuilt from the ground up for high trust, elegance, and extreme legibility.
    ============================================================= */
 
 /* === DESIGN TOKENS === */
 :root {
-  /* Core palette — non-negotiable */
-  --void: #08080D;
-  --surface: #0F0F18;
-  --border: #1A1A2E;
-  --cyan-primary: #00FFE0;
-  --cyan-dim: rgba(0, 255, 224, 0.12);
-  --bone: #F0EBE1;
-  --muted: #4A4A6A;
-  --amber: #FFB020;
-  --shield-green: #00FF88;
+  /* Core palette — Calmer, premium slate & indigo */
+  --void: #0B0F17;              /* Deep obsidian-slate void background */
+  --surface: #121824;           /* Soft, calm card surface */
+  --border: #1E293B;            /* Slate-800 clean borders */
+  --cyan-primary: #6366F1;      /* Trustworthy Indigo-500 brand color */
+  --cyan-dim: rgba(99, 102, 241, 0.08); /* Calm transparent brand focus tint */
+  --bone: #F8FAFC;              /* Clean Slate-50 welcoming soft off-white */
+  --muted: #64748B;             /* Slate-500 neutral text */
+  --amber: #F59E0B;             /* Warm Amber accent */
+  --shield-green: #10B981;      /* Emerald Green for verified zero-knowledge security */
+  --violet: #8B5CF6;            /* Premium deep violet accent */
+  --violet-dim: rgba(139, 92, 246, 0.08); /* Calm transparent violet focus tint */
 
   /* Semantic aliases */
   --bg-primary: var(--void);
@@ -45,82 +47,70 @@
 
 html {
   scroll-behavior: smooth;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(0, 255, 224, 0.3) transparent;
-}
-
-/* Custom scrollbar — 3px, cyan, rounded */
-::-webkit-scrollbar { width: 3px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb {
-  background: rgba(0, 255, 224, 0.3);
-  border-radius: 2px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 255, 224, 0.6);
 }
 
 body {
   background-color: var(--void);
   color: var(--bone);
-  font-family: 'DM Mono', 'Courier New', monospace;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
-  line-height: 1.7;
+  line-height: 1.6;
   font-size: 14px;
+  font-weight: 300;
 }
 
 ::selection {
-  background: rgba(0, 255, 224, 0.2);
+  background: rgba(99, 102, 241, 0.2);
   color: var(--text-primary);
 }
 
 /* === TYPOGRAPHY HIERARCHY ===
-   Level 1 — Display / Wordmark: Bebas Neue, ALL CAPS, ultra-wide tracking
-   Level 2 — UI Labels / Nav: Space Mono, 13px–14px
-   Level 3 — Body / Chat: DM Mono, 14px–15px, 1.7 line-height
-   Level 4 — Timestamps / Meta: Space Mono, 11px, uppercase, muted
+   Level 1 — Display / Wordmark: Plus Jakarta Sans, gorgeous geometric curves
+   Level 2 — UI Labels / Nav: Inter, 13px-14px, medium weight
+   Level 3 — Body / Chat: Inter, 14px-15px, elegant line-height
+   Level 4 — Timestamps / Meta: Inter, 11px, slate-500
 */
 
 /* Level 1 — Display */
 .nx-display,
 .nx-wordmark {
-  font-family: 'Bebas Neue', 'Impact', monospace;
-  font-weight: 400;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  line-height: 1;
+  font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-transform: none;
+  line-height: 1.1;
 }
 
 /* Level 2 — UI Labels / Nav */
 .nx-label,
 .nx-nav-label {
-  font-family: 'Space Mono', 'Courier New', monospace;
+  font-family: 'Inter', -apple-system, sans-serif;
   font-size: 13px;
-  font-weight: 400;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+  font-weight: 500;
+  letter-spacing: normal;
+  text-transform: none;
 }
 
 /* Level 3 — Body / Messages */
 .nx-body,
 .nx-message-text {
-  font-family: 'DM Mono', 'Courier New', monospace;
+  font-family: 'Inter', -apple-system, sans-serif;
   font-size: 14px;
   font-weight: 400;
-  line-height: 1.7;
+  line-height: 1.65;
   color: var(--bone);
 }
 
 /* Level 4 — Meta / Timestamps */
 .nx-meta,
 .nx-timestamp {
-  font-family: 'Space Mono', 'Courier New', monospace;
+  font-family: 'Inter', -apple-system, sans-serif;
   font-size: 11px;
   font-weight: 400;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  letter-spacing: normal;
+  text-transform: none;
   color: var(--muted);
 }
 
@@ -149,7 +139,7 @@ body {
   position: absolute;
   inset: 0;
   background-image:
-    radial-gradient(circle, rgba(0, 255, 224, 0.06) 1.5px, transparent 1.5px);
+    radial-gradient(circle, rgba(99, 102, 241, 0.04) 1.5px, transparent 1.5px);
   background-size: 28px 28px;
 }
 
@@ -239,7 +229,7 @@ body {
   left: 0;
   width: 100%;
   height: 1px;
-  background: var(--cyan-primary);
+  background: var(--violet);
   transform: scaleX(0);
   transform-origin: left;
   animation: brandUnderline 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.8s forwards;
@@ -251,37 +241,32 @@ body {
   align-items: center;
   gap: 0.625rem;
   padding: 0.75rem 1rem;
-  background: var(--cyan-dim);
-  border: 1px solid rgba(0, 255, 224, 0.2);
-  border-radius: 4px;
+  background: var(--violet-dim);
+  border: 1px solid rgba(139, 92, 246, 0.15);
+  border-radius: 8px;
   margin-bottom: 2.5rem;
   position: relative;
-  animation: shieldBreathe 2.4s ease-in-out infinite;
 }
 
 .nx-shield.flash {
-  background: rgba(0, 255, 224, 0.3);
-  border-color: var(--cyan-primary);
-  box-shadow: 0 0 30px rgba(0, 255, 224, 0.5), inset 0 0 20px rgba(0, 255, 224, 0.1);
-  animation: shieldBreathe 2.4s ease-in-out infinite, shieldFlash 0.3s ease-out;
+  background: rgba(139, 92, 246, 0.15);
+  border-color: var(--violet);
 }
 
 .nx-shield-icon {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: var(--cyan-primary);
-  box-shadow: 0 0 12px rgba(0, 255, 224, 0.6);
-  animation: shieldPulse 2s ease-in-out infinite;
+  background: var(--violet);
 }
 
 .nx-shield-label {
-  font-family: 'Space Mono', 'Courier New', monospace;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--cyan-primary);
+  font-family: 'Inter', -apple-system, sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  color: var(--muted);
 }
 
 /* Sidebar navigation */
@@ -298,33 +283,34 @@ body {
   gap: 0.75rem;
   padding: 0.625rem 0.75rem;
   color: var(--muted);
-  font-family: 'Space Mono', 'Courier New', monospace;
+  font-family: 'Inter', -apple-system, sans-serif;
   font-size: 13px;
   font-weight: 400;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  letter-spacing: 0;
+  text-transform: none;
   cursor: pointer;
+  border-radius: 6px;
   position: relative;
-  transition: color 0.18s ease, background 0.18s ease, transform 0.18s ease;
-  transform: translateX(0);
+  transition: color 0.18s ease, background 0.18s ease;
 }
 
 .nx-nav-item::before {
   content: '';
   position: absolute;
   left: 0;
-  top: 0;
+  top: 50%;
+  transform: translateY(-50%);
   width: 2px;
   height: 0;
-  background: var(--cyan-primary);
+  background: var(--violet);
+  border-radius: 2px;
   transition: height 0.18s ease;
-  transform-origin: top;
+  transform-origin: center;
 }
 
 .nx-nav-item:hover {
   color: var(--bone);
-  background: rgba(0, 255, 224, 0.04);
-  transform: translateX(6px);
+  background: rgba(139, 92, 246, 0.06);
 }
 
 .nx-nav-item:hover::before {
@@ -349,11 +335,10 @@ body {
   align-items: center;
   gap: 0.5rem;
   color: var(--muted);
-  font-family: 'Space Mono', 'Courier New', monospace;
-  font-size: 10px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  opacity: 0.5;
+  font-family: 'Inter', -apple-system, sans-serif;
+  font-size: 11px;
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 /* =============================================================
@@ -389,22 +374,20 @@ body {
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--cyan-primary), transparent);
-  background-size: 200% 100%;
-  animation: headerBorderShimmer 3s linear infinite;
+  background: var(--border-structural);
 }
 
 .nx-session-id {
-  font-family: 'Space Mono', 'Courier New', monospace;
+  font-family: 'Inter', -apple-system, sans-serif;
   font-size: 13px;
-  font-weight: 400;
-  letter-spacing: 0.1em;
-  color: var(--bone);
-  text-transform: uppercase;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--muted);
+  text-transform: none;
 }
 
 .nx-session-id .nx-session-highlight {
-  color: var(--cyan-primary);
+  color: var(--bone);
 }
 
 .nx-header-right {
@@ -446,7 +429,7 @@ body {
 
 .nx-conn-bar {
   width: 2.5px;
-  background: rgba(0, 255, 224, 0.8);
+  background: rgba(139, 92, 246, 0.5);
   border-radius: 1px;
 }
 
@@ -475,18 +458,18 @@ body {
   flex-direction: column;
   gap: 1.75rem;
   scroll-behavior: smooth;
-  scrollbar-width: 3px;
-  scrollbar-color: rgba(0, 255, 224, 0.3) transparent;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.08) transparent;
 }
 
-.nx-chat-viewport::-webkit-scrollbar { width: 3px; }
+.nx-chat-viewport::-webkit-scrollbar { width: 4px; }
 .nx-chat-viewport::-webkit-scrollbar-track { background: transparent; }
 .nx-chat-viewport::-webkit-scrollbar-thumb {
-  background: rgba(0, 255, 224, 0.3);
-  border-radius: 2px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 4px;
 }
 .nx-chat-viewport::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 255, 224, 0.6);
+  background: rgba(255,255,255,0.15);
 }
 
 /* Scroll fade indicator at bottom */
@@ -544,14 +527,14 @@ body {
 }
 
 .nx-avatar-user {
-  background: rgba(0, 255, 224, 0.08);
-  border: 1px solid rgba(0, 255, 224, 0.2);
+  background: rgba(99, 102, 241, 0.12);
+  border: 1px solid rgba(99, 102, 241, 0.3);
   color: var(--cyan-primary);
 }
 
 .nx-avatar-ai {
   background: var(--surface);
-  border: 1px solid rgba(0, 255, 224, 0.15);
+  border: 1px solid var(--border);
   color: var(--cyan-primary);
 }
 
@@ -577,9 +560,9 @@ body {
 .nx-bubble {
   position: relative;
   padding: 0.875rem 1.125rem;
-  font-family: 'DM Mono', 'Courier New', monospace;
+  font-family: var(--font-sans), 'Inter', sans-serif;
   font-size: 14px;
-  line-height: 1.7;
+  line-height: 1.65;
   color: var(--bone);
   word-break: break-word;
   overflow-wrap: anywhere;
@@ -589,41 +572,41 @@ body {
 .nx-bubble-user {
   max-width: 68%;
   margin-left: auto;
-  background: linear-gradient(135deg, rgba(0, 255, 224, 0.15), rgba(0, 255, 224, 0.08));
-  border: 1px solid rgba(0, 255, 224, 0.3);
-  border-radius: 2px 8px 8px 8px;
+  background: rgba(99, 102, 241, 0.08);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: 12px 12px 2px 12px;
 }
 
-/* AI message bubble — left-aligned, max 78%, left cyan border */
+/* AI message bubble — left-aligned, max 78%, subtle left border */
 .nx-bubble-ai {
   max-width: 78%;
   margin-right: auto;
   background: var(--surface);
-  border-left: 3px solid var(--cyan-primary);
+  border-left: 2px solid rgba(139, 92, 246, 0.4);
   border-top: 1px solid var(--border-structural);
   border-right: 1px solid var(--border-structural);
   border-bottom: 1px solid var(--border-structural);
-  border-radius: 0 8px 8px 8px;
+  border-radius: 2px 12px 12px 12px;
   padding-left: 1.25rem;
 }
 
-/* ZK Verified badge — bottom-right of AI bubble */
+/* ZK Verified badge */
 .nx-proof-badge {
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
   margin-top: 0.625rem;
   margin-left: auto;
-  font-family: 'Space Mono', 'Courier New', monospace;
+  font-family: 'Inter', -apple-system, sans-serif;
   font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: none;
   color: var(--success);
-  border: 1px solid rgba(0, 255, 136, 0.3);
-  border-radius: 2px;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 4px;
   padding: 0.15rem 0.5rem;
-  background: rgba(0, 255, 136, 0.05);
+  background: rgba(16, 185, 129, 0.05);
   animation: badgeReveal 0.22s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
@@ -859,7 +842,7 @@ body {
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: var(--cyan-primary);
+  background: var(--violet);
   opacity: 0.4;
 }
 
@@ -889,16 +872,16 @@ body {
 }
 
 .nx-glass:hover {
-  border-color: rgba(0, 255, 224, 0.15);
+  border-color: rgba(139, 92, 246, 0.1);
   background: rgba(15, 15, 24, 0.8);
 }
 
-/* Subtle cyan wash on hover */
+/* Subtle violet wash on hover */
 .nx-glass::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(0, 255, 224, 0.04), transparent 60%);
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.03), transparent 60%);
   opacity: 0;
   transition: opacity 0.4s ease;
   pointer-events: none;
@@ -921,44 +904,47 @@ body {
    BUTTON SYSTEM
    ============================================================= */
 
-/* Primary — cyan outlined, brutalist */
+/* Primary — elegant SaaS button */
 .nx-btn-primary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.625rem;
   padding: 0.75rem 1.5rem;
-  background: transparent;
+  background: var(--cyan-primary);
   border: 1px solid var(--cyan-primary);
-  color: var(--cyan-primary);
-  font-family: 'Space Mono', 'Courier New', monospace;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
+  color: #FFFFFF !important;
+  font-family: var(--font-sans), 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: normal;
+  text-transform: none;
   cursor: pointer;
-  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
-  transition: color 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 8px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   overflow: hidden;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
 }
 
 .nx-btn-primary::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: var(--cyan-primary);
-  transform: translateY(100%);
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  background: rgba(255, 255, 255, 0.08);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
 }
 
 .nx-btn-primary:hover {
-  color: var(--void);
-  box-shadow: 0 0 30px rgba(0, 255, 224, 0.25), 0 0 80px rgba(0, 255, 224, 0.08);
+  background: #4F46E5;
+  border-color: #4F46E5;
+  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.3);
 }
 
 .nx-btn-primary:hover::before {
-  transform: translateY(0);
+  transform: scaleX(1);
 }
 
 .nx-btn-primary span {
@@ -973,16 +959,16 @@ body {
   gap: 0.5rem;
   padding: 0.625rem 1.25rem;
   background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   color: var(--muted);
-  font-family: 'Space Mono', 'Courier New', monospace;
-  font-size: 12px;
-  font-weight: 400;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-family: var(--font-sans), 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: normal;
+  text-transform: none;
   cursor: pointer;
-  border-radius: 2px;
-  transition: all 0.25s ease;
+  border-radius: 8px;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .nx-btn-ghost:hover {
@@ -995,39 +981,7 @@ body {
    ZK SHIELD WIDGET (sidebar)
    ============================================================= */
 
-/* Breathing glow pulse — 2.4s ease-in-out infinite */
-@keyframes shieldBreathe {
-  0%, 100% {
-    box-shadow: 0 0 8px rgba(0, 255, 224, 0.1);
-  }
-  50% {
-    box-shadow: 0 0 24px rgba(0, 255, 224, 0.25);
-  }
-}
-
-@keyframes shieldPulse {
-  0%, 100% {
-    transform: scale(1);
-    box-shadow: 0 0 6px rgba(0, 255, 224, 0.3);
-  }
-  50% {
-    transform: scale(1.15);
-    box-shadow: 0 0 18px rgba(0, 255, 224, 0.6);
-  }
-}
-
-/* Flash on message send */
-@keyframes shieldFlash {
-  0% {
-    background: rgba(0, 255, 224, 0.5);
-    border-color: #fff;
-    box-shadow: 0 0 50px rgba(0, 255, 224, 0.8);
-  }
-  100% {
-    background: var(--cyan-dim);
-    border-color: rgba(0, 255, 224, 0.2);
-  }
-}
+/* Removed harsh cyan keyframe animations */
 
 /* =============================================================
    MESSAGE ENTRANCE ANIMATION
@@ -1225,11 +1179,10 @@ body {
   display: inline-block;
   width: 2px;
   height: 1.1em;
-  background: var(--cyan-primary);
+  background: var(--violet);
   vertical-align: middle;
   margin-left: 3px;
   animation: cursorBlink 0.8s step-end infinite;
-  box-shadow: 0 0 4px rgba(0, 255, 224, 0.4);
 }
 
 @keyframes cursorBlink {
@@ -1283,15 +1236,15 @@ body {
     to right,
     transparent 0%,
     rgba(255, 255, 255, 0.04) 20%,
-    rgba(0, 255, 224, 0.08) 50%,
+    rgba(139, 92, 246, 0.08) 50%,
     rgba(255, 255, 255, 0.04) 80%,
     transparent 100%
   );
 }
 
-/* Gradient text — uses --cyan-primary, NOT purple */
+/* Gradient text — violet to indigo */
 .nx-gradient-text {
-  background: linear-gradient(135deg, var(--cyan-primary) 0%, rgba(0, 255, 224, 0.6) 60%, var(--cyan-primary) 100%);
+  background: linear-gradient(135deg, var(--violet) 0%, var(--cyan-primary) 100%);
   background-size: 200% 200%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -1300,7 +1253,7 @@ body {
 }
 
 .nx-gradient-text-subtle {
-  background: linear-gradient(135deg, var(--cyan-primary) 0%, rgba(0, 255, 224, 0.4) 100%);
+  background: linear-gradient(135deg, var(--violet) 0%, rgba(99, 102, 241, 0.7) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -1311,25 +1264,22 @@ body {
   50% { background-position: 100% 50%; }
 }
 
-/* Glow effects — cyan only, no purple */
+/* Glow effects — violet only */
 .nx-glow-cyan {
   box-shadow:
-    0 0 20px rgba(0, 255, 224, 0.12),
-    0 0 60px rgba(0, 255, 224, 0.04),
-    inset 0 0 30px rgba(0, 255, 224, 0.02);
+    0 0 20px rgba(139, 92, 246, 0.08),
+    0 0 60px rgba(139, 92, 246, 0.03);
 }
 
 .nx-glow-cyan-strong {
   box-shadow:
-    0 0 30px rgba(0, 255, 224, 0.3),
-    0 0 80px rgba(0, 255, 224, 0.1),
-    0 0 120px rgba(0, 255, 224, 0.04);
+    0 0 30px rgba(139, 92, 246, 0.2),
+    0 0 80px rgba(139, 92, 246, 0.06);
 }
 
 .nx-text-glow {
   text-shadow:
-    0 0 20px rgba(0, 255, 224, 0.5),
-    0 0 60px rgba(0, 255, 224, 0.2);
+    0 0 20px rgba(139, 92, 246, 0.3);
 }
 
 /* Glass card — subtle depth with border + backdrop */
@@ -1347,7 +1297,7 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(0, 255, 224, 0.03), transparent 60%);
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.02), transparent 60%);
   opacity: 0;
   transition: opacity 0.4s ease;
   pointer-events: none;
@@ -1358,7 +1308,7 @@ body {
 }
 
 .nx-glass-card:hover {
-  border-color: rgba(0, 255, 224, 0.12);
+  border-color: rgba(139, 92, 246, 0.1);
 }
 
 /* Clip corner — brutalist angular */
@@ -1370,23 +1320,23 @@ body {
   clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
 }
 
-/* Tech label — Space Mono, uppercase, tight tracking */
+/* Tech label — Inter, clean, readable */
 .nx-tech-label {
-  font-family: 'Space Mono', 'Courier New', monospace;
+  font-family: 'Inter', -apple-system, sans-serif;
   font-size: 10px;
-  font-weight: 700;
+  font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 0.3em;
+  letter-spacing: 0.1em;
   color: var(--muted);
 }
 
 .nx-tech-label-cyan {
-  font-family: 'Space Mono', 'Courier New', monospace;
+  font-family: 'Inter', -apple-system, sans-serif;
   font-size: 10px;
-  font-weight: 700;
+  font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 0.3em;
-  color: var(--cyan-primary);
+  letter-spacing: 0.1em;
+  color: rgba(139, 92, 246, 0.8);
 }
 
 /* Status dot */
@@ -1596,4 +1546,53 @@ body {
   .nx-scroll-fade { display: none; }
   .nx-bg-dots,
   .nx-bg-noise { display: none; }
+}
+
+/* =============================================================
+   CUSTOM CURSOR AURAS
+   ============================================================= */
+
+.nx-cursor {
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  animation: fadeInCursor 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeInCursor {
+  to { opacity: 1; }
+}
+
+.nx-cursor-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--cyan-primary);
+  box-shadow: 0 0 12px var(--cyan-primary);
+}
+
+.nx-cursor-ring {
+  width: 32px;
+  height: 32px;
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  background: rgba(99, 102, 241, 0.02);
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              height 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nx-cursor-ring.hovered {
+  width: 48px;
+  height: 48px;
+  background: rgba(99, 102, 241, 0.08);
+  border-color: rgba(99, 102, 241, 0.55);
+}
+
+/* On screens where touching is active or hover is not supported, hide cursor elements */
+@media (hover: none) and (pointer: coarse) {
+  .nx-cursor-dot,
+  .nx-cursor-ring {
+    display: none !important;
+  }
 }

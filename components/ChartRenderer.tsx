@@ -13,13 +13,9 @@ import {
   Tooltip,
   Legend,
   Filler,
-  ChartData,
-  ChartOptions,
 } from 'chart.js';
 import { Line, Bar, Pie, Doughnut } from 'react-chartjs-2';
-import { useTheme } from 'next-themes';
 
-// Register ChartJS components
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -35,25 +31,23 @@ ChartJS.register(
 
 interface ChartRendererProps {
   type: 'line' | 'bar' | 'pie' | 'doughnut';
-  data: ChartData<any>;
+  data: any;
   title?: string;
 }
 
-export function ChartRenderer({ type, data, title }: ChartRendererProps) {
-  const { resolvedTheme } = useTheme();
-  const isDark = resolvedTheme === 'dark';
-
-  const defaultOptions: ChartOptions<any> = {
+export default function ChartRenderer({ type, data, title }: ChartRendererProps) {
+  const defaultOptions: any = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
       legend: {
+        display: true,
         position: 'bottom' as const,
         labels: {
-          color: isDark ? '#a1a1aa' : '#71717a',
+          color: '#4A4A6A',
           font: {
-            family: 'Inter, sans-serif',
-            size: 12,
+            family: "'Space Mono', monospace",
+            size: 10,
           },
           usePointStyle: true,
           padding: 20,
@@ -62,53 +56,64 @@ export function ChartRenderer({ type, data, title }: ChartRendererProps) {
       title: {
         display: !!title,
         text: title,
-        color: isDark ? '#f4f4f5' : '#18181b',
+        color: '#F0EBE1',
         font: {
-          family: 'Inter, sans-serif',
-          size: 16,
-          weight: '600',
+          family: "'Bebas Neue', sans-serif",
+          size: 18,
         },
         padding: { bottom: 20 },
       },
       tooltip: {
-        backgroundColor: isDark ? '#18181b' : '#ffffff',
-        titleColor: isDark ? '#f4f4f5' : '#18181b',
-        bodyColor: isDark ? '#a1a1aa' : '#71717a',
-        borderColor: isDark ? '#27272a' : '#e4e4e7',
+        backgroundColor: '#0F0F18',
+        titleColor: '#00FFE0',
+        bodyColor: '#F0EBE1',
+        borderColor: '#1A1A2E',
         borderWidth: 1,
         padding: 12,
-        boxPadding: 6,
-        usePointStyle: true,
+        displayColors: true,
       },
     },
-    scales: type === 'pie' || type === 'doughnut' ? {} : {
+    scales: (type === 'pie' || type === 'doughnut') ? {} : {
       x: {
         grid: {
-          color: isDark ? 'rgba(39, 39, 42, 0.5)' : 'rgba(228, 228, 231, 0.5)',
+          color: 'rgba(26, 26, 46, 0.5)',
           drawBorder: false,
         },
         ticks: {
-          color: isDark ? '#a1a1aa' : '#71717a',
+          color: '#4A4A6A',
+          font: { family: "'Space Mono', monospace", size: 10 },
         },
       },
       y: {
         grid: {
-          color: isDark ? 'rgba(39, 39, 42, 0.5)' : 'rgba(228, 228, 231, 0.5)',
+          color: 'rgba(26, 26, 46, 0.5)',
           drawBorder: false,
         },
         ticks: {
-          color: isDark ? '#a1a1aa' : '#71717a',
+          color: '#4A4A6A',
+          font: { family: "'Space Mono', monospace", size: 10 },
         },
       },
     },
   };
 
+  // Customizing colors for the data based on the theme
+  const customData = {
+    ...data,
+    datasets: (data.datasets || []).map((ds: any) => ({
+      ...ds,
+      borderColor: '#00FFE0',
+      backgroundColor: type === 'line' ? 'rgba(0, 255, 224, 0.1)' : ds.backgroundColor || 'rgba(0, 255, 224, 0.2)',
+    }))
+  };
+
   return (
-    <div className="w-full h-[350px] p-6 bg-zinc-900/50 dark:bg-zinc-900/30 rounded-2xl border border-border/50 backdrop-blur-sm my-6 overflow-hidden">
-      {type === 'line' && <Line options={defaultOptions} data={data} />}
-      {type === 'bar' && <Bar options={defaultOptions} data={data} />}
-      {type === 'pie' && <Pie options={defaultOptions} data={data} />}
-      {type === 'doughnut' && <Doughnut options={defaultOptions} data={data} />}
+    <div className="w-full h-[350px] p-6 nx-glass-card border-accent/20 my-6 overflow-hidden relative">
+      <div className="absolute inset-0 bg-accent/5 pointer-events-none" />
+      {type === 'line' && <Line options={defaultOptions} data={customData} />}
+      {type === 'bar' && <Bar options={defaultOptions} data={customData} />}
+      {type === 'pie' && <Pie options={defaultOptions} data={customData} />}
+      {type === 'doughnut' && <Doughnut options={defaultOptions} data={customData} />}
     </div>
   );
 }

@@ -1,20 +1,35 @@
-import { deployContract } from "@/lib/midnight/contract";
-import { z } from "zod";
+import { NextApiRequest, NextApiResponse } from 'next';
+import { deployNexusZero } from "@/lib/midnight/contract";
+import { rateLimiter, securityHeaders } from "@/lib/security";
 
-const DeploySchema = z.object({
-  action: z.literal("deploy"),
-});
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  // Set security headers
+  Object.entries(securityHeaders).forEach(([key, value]) => {
+    res.setHeader(key, value);
+  });
 
-export default async function handler(req: Request) {
   if (req.method !== "POST") {
-    return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405 });
+    res.setHeader('Allow', ['POST']);
+    return res.status(405).json({ error: "Method not allowed" });
   }
 
   try {
-    const { contractAddress, txHash } = await deployContract();
-    return new Response(JSON.stringify({ contractAddress, txHash }), { status: 200 });
-  } catch (error) {
-    const message = error instanceof Error ? error.message : "Deployment failed";
-    return new Response(JSON.stringify({ error: message }), { status: 500 });
+    // Rate limiting (max 3/min per IP)
+    const rate = rateLimiter(req);
+    if (!rate.allowed) {
+      return res.status(429).json({ error: "Too many deployment attempts" });
+    }
+
+    const { contractAddress, txHash } = await deployNexusZero();
+
+    return res.status(200).json({
+      contractAddress,
+      txHash,
+      network: "Midnight Preprod"
+    });
+  } catch (error: any) {
+    return res.status(500).json({ 
+      error: error.message || "Deployment failed" 
+    });
   }
 }

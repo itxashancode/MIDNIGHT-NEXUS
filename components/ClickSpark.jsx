@@ -1,19 +1,6 @@
-"use client";
+import { useRef, useEffect, useCallback } from 'react';
 
-import React, { useRef, useEffect, useCallback } from 'react';
-
-interface ClickSparkProps {
-  sparkColor?: string;
-  sparkSize?: number;
-  sparkRadius?: number;
-  sparkCount?: number;
-  duration?: number;
-  easing?: 'linear' | 'ease-in' | 'ease-in-out' | 'ease-out';
-  extraScale?: number;
-  children?: React.ReactNode;
-}
-
-const ClickSpark: React.FC<ClickSparkProps> = ({
+const ClickSpark = ({
   sparkColor = '#fff',
   sparkSize = 10,
   sparkRadius = 15,
@@ -23,20 +10,54 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
   extraScale = 1.0,
   children
 }) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const sparksRef = useRef<any[]>([]);
-  const startTimeRef = useRef<number | null>(null);
+  const canvasRef = useRef(null);
+  const sparksRef = useRef([]);
+  const startTimeRef = useRef(null);
 
-  const drawRef = useRef<((timestamp: number) => void) | null>(null);
-  const animationIdRef = useRef<number | null>(null);
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const parent = canvas.parentElement;
+    if (!parent) return;
+
+    let resizeTimeout;
+
+    const resizeCanvas = () => {
+      const { width, height } = parent.getBoundingClientRect();
+      if (canvas.width !== width || canvas.height !== height) {
+        canvas.width = width;
+        canvas.height = height;
+      }
+    };
+
+    const handleResize = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(resizeCanvas, 100);
+    };
+
+    const ro = new ResizeObserver(handleResize);
+    ro.observe(parent);
+
+    resizeCanvas();
+
+    return () => {
+      ro.disconnect();
+      clearTimeout(resizeTimeout);
+    };
+  }, []);
 
   const easeFunc = useCallback(
-    (t: number) => {
+    t => {
       switch (easing) {
-        case 'linear': return t;
-        case 'ease-in': return t * t;
-        case 'ease-in-out': return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-        default: return t * (2 - t);
+        case 'linear':
+          return t;
+        case 'ease-in':
+          return t * t;
+        case 'ease-in-out':
+          return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+        default:
+          return t * (2 - t);
       }
     },
     [easing]
@@ -45,11 +66,11 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-
     const ctx = canvas.getContext('2d');
-    if (!ctx) return;
 
-    const draw = (timestamp: number) => {
+    let animationId;
+
+    const draw = timestamp => {
       if (!startTimeRef.current) {
         startTimeRef.current = timestamp;
       }
@@ -57,7 +78,9 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
 
       sparksRef.current = sparksRef.current.filter(spark => {
         const elapsed = timestamp - spark.startTime;
-        if (elapsed >= duration) return false;
+        if (elapsed >= duration) {
+          return false;
+        }
 
         const progress = elapsed / duration;
         const eased = easeFunc(progress);
@@ -80,24 +103,17 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
         return true;
       });
 
-      if (sparksRef.current.length > 0) {
-        animationIdRef.current = requestAnimationFrame(draw);
-      } else {
-        startTimeRef.current = null;
-        animationIdRef.current = null;
-      }
+      animationId = requestAnimationFrame(draw);
     };
 
-    drawRef.current = draw;
+    animationId = requestAnimationFrame(draw);
 
     return () => {
-      if (animationIdRef.current) {
-        cancelAnimationFrame(animationIdRef.current);
-      }
+      cancelAnimationFrame(animationId);
     };
   }, [sparkColor, sparkSize, sparkRadius, sparkCount, duration, easeFunc, extraScale]);
 
-  const handleClick = (e: React.MouseEvent) => {
+  const handleClick = e => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const rect = canvas.getBoundingClientRect();
@@ -113,10 +129,6 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
     }));
 
     sparksRef.current.push(...newSparks);
-    
-    if (!animationIdRef.current && drawRef.current) {
-      animationIdRef.current = requestAnimationFrame(drawRef.current);
-    }
   };
 
   return (

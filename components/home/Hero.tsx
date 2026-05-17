@@ -35,25 +35,24 @@ function TypewriterCycle() {
   }, [displayed, deleting, phraseIdx]);
 
   return (
-    <span className="text-[var(--cyan)]">
+    <span className="text-foreground font-medium">
       {displayed}
-      <span className="tw-cursor" />
+      <span className="w-[2px] h-[1em] bg-violet-400 inline-block align-middle ml-1 animate-pulse" />
     </span>
   );
 }
 
-// Orbiting ZK ring decoration
 function ZkOrbital({ size, delay, duration }: { size: number; delay: number; duration: number }) {
   return (
     <motion.div
-      className="absolute rounded-full border border-[rgba(0,229,200,0.1)]"
+      className="absolute rounded-full border border-foreground/[0.04]"
       style={{ width: size, height: size, top: "50%", left: "50%", marginTop: -size/2, marginLeft: -size/2 }}
       animate={{ rotate: 360 }}
       transition={{ duration, delay, repeat: Infinity, ease: "linear" }}
     >
       <div
-        className="absolute w-1.5 h-1.5 rounded-full bg-[var(--cyan)]"
-        style={{ top: -3, left: "50%", marginLeft: -3, boxShadow: "0 0 8px var(--cyan)" }}
+        className="absolute w-1.5 h-1.5 rounded-full bg-violet-400/50"
+        style={{ top: -3, left: "50%", marginLeft: -3 }}
       />
     </motion.div>
   );
@@ -72,9 +71,7 @@ export default function Hero({ onStart }: { onStart?: () => void }) {
     <section
       ref={containerRef}
       className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden"
-      style={{ cursor: "none" }}
     >
-      {/* Parallax orbital decoration */}
       <motion.div
         style={{ y: y1 }}
         className="absolute inset-0 flex items-center justify-center pointer-events-none"
@@ -84,43 +81,36 @@ export default function Hero({ onStart }: { onStart?: () => void }) {
           <ZkOrbital size={440} delay={0.5} duration={28} />
           <ZkOrbital size={300} delay={1} duration={18} />
           <ZkOrbital size={180} delay={0.2} duration={12} />
-          {/* Center glow */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full bg-[var(--cyan)]/5 blur-3xl" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-[var(--cyan)] glow-cyan-strong" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full bg-violet-500/5 blur-3xl" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-violet-400/20" />
         </div>
       </motion.div>
 
-      {/* Background blobs */}
       <motion.div style={{ y: y2 }} className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-[20%] right-[15%] w-[500px] h-[300px] rounded-full bg-[var(--violet)]/6 blur-[120px]" />
-        <div className="absolute bottom-[10%] left-[5%] w-[400px] h-[250px] rounded-full bg-[var(--cyan)]/5 blur-[100px]" />
+        <div className="absolute top-[20%] right-[15%] w-[500px] h-[300px] rounded-full bg-violet-500/10 blur-[120px]" />
+        <div className="absolute bottom-[10%] left-[5%] w-[400px] h-[250px] rounded-full bg-indigo-500/10 blur-[100px]" />
       </motion.div>
 
-      {/* Content */}
       <motion.div
         style={{ y: y1, opacity, scale }}
         className="relative z-10 max-w-5xl mx-auto px-6 text-center"
       >
-        {/* Badge */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          className="inline-flex items-center gap-3 mb-10"
+          className="inline-flex items-center gap-3 mb-10 bg-foreground/5 px-4 py-1.5 rounded-full border border-foreground/10"
         >
-          <div className="status-dot">
-            <div className="status-dot-indicator" />
-          </div>
-          <span className="nx-tech-label-cyan">Midnight Network · ZK-Proof Verified · v2.4.1</span>
+          <div className="w-1.5 h-1.5 rounded-full bg-violet-500 animate-pulse" />
+          <span className="text-xs font-medium tracking-wide text-foreground/80">Midnight Network · ZK-Proof Verified</span>
         </motion.div>
 
-        {/* Headline */}
         <div className="overflow-hidden mb-4">
           <motion.h1
             initial={{ y: "100%" }}
             animate={{ y: 0 }}
             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-            className="text-[clamp(56px,10vw,120px)] font-subheading font-bold leading-none tracking-tighter text-foreground"
+            className="nx-display text-[clamp(56px,10vw,120px)] tracking-tighter text-foreground"
           >
             AI That Sees
           </motion.h1>
@@ -130,57 +120,53 @@ export default function Hero({ onStart }: { onStart?: () => void }) {
             initial={{ y: "100%" }}
             animate={{ y: 0 }}
             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.18 }}
-            className="text-[clamp(56px,10vw,120px)] font-subheading font-bold leading-none tracking-tighter gradient-text"
+            className="nx-display text-[clamp(56px,10vw,120px)] tracking-tighter text-violet-400"
           >
             Nothing.
           </motion.h1>
         </div>
 
-        {/* Typewriter sub */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6, duration: 0.8 }}
-          className="mt-6 mb-10 text-xl md:text-2xl font-mono text-muted/80 min-h-[2em]"
+          className="mt-6 mb-10 nx-font-dm text-xl md:text-2xl text-muted/80 min-h-[2em]"
         >
           <TypewriterCycle />
           {" "}
           <span className="text-muted/50">— without exposing your data.</span>
         </motion.div>
 
-        {/* Description */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.7, duration: 0.8 }}
-          className="max-w-xl mx-auto text-base md:text-lg text-muted/60 leading-relaxed mb-14"
+          className="nx-font-dm max-w-xl mx-auto text-base md:text-lg text-muted/60 leading-relaxed mb-14"
         >
           The first privacy-preserving AI reasoning protocol on Midnight Network.
           Your data stays yours — cryptographically guaranteed.
         </motion.p>
 
-        {/* CTAs */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.85, duration: 0.7 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-4"
         >
-          <button onClick={onStart} className="btn-nexus-primary">
-            <span>Initialize Nexus</span>
+          <button onClick={onStart} className="nx-btn-primary">
+            <span>Get Started</span>
             <ArrowRight size={14} />
           </button>
           <a
             href="https://midnight.network/"
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-nexus-ghost"
+            className="nx-btn-ghost"
           >
             Read Whitepaper
           </a>
         </motion.div>
 
-        {/* Mini stats row */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -193,26 +179,25 @@ export default function Hero({ onStart }: { onStart?: () => void }) {
             { icon: Lock, label: "Data Exposed", value: "Zero" },
           ].map(({ icon: Icon, label, value }) => (
             <div key={label} className="flex items-center gap-3">
-              <Icon size={14} className="text-[var(--cyan)] opacity-70" />
-              <span className="tech-label">{label}</span>
-              <span className="font-mono text-sm font-bold text-[var(--cyan)]">{value}</span>
+              <Icon size={14} className="text-violet-400 opacity-70" />
+              <span className="text-xs text-muted-foreground uppercase tracking-wider">{label}</span>
+              <span className="font-medium text-sm text-foreground">{value}</span>
             </div>
           ))}
         </motion.div>
       </motion.div>
 
-      {/* Scroll hint */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5, duration: 1 }}
         className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
       >
-        <span className="tech-label">Scroll</span>
+        <span className="text-[10px] text-muted-foreground uppercase tracking-widest">Scroll</span>
         <motion.div
           animate={{ y: [0, 8, 0] }}
           transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
-          className="w-px h-12 bg-gradient-to-b from-[var(--cyan)] to-transparent"
+          className="w-px h-12 bg-gradient-to-b from-violet-500/50 to-transparent"
         />
       </motion.div>
     </section>

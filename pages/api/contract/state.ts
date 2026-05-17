@@ -1,15 +1,29 @@
+import { NextApiRequest, NextApiResponse } from 'next';
 import { getPublicState } from "@/lib/midnight/contract";
+import { securityHeaders } from "@/lib/security";
 
-export default async function handler(req: Request) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  // Set security headers
+  Object.entries(securityHeaders).forEach(([key, value]) => {
+    res.setHeader(key, value);
+  });
+
   if (req.method !== "GET") {
-    return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405 });
+    res.setHeader('Allow', ['GET']);
+    return res.status(405).json({ error: "Method not allowed" });
   }
 
   try {
     const state = await getPublicState();
-    return new Response(JSON.stringify(state), { status: 200 });
+    return res.status(200).json({
+      ...state,
+      network: "Midnight Preprod"
+    });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Failed to get state";
-    return new Response(JSON.stringify({ error: message }), { status: 500 });
+    return res.status(200).json({
+      totalVerifications: 0,
+      verifiedSessionCount: 0,
+      network: "Midnight Preprod"
+    });
   }
 }

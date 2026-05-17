@@ -1,5 +1,5 @@
-import { MidnightNexusClient, NetworkName } from "../midnight-client";
-import { verifyExecution } from "../midnight/contract";
+import { MidnightNexusClient, NetworkName } from "../../midnight-client";
+import { verifyExecution } from "../contract";
 import { Logger } from "pino";
 
 export interface PrivacyEngineConfig {

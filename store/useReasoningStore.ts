@@ -33,6 +33,19 @@ interface ReasoningState {
   isPrivacyEnabled: boolean;
   isProving: boolean;
 
+  // ZK verification state
+  zkVerificationStatus: 'idle' | 'proving' | 'confirmed' | 'failed';
+  zkTxHash: string | null;
+  zkTotalVerifications: number;
+  zkAiAnalysis: {
+    riskLevel: 'LOW' | 'MEDIUM' | 'HIGH'
+    summary: string
+    recommendation: string
+    confidence: string
+    isMocked: boolean
+  } | null;
+  lastVerifiedAt: string | null;
+
   // Actions
   setAppState: (state: AppState) => void;
   setUserInput: (input: string) => void;
@@ -43,6 +56,23 @@ interface ReasoningState {
   setProtocol: (protocol: 'cloud' | 'local') => void;
   setPrivacyEnabled: (enabled: boolean) => void;
   setIsProving: (proving: boolean) => void;
+
+  // New ZK actions
+  setZkStatus: (status: ReasoningState['zkVerificationStatus']) => void;
+  setZkResult: (result: {
+    txHash: string;
+    totalVerifications: number;
+    aiAnalysis: {
+      riskLevel: 'LOW' | 'MEDIUM' | 'HIGH'
+      summary: string
+      recommendation: string
+      confidence: string
+      isMocked: boolean
+    };
+    verifiedAt: string;
+  }) => void;
+  resetZkState: () => void;
+
   clearHistory: () => void;
 
   // Complex Actions
@@ -60,30 +90,54 @@ export const useReasoningStore = create<ReasoningState>()(
       currentImage: undefined,
       currentThoughts: [],
       currentAnswer: '',
-       entropyData: [],
-       protocol: 'cloud',
-       isProcessing: false,
-       isPrivacyEnabled: false,
-       isProving: false,
+      entropyData: [],
+      protocol: 'cloud',
+      isProcessing: false,
+      isPrivacyEnabled: false,
+      isProving: false,
 
-       // Actions
-       setAppState: (appState) => set({ appState }),
-       setUserInput: (userInput) => set({ userInput }),
-       setCurrentMessage: (currentMessage) => set({ currentMessage }),
-       setCurrentImage: (currentImage) => set({ currentImage }),
-       setCurrentThoughts: (thoughts) => {
-         if (typeof thoughts === 'function') {
-           set((state) => ({ currentThoughts: thoughts(state.currentThoughts) }));
-         } else {
-           set({ currentThoughts: thoughts });
-         }
-       },
-       setCurrentAnswer: (currentAnswer) => set({ currentAnswer }),
-       setProtocol: (protocol) => set({ protocol }),
-       setPrivacyEnabled: (isPrivacyEnabled) => set({ isPrivacyEnabled }),
-       setIsProving: (isProving) => set({ isProving }),
-       clearHistory: () => {
+      // ZK verification state
+      zkVerificationStatus: 'idle',
+      zkTxHash: null,
+      zkTotalVerifications: 0,
+      zkAiAnalysis: null,
+      lastVerifiedAt: null,
 
+      // Actions
+      setAppState: (appState) => set({ appState }),
+      setUserInput: (userInput) => set({ userInput }),
+      setCurrentMessage: (currentMessage) => set({ currentMessage }),
+      setCurrentImage: (currentImage) => set({ currentImage }),
+      setCurrentThoughts: (thoughts) => {
+        if (typeof thoughts === 'function') {
+          set((state) => ({ currentThoughts: thoughts(state.currentThoughts) }));
+        } else {
+          set({ currentThoughts: thoughts });
+        }
+      },
+      setCurrentAnswer: (currentAnswer) => set({ currentAnswer }),
+      setProtocol: (protocol) => set({ protocol }),
+      setPrivacyEnabled: (isPrivacyEnabled) => set({ isPrivacyEnabled }),
+      setIsProving: (isProving) => set({ isProving }),
+
+      // New ZK actions
+      setZkStatus: (zkVerificationStatus) => set({ zkVerificationStatus }),
+      setZkResult: (result) => set({
+        zkTxHash: result.txHash,
+        zkTotalVerifications: result.totalVerifications,
+        zkAiAnalysis: result.aiAnalysis,
+        lastVerifiedAt: result.verifiedAt,
+        zkVerificationStatus: 'confirmed'
+      }),
+      resetZkState: () => set({
+        zkVerificationStatus: 'idle',
+        zkTxHash: null,
+        zkTotalVerifications: 0,
+        zkAiAnalysis: null,
+        lastVerifiedAt: null
+      }),
+
+      clearHistory: () => {
         if (confirm('Clear all intelligence history?')) {
           set({ exchanges: [] });
         }
@@ -229,7 +283,7 @@ export const useReasoningStore = create<ReasoningState>()(
         const { isProcessing, exchanges, currentMessage, currentThoughts, currentImage, protocol } = get();
         if (isProcessing) return;
         
-        set({ isProcessing: true, appState: 'collapsed' });
+        set({ isProcessing: true, appState: 'collapsed', zkVerificationStatus: 'proving' });
 
         const history: ConversationTurn[] = [];
         const relevantExchanges = exchanges.slice(-4);
@@ -289,7 +343,7 @@ export const useReasoningStore = create<ReasoningState>()(
           set({ currentAnswer: pendingAnswer, appState: 'answered' });
         } catch (err) {
           console.error(err);
-          set({ appState: 'error' });
+          set({ appState: 'error', zkVerificationStatus: 'failed' });
         } finally {
           set({ isProcessing: false });
         }

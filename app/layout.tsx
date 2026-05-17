@@ -1,5 +1,8 @@
+import "./globals.css";
+import Script from "next/script";
+import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
-import { Bebas_Neue, Space_Mono, DM_Mono } from "next/font/google";
+import { Bebas_Neue, Space_Mono, DM_Mono, Plus_Jakarta_Sans, Inter } from "next/font/google";
 
 const bebasNeue = Bebas_Neue({
   subsets: ["latin"],
@@ -13,10 +16,16 @@ const dmMono = DM_Mono({
   weight: ["300", "400", "500"],
 });
 
-const spaceMono = Space_Mono({
+const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  variable: "--font-space",
-  weight: ["400", "700"],
+  variable: "--font-heading",
+  weight: ["400", "500", "600", "700"],
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  weight: ["300", "400", "500", "600", "700"],
 });
 
 const spaceMono = Space_Mono({
@@ -24,6 +33,8 @@ const spaceMono = Space_Mono({
   variable: "--font-space",
   weight: ["400", "700"],
 });
+
+
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://midnightnexusai.vercel.app";
 
@@ -120,10 +131,12 @@ export default function RootLayout({
       </head>
 <body
          className={cn(
-           "min-h-screen bg-background font-dm antialiased",
+           "min-h-screen bg-background font-sans antialiased",
            bebasNeue.variable,
            dmMono.variable,
-           spaceMono.variable
+           spaceMono.variable,
+           plusJakartaSans.variable,
+           inter.variable
          )}
        >
         {/* Google Analytics */}
@@ -153,7 +166,15 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <ClickSpark
+            sparkColor="#fff"
+            sparkSize={10}
+            sparkRadius={15}
+            sparkCount={8}
+            duration={400}
+          >
+            {children}
+          </ClickSpark>
         </ThemeProvider>
       </body>
     </html>

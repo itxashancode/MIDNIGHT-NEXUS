@@ -2,14 +2,14 @@
 
 import { motion } from "framer-motion";
 
-interface NexusLogoProps {
+interface GemmaLogoProps {
   className?: string;
   size?: number;
   animated?: boolean;
   priority?: boolean;
 }
 
-export default function NexusLogo({ className = "", size = 40, priority = false }: NexusLogoProps) {
+export default function GemmaLogo({ className = "", size = 40, priority = false }: GemmaLogoProps) {
   const draw = {
     hidden: { pathLength: 0, opacity: 0 },
     visible: (i: number) => {
@@ -54,12 +54,14 @@ export default function NexusLogo({ className = "", size = 40, priority = false 
       className={className}
     >
       <defs>
-        <linearGradient id="nexus-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#00FFE0" />
-          <stop offset="100%" stopColor="#008B8B" />
+        <linearGradient id="gemma-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#3b82f6" />
+          <stop offset="50%" stopColor="#6366f1" />
+          <stop offset="100%" stopColor="#8b5cf6" />
         </linearGradient>
       </defs>
 
+      {/* Grid Lines */}
       <motion.line
         x1="25" y1="10" x2="25" y2="90"
         stroke="currentColor" strokeWidth="1" strokeOpacity="0.2"
@@ -81,6 +83,7 @@ export default function NexusLogo({ className = "", size = 40, priority = false 
         variants={draw} custom={4}
       />
       
+      {/* Central Cross Lines */}
       <motion.line
         x1="50" y1="0" x2="50" y2="100"
         stroke="currentColor" strokeWidth="1" strokeOpacity="0.1"
@@ -92,6 +95,7 @@ export default function NexusLogo({ className = "", size = 40, priority = false 
         variants={draw} custom={0}
       />
 
+      {/* Circle */}
       <motion.circle
         cx="50" cy="50" r="35"
         fill="none"
@@ -102,15 +106,17 @@ export default function NexusLogo({ className = "", size = 40, priority = false 
         custom={5}
       />
 
+      {/* The Gemma Star (Central shape) */}
       <motion.path
         d="M50 15C50 15 54 46 85 50C54 54 50 85 50 85C50 85 46 54 15 50C46 46 50 15 50 15Z"
-        fill="url(#nexus-gradient)"
+        fill="url(#gemma-gradient)"
         initial="initial"
         animate="animate"
         variants={starPulse}
-        className="drop-shadow-[0_0_8px_rgba(0,255,224,0.5)]"
+        className="drop-shadow-[0_0_8px_rgba(99,102,241,0.5)]"
       />
       
+      {/* Inner Highlight for depth */}
       <motion.path
         d="M50 25C50 25 52 48 75 50C52 52 50 75 50 75C50 75 48 52 25 50C48 48 50 25 50 25Z"
         fill="white"

@@ -1,25 +1,27 @@
-export default function handler(req: Request) {
+import { NextApiRequest, NextApiResponse } from 'next';
+import { securityHeaders } from "@/lib/security";
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  // Set security headers
+  Object.entries(securityHeaders).forEach(([key, value]) => {
+    res.setHeader(key, value);
+  });
+
   if (req.method !== "GET") {
-    return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405 });
+    res.setHeader('Allow', ['GET']);
+    return res.status(405).json({ error: "Method not allowed" });
   }
 
   try {
-    const contractDeployed = !!process.env.CONTRACT_ADDRESS;
-
-    return new Response(
-      JSON.stringify({
-        status: "ok",
-        network: process.env.MIDNIGHT_NETWORK ?? "TestNet",
-        contractDeployed,
-        contractAddress: process.env.CONTRACT_ADDRESS ?? null,
-        timestamp: new Date().toISOString(),
-      }),
-      { status: 200 }
-    );
+    return res.status(200).json({
+      status: 'ok',
+      network: 'Midnight Preprod',
+      contractDeployed: !!process.env.CONTRACT_ADDRESS,
+      contractAddress: process.env.CONTRACT_ADDRESS ?? null,
+      proofServer: process.env.MIDNIGHT_PROVING_SERVER_URL,
+      timestamp: new Date().toISOString()
+    });
   } catch {
-    return new Response(
-      JSON.stringify({ status: "ok", note: "partial" }),
-      { status: 200 }
-    );
+    return res.status(200).json({ status: 'ok' });
   }
 }

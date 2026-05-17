@@ -2,164 +2,220 @@ import {
   deployContract as deployContractFn, 
   findDeployedContract,
   DeployTxFailedError,
-  CallTxFailedError
+  CallTxFailedError,
+  TxFailedError
 } from "@midnight-ntwrk/midnight-js-contracts";
-import { buildProviders } from "./providers";
-import { CompactRuntime } from "@midnight-ntwrk/compact-runtime";
+import { buildProviders, MidnightProviders } from "./providers";
 import fs from "fs";
 import path from "path";
 
-async function loadCircuit() {
-  const circuitPath = path.join(process.cwd(), "midnight-contracts", "NexusZero.compact");
-  const circuitContent = fs.readFileSync(circuitPath, "utf-8");
-  return CompactRuntime.compile(circuitContent);
+export interface DeployedContract {
+  contractAddress: string;
+  txHash: string;
+  [key: string]: any;
 }
 
-export async function deployContract(): Promise<{ contractAddress: string; txHash: string }> {
+export async function deployNexusZero(): Promise<{
+  contractAddress: string
+  txHash: string
+}> {
   const providers = buildProviders();
-  const circuit = await loadCircuit();
+  const contractPath = path.join(process.cwd(), "midnight-contracts", "managed", "NexusZero", "contract", "index.js");
   
+  if (!fs.existsSync(contractPath)) {
+    throw new Error("Contract not compiled. Run: npm run compile");
+  }
+
+  const { default: contract } = await import(`file://${contractPath}`);
+
   try {
-    const result = await deployContractFn(circuit, providers);
-    const contractAddress = result.contractAddress;
-    const txHash = result.txHash;
+    const result = await deployContractFn(providers, {
+      compiledContract: contract
+    } as any);
+    
+    const contractAddress = (result as any).contractAddress;
+    const txHash = (result as any).txHash;
 
     const envPath = path.join(process.cwd(), ".env");
-    const envContent = fs.readFileSync(envPath, "utf-8");
-    const updatedEnv = envContent.includes("CONTRACT_ADDRESS=")
-      ? envContent.replace(/CONTRACT_ADDRESS=.*/g, `CONTRACT_ADDRESS=${contractAddress}`)
-      : envContent + `\nCONTRACT_ADDRESS=${contractAddress}`;
-    fs.writeFileSync(envPath, updatedEnv);
-
-    console.log("✅ Contract deployed!");
-    console.log(`Address: ${contractAddress}`);
-    console.log(`TxHash: ${txHash}`);
+    if (fs.existsSync(envPath)) {
+      const envContent = fs.readFileSync(envPath, "utf-8");
+      const updatedEnv = envContent.includes("CONTRACT_ADDRESS=")
+        ? envContent.replace(/CONTRACT_ADDRESS=.*/g, `CONTRACT_ADDRESS=${contractAddress}`)
+        : envContent + `\nCONTRACT_ADDRESS=${contractAddress}`;
+      fs.writeFileSync(envPath, updatedEnv);
+    }
 
     return { contractAddress, txHash };
-  } catch (err) {
-    if (err instanceof DeployTxFailedError) {
-      throw new Error(`Contract deployment failed: ${err.message}`);
+  } catch (error: any) {
+    if (error instanceof DeployTxFailedError) {
+      throw new Error(`Contract deployment failed: ${error.message}`);
     }
-    throw new Error(`Unexpected deploy error: ${String(err)}`);
+    throw new Error(`Unexpected deployment error: ${error.message}`);
   }
 }
 
-export async function getContract() {
+export async function getContract(): Promise<DeployedContract> {
   const contractAddress = process.env.CONTRACT_ADDRESS;
   if (!contractAddress) {
-    throw new Error("Contract not deployed yet. Run deploy first.");
+    throw new Error("Contract not deployed. Run: npm run deploy");
   }
 
   const providers = buildProviders();
-  const circuit = await loadCircuit();
-  
+  const contractPath = path.join(process.cwd(), "midnight-contracts", "managed", "NexusZero", "contract", "index.js");
+  const { default: contract } = await import(`file://${contractPath}`);
+
   try {
-    return await findDeployedContract(circuit, contractAddress, providers);
-  } catch (err) {
-    throw new Error(
-      "Contract not found. Run: npm run deploy\n" +
-      `CONTRACT_ADDRESS in .env: ${contractAddress ?? 'NOT SET'}`
-    );
+    const deployed = await findDeployedContract(providers, {
+      compiledContract: contract,
+      contractAddress: contractAddress
+    } as any);
+    
+    return {
+      ...deployed,
+      contractAddress,
+      txHash: (deployed as any).deployTxData?.txHash || ""
+    } as any;
+  } catch (error: any) {
+    throw new Error(`Failed to find deployed contract: ${error.message}`);
   }
 }
 
 export async function verifyExecution(params: {
-  executionAttestation: string;
-  isCompliant: boolean;
-  aiExecutionLogHash: string;
-  callerSecret: string;
+  executionAttestation: string
+  isCompliant: boolean
+  aiExecutionLogHash: string
+  callerSecret: string
 }): Promise<{
-  success: boolean;
-  txHash: string;
-  sessionId: string;
-  totalVerifications: number;
-  error?: string;
+  success: boolean
+  txHash: string
+  sessionId: string
+  totalVerifications: number
+  error?: string
 }> {
   const { executionAttestation, isCompliant, aiExecutionLogHash, callerSecret } = params;
-  
-  try {
-    const contract = await getContract();
-    const providers = buildProviders();
 
+  const validateHex = (hex: string, name: string): string => {
+    const cleanHex = hex.startsWith("0x") ? hex.slice(2) : hex;
+    if (!/^[0-9a-fA-F]+$/.test(cleanHex) || cleanHex.length % 2 !== 0) {
+      throw new Error(`Invalid hex string for ${name}`);
+    }
+    return cleanHex;
+  };
+
+  const hexToBytes = (hex: string): Uint8Array => {
+    const cleanHex = validateHex(hex, "input");
+    const bytes = new Uint8Array(cleanHex.length / 2);
+    for (let i = 0; i < bytes.length; i++) {
+      bytes[i] = parseInt(cleanHex.substr(i * 2, 2), 16);
+    }
+    return bytes;
+  };
+
+  try {
     const attestationBytes = hexToBytes(executionAttestation);
     const logHashBytes = hexToBytes(aiExecutionLogHash);
     const secretBytes = hexToBytes(callerSecret);
 
-    const txHash = await contract.verify_ai_execution(attestationBytes, isCompliant, {
-      aiExecutionLogHash: logHashBytes,
-      callerSecret: secretBytes,
-    });
+    const contract = await getContract();
+    const providers = buildProviders();
 
-    let success = false;
-    let totalVerifications = 0;
+    let txHash = "";
+    try {
+      if (typeof (contract as any).submitCallTx === 'function') {
+        txHash = await (contract as any).submitCallTx("verify_ai_execution", [
+          attestationBytes,
+          isCompliant,
+          logHashBytes,
+          secretBytes
+        ]);
+      } else {
+        txHash = await (contract as any).verify_ai_execution(attestationBytes, isCompliant, {
+          aiExecutionLogHash: logHashBytes,
+          callerSecret: secretBytes,
+        });
+      }
+    } catch (e: any) {
+      throw e;
+    }
+
+    let confirmed = false;
     const startTime = Date.now();
-    const timeout = 45000;
-
-    while (Date.now() - startTime < timeout) {
+    while (Date.now() - startTime < 60000) {
       try {
         const status = await providers.publicDataProvider.getTxStatus(txHash);
-        if (status.confirmed) {
-          success = true;
-          const publicState = await contract.getPublicState();
-          totalVerifications = Number(publicState.totalVerifications);
+        if (status && status.confirmed) {
+          confirmed = true;
           break;
         }
       } catch {
         // continue polling
       }
-      await new Promise((r) => setTimeout(r, 2000));
+      await new Promise(resolve => setTimeout(resolve, 2000));
     }
 
-    return {
-      success,
-      txHash,
-      sessionId: executionAttestation,
-      totalVerifications,
-    };
-  } catch (err) {
-    if (err instanceof CallTxFailedError) {
-      return { 
-        success: false, 
-        txHash: '', 
-        sessionId: '', 
+    if (!confirmed) {
+      return {
+        success: false,
+        txHash,
+        sessionId: executionAttestation,
         totalVerifications: 0,
-        error: `ZK proof failed: ${err.message}` 
+        error: "Transaction confirmation timed out"
       };
     }
-    return { 
-      success: false, 
-      txHash: '', 
-      sessionId: '', 
+
+    const publicState = await getPublicState();
+
+    return {
+      success: true,
+      txHash,
+      sessionId: executionAttestation,
+      totalVerifications: publicState.totalVerifications
+    };
+
+  } catch (error: any) {
+    if (error instanceof CallTxFailedError || error instanceof TxFailedError || error.name === 'CallTxFailedError' || error.name === 'TxFailedError') {
+      return {
+        success: false,
+        txHash: "",
+        sessionId: executionAttestation,
+        totalVerifications: 0,
+        error: error.message
+      };
+    }
+    return {
+      success: false,
+      txHash: "",
+      sessionId: executionAttestation,
       totalVerifications: 0,
-      error: `Unexpected error: ${String(err)}` 
+      error: error.message
     };
   }
 }
 
 export async function getPublicState(): Promise<{
-  totalVerifications: number;
-  verifiedSessionCount: number;
+  totalVerifications: number
+  verifiedSessionCount: number
 }> {
   try {
     const contract = await getContract();
-    const publicState = await contract.getPublicState();
+    const publicState = await (contract as any).getPublicStates();
     return {
       totalVerifications: Number(publicState.totalVerifications),
-      verifiedSessionCount: Number(publicState.totalVerifications),
+      verifiedSessionCount: Number(publicState.verifiedSessionCount)
     };
   } catch {
-    return {
-      totalVerifications: 0,
-      verifiedSessionCount: 0,
-    };
+    try {
+      const contract = await getContract();
+      const publicState = await (contract as any).getPublicState();
+      return {
+        totalVerifications: Number(publicState.totalVerifications),
+        verifiedSessionCount: Number(publicState.totalVerifications),
+      };
+    } catch {
+      return {
+        totalVerifications: 0,
+        verifiedSessionCount: 0
+      };
+    }
   }
-}
-
-function hexToBytes(hex: string): Uint8Array {
-  const cleanHex = hex.startsWith("0x") ? hex.slice(2) : hex;
-  const bytes = new Uint8Array(cleanHex.length / 2);
-  for (let i = 0; i < bytes.length; i++) {
-    bytes[i] = parseInt(cleanHex.substr(i * 2, 2), 16);
-  }
-  return bytes;
 }

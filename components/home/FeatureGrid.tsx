@@ -69,7 +69,7 @@ function FeatureCard({
     <motion.div
       data-reveal="fade-up"
       data-delay={String(index * 100)}
-      className={`glass-card rounded-[32px] p-8 group relative overflow-hidden ${
+      className={`nx-glass-card p-8 group relative overflow-hidden ${
         feature.large ? "md:col-span-2 md:row-span-2" : ""
       }`}
     >
@@ -77,46 +77,46 @@ function FeatureCard({
       <div className="absolute top-0 right-0 w-16 h-16 overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-500">
         <div
           className="absolute top-0 right-0 w-px h-8 origin-top"
-          style={{ background: isCyan ? "var(--cyan)" : "var(--violet)" }}
+          style={{ background: isCyan ? "var(--cyan-primary)" : "var(--violet)", opacity: 0.4 }}
         />
         <div
           className="absolute top-0 right-0 w-8 h-px origin-right"
-          style={{ background: isCyan ? "var(--cyan)" : "var(--violet)" }}
+          style={{ background: isCyan ? "var(--cyan-primary)" : "var(--violet)", opacity: 0.4 }}
         />
       </div>
 
       {/* Background glow */}
       <div
         className="absolute -top-20 -right-20 w-48 h-48 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-3xl"
-        style={{ background: isCyan ? "rgba(0,229,200,0.06)" : "rgba(123,60,220,0.08)" }}
+        style={{ background: isCyan ? "var(--cyan-dim)" : "var(--violet-dim)" }}
       />
 
       <div className="relative z-10 h-full flex flex-col">
         {/* Tag + Icon */}
         <div className="flex items-start justify-between mb-6">
           <span
-            className="tech-label"
-            style={{ color: isCyan ? "var(--cyan)" : "var(--violet)", opacity: 0.8 }}
+            className="nx-tech-label"
+            style={{ color: isCyan ? "var(--cyan-primary)" : "var(--violet)", opacity: 0.8 }}
           >
             {feature.tag}
           </span>
           <div
-            className="w-10 h-10 rounded-lg flex items-center justify-center border"
+            className="w-10 h-10 rounded-sm flex items-center justify-center border"
             style={{
-              borderColor: isCyan ? "rgba(0,229,200,0.2)" : "rgba(123,60,220,0.2)",
-              background: isCyan ? "rgba(0,229,200,0.05)" : "rgba(123,60,220,0.05)",
+              borderColor: isCyan ? "rgba(99, 102, 241, 0.2)" : "rgba(139, 92, 246, 0.2)",
+              background: isCyan ? "rgba(99, 102, 241, 0.05)" : "rgba(139, 92, 246, 0.05)",
             }}
           >
             <Icon
               size={18}
-              style={{ color: isCyan ? "var(--cyan)" : "var(--violet)" }}
+              style={{ color: isCyan ? "var(--cyan-primary)" : "var(--violet)" }}
             />
           </div>
         </div>
 
         {/* Title */}
         <h3
-          className={`font-subheading font-bold text-foreground mb-3 ${
+          className={`nx-display text-foreground mb-3 ${
             feature.large ? "text-2xl md:text-3xl" : "text-lg"
           }`}
         >
@@ -124,15 +124,15 @@ function FeatureCard({
         </h3>
 
         {/* Description */}
-        <p className="text-sm text-muted/70 leading-relaxed flex-1">
+        <p className="nx-body text-sm text-muted/70 leading-relaxed flex-1">
           {feature.description}
         </p>
 
         {/* Large card gets a link */}
         {feature.large && (
           <div className="mt-8">
-            <button className="flex items-center gap-2 text-sm font-medium text-[var(--cyan)] group/link cursor-none">
-              <span className="reveal-line active">Explore Protocol</span>
+            <button className="flex items-center gap-2 text-sm font-medium text-violet-400 group/link cursor-pointer">
+              <span className="nx-reveal-line active">Explore Protocol</span>
               <ArrowRight
                 size={14}
                 className="group-hover/link:translate-x-1 transition-transform"
@@ -162,7 +162,7 @@ export default function FeatureGrid() {
       className="relative py-40 overflow-hidden"
     >
       {/* Section divider top */}
-      <div className="section-divider mb-24 mx-6" />
+      <div className="nx-section-divider mb-24 mx-6" />
 
       {/* Parallax title */}
       <motion.div
@@ -171,13 +171,13 @@ export default function FeatureGrid() {
       >
         <div className="flex items-end justify-between flex-wrap gap-8">
           <div>
-            <span className="tech-label-cyan block mb-4">— Core Capabilities</span>
-            <h2 className="text-4xl md:text-6xl font-subheading font-bold tracking-tighter text-foreground">
+            <span className="text-sm font-medium text-violet-400 block mb-4">— Core Capabilities</span>
+            <h2 className="nx-display text-4xl md:text-6xl font-bold tracking-tighter text-foreground">
               Built for the next era<br />
-              <span className="gradient-text-static">of data privacy.</span>
+              <span className="nx-gradient-text-subtle">of data privacy.</span>
             </h2>
           </div>
-          <p className="max-w-sm text-muted/70 text-sm leading-relaxed">
+          <p className="max-w-sm nx-body text-sm text-muted/70 leading-relaxed">
             Every component of Midnight Nexus is engineered around a single axiom:
             your data belongs to you, mathematically and irrevocably.
           </p>
@@ -194,7 +194,7 @@ export default function FeatureGrid() {
       </div>
 
       {/* Bottom divider */}
-      <div className="section-divider mt-24 mx-6" />
+      <div className="nx-section-divider mt-24 mx-6" />
     </section>
   );
 }
