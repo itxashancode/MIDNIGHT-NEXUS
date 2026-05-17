@@ -8,7 +8,7 @@ import { NodeZkConfigProvider } from '@midnight-ntwrk/midnight-js-node-zk-config
 import { levelPrivateStateProvider } from '@midnight-ntwrk/midnight-js-level-private-state-provider';
 import { FluentWalletBuilder } from '@midnight-ntwrk/testkit-js';
 import type { EnvironmentConfiguration } from '@midnight-ntwrk/testkit-js';
-import { SecretKeys, DustKey } from '@midnight-ntwrk/ledger';
+import { SecretKeys, CoinSecretKey } from '@midnight-ntwrk/ledger';
 import * as Rx from 'rxjs';
 import type { Logger } from 'pino';
 
@@ -167,7 +167,7 @@ export class MidnightNexusClient {
           tx,
           {
             shieldedSecretKeys: SecretKeys.fromSeed(new Uint8Array(32)),
-            dustSecretKey: DustKey.fromSeed(new Uint8Array(32)),
+            coinSecretKey: SecretKeys.fromSeed(new Uint8Array(32)).coinSecretKey,
           },
           { ttl: ttl ?? new Date(Date.now() + 30 * 60 * 1000) },
         );
@@ -178,9 +178,10 @@ export class MidnightNexusClient {
   }
 
   async start(): Promise<void> {
+    const secretKeys = SecretKeys.fromSeed(new Uint8Array(32));
     await this.wallet.start(
-      SecretKeys.fromSeed(new Uint8Array(32)),
-      DustKey.fromSeed(new Uint8Array(32))
+      secretKeys,
+      secretKeys.coinSecretKey
     );
     await this.syncWallet();
   }
