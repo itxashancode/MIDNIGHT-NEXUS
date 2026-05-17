@@ -21,16 +21,8 @@ export default function Footer({ footerRef }: FooterProps) {
         <div className="absolute bottom-4 left-4 w-1.5 h-1.5 rounded-full bg-white/10 shadow-inner z-20" />
         <div className="absolute bottom-4 right-4 w-1.5 h-1.5 rounded-full bg-white/10 shadow-inner z-20" />
 
-        <div className="flex flex-col md:flex-row justify-between items-start w-full relative z-10">
+        <div className="flex flex-col md:flex-row justify-end items-start w-full relative z-10">
           
-          <div>
-            <h2 className="text-3xl md:text-4xl font-light text-white mb-6 tracking-tight">Contacts</h2>
-            <a href="mailto:contact@midnightnexus.com" className="text-foreground/70 md:text-lg hover:text-white flex items-center gap-1 group font-light transition-colors">
-              contact@midnightnexus.com
-              <ArrowUpRight size={18} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-            </a>
-          </div>
-
           <div className="flex flex-col items-start md:items-end gap-6 md:gap-10 mt-10 md:mt-2">
             <p className="text-white/30 text-sm font-light">© 2026 Midnight Nexus</p>
             <div className="flex flex-wrap gap-5 text-white/60 font-light text-sm md:text-base">

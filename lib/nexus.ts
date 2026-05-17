@@ -107,11 +107,10 @@ export async function fetchNexusStream(
   }
 
   // VERIFIED Gemini Models for v1beta REST API
-  const models = [
-      "gemma-4-26b-a4b-it",  // High-Throughput MoE (FASTER ✅)
-      "gemma-4-31b-it",      // Dense Reasoning (POWERFUL ✅)
-    ];
-
+ const models = [
+    "gemma-4-26b-a4b-it",  // High-Throughput MoE (FASTER ✅)
+    "gemma-4-31b-it",      // Dense Reasoning (POWERFUL ✅)
+  ];
   // Official Nexus 4 Prompt Formatting
   const formattedSystem = `<|turn>system\n<|think|>${systemInstruction}<turn|>`;
   
