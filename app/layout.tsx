@@ -2,19 +2,7 @@ import "./globals.css";
 import Script from "next/script";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
-import { Bebas_Neue, Space_Mono, DM_Mono, Plus_Jakarta_Sans, Inter } from "next/font/google";
-
-const bebasNeue = Bebas_Neue({
-  subsets: ["latin"],
-  variable: "--font-display",
-  weight: ["400"],
-});
-
-const dmMono = DM_Mono({
-  subsets: ["latin"],
-  variable: "--font-dm",
-  weight: ["300", "400", "500"],
-});
+import { Plus_Jakarta_Sans, Inter } from "next/font/google";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -26,12 +14,6 @@ const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
   weight: ["300", "400", "500", "600", "700"],
-});
-
-const spaceMono = Space_Mono({
-  subsets: ["latin"],
-  variable: "--font-space",
-  weight: ["400", "700"],
 });
 
 
@@ -132,9 +114,6 @@ export default function RootLayout({
 <body
          className={cn(
            "min-h-screen bg-background font-sans antialiased",
-           bebasNeue.variable,
-           dmMono.variable,
-           spaceMono.variable,
            plusJakartaSans.variable,
            inter.variable
          )}
@@ -166,15 +145,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <ClickSpark
-            sparkColor="#fff"
-            sparkSize={10}
-            sparkRadius={15}
-            sparkCount={8}
-            duration={400}
-          >
-            {children}
-          </ClickSpark>
+          {children}
         </ThemeProvider>
       </body>
     </html>
